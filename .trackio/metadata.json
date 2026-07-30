@@ -1,6 +1,9 @@
 {
-  "space_id": "DineshAI/repro-beyond-euclidean-summaries-online-change-point-detection-for-distribution-valued-data",
-  "tags": ["icml2026-repro", "paper-aU2sxdnRuL"],
+  "space_id": "DineshAI/repro-aU2sxdnRuL-distribution-valued-cpd",
+  "tags": [
+    "icml2026-repro",
+    "paper-aU2sxdnRuL"
+  ],
   "emoji": "🎯",
   "created_at": "2026-07-30T07:37:41+00:00",
   "last_page": "executive-summary"
