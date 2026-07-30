@@ -16,6 +16,6 @@
   "exact_embedding_stream_recovered": false,
   "dated_numeric_alarm_series_recovered": false,
   "figure_asset_recovered": true,
-  "verdict": "falsified_literal_source_scope",
-  "reason": "The authoritative arXiv source recovers Figure-4 assets and the 384-D to PCA-20 protocol, but it says the relevant post-pause alarm is Apr 30 after an Apr 3--28 sparse-data gap; it does not report an Apr 13 alarm. The live wording's direct April-13-alignment reading is therefore not supported. This is a source-asset audit, not an independent rerun of the unavailable embedding stream."
+  "verdict": "inconclusive_source_artifact_scope",
+  "reason": "The authoritative arXiv source recovers Figure-4 assets and the 384-D to PCA-20 protocol, and describes the Apr 30 post-J&J-pause reorganization after an Apr 3--28 sparse-data gap. This supports source-level event alignment but does not provide the released embedding/alarm series needed for an independent numeric rerun; the live claim is therefore inconclusive rather than falsified."
 }

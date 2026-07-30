@@ -7,16 +7,13 @@
 - Contract manifest: contract/contract_manifest.json
 - Paper: https://arxiv.org/abs/2602.07252
 - Official code pin: https://github.com/yyzeng43/IDD-icml@c5b1db4060e5081e5c487f91792dc18c17603fd0
-- Compute policy: Hugging Face cpu-upgrade only; no GPU or paid Jobs without a later explicit documented need.
-- GitHub repository: https://github.com/MachineLearning-Nerd/icml26-repro-aU2sxdnRuL-distribution-valued-cpd @ 372314edc6fec88f51673a7b4cea3f012914e5b4
-- Current phase: logbook_ready_for_independent_review
-- Claim 1 state: Three distinct toy routes are complete; full claim remains unverified. Attempt 3 independently verifies the 1-D empirical quantile radial identity for translation, scale, and non-affine deformation (all absolute errors `0.0`) and rejects identity-map, wrong-reference, and uncentered-map controls. The full released R/funcharts mFPCA/paper-scale path remains absent. See `outputs/claim1_attempt3_quantile_audit.md`.
-- Claim 2 state: falsified as literally written. Theorem 3.10 supplies the displayed fixed-threshold bound, while the source empirical-quantile corollary has the finite-sample `+ 2/(n0+1)` denominator correction. See `outputs/claim2_attempt1_audit.md`.
-- Claim 3 state: falsified for literal source-table scope; see `outputs/claim3_attempt1_audit.md`.
-- Claim 4 state: literal source scope is falsified by Attempt 1. Attempt 2 independently found no source-faithful public evaluation route: the paper acknowledges direct data sharing, the retrieved FlowCAP-II URL is a Coming Soon page, and the pinned release lacks files, labels, preprocessing, seed, and runner. This availability finding is not a dataset-level refutation. See `outputs/claim4_attempt1_audit.md` and `outputs/claim4_attempt2_audit.md`.
-- Claim 5 state: falsified for the live claim's literal April-13-alignment wording. Attempt 3 recovered the authoritative arXiv Figure-4 asset and source protocol, which documents Apr 30 post-gap reorganization after an Apr 3--28 sparse-data gap rather than a direct Apr 13 alarm. The unreleased numeric embedding/alarm stream was not substituted with a proxy. See `outputs/claim5_attempt3_audit.md`.
-- Claim 6 state: unverified.
-- Next action: Claim 6 Attempt 1 — audit and test the epsilon-isometry theorem scope.
-- Publication status: not started
-- Claim 6 state: verified (scoped theorem audit). The pinned epsilon-isometry theorem gives K >= (A_X C_K/(epsilon^2 tr(Gamma)))^d under its bounded-domain/Hölder/OT/Lipschitz-kernel assumptions; finite-K algebra checks and a dropped-dimension negative control pass. See `outputs/claim6_attempt1_audit.md`.
-- Next action: independent logbook/evidence review, then final publication gate; official local validator passed and publication remains disallowed pending review.
+- Compute policy: CPU only; no GPU or paid Jobs used.
+- GitHub repository: https://github.com/MachineLearning-Nerd/icml26-repro-aU2sxdnRuL-distribution-valued-cpd
+- Current phase: review_remediation_in_progress
+- Claim 1: inconclusive; retained toy mechanism audits, not a full source-scale run.
+- Claim 2: falsified as literally written; empirical-quantile correction omitted from the live wording.
+- Claim 3: falsified for literal source-table scope; maximum reported high-variance reduction is 72.5%, not 95%.
+- Claim 4: falsified for literal source metric scope; Hotelling precision, not F1, is below 0.4.
+- Claim 5: inconclusive; source supports post-pause alignment but released artifacts do not permit an independent numeric rerun.
+- Claim 6: verified only as a scoped finite-dimensional theorem/algebra audit.
+- Publication status: blocked pending remediation of trace attachment/tool compatibility and poster asset-provenance gate; do not publish.

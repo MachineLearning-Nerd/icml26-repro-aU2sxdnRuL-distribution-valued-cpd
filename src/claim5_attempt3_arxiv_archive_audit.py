@@ -6,10 +6,13 @@ import hashlib
 import json
 import tarfile
 from pathlib import Path
+from urllib.request import urlopen
 
 ROOT = Path(__file__).resolve().parents[1]
 EVIDENCE = ROOT / "evidence" / "claim5_attempt3"
 ARCHIVE = EVIDENCE / "arxiv_source.tar"
+ARCHIVE_URL = "https://arxiv.org/e-print/2602.07252"
+ARCHIVE_SHA256 = "6d4af865d403a1c4f72ed3ef8057069212ac1633aa79410b4607b04a8b9edb87"
 OUTPUT = ROOT / "outputs" / "claim5_attempt3" / "arxiv_archive_audit.json"
 
 FIGURE_MEMBER = "arixv/figures/approachB_embed_pca20_D_first50_phase1_phase2_monitoring_manuscript.pdf"
@@ -21,8 +24,21 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def ensure_archive() -> None:
+    EVIDENCE.mkdir(parents=True, exist_ok=True)
+    if not ARCHIVE.exists():
+        temporary = ARCHIVE.with_suffix(".tmp")
+        with urlopen(ARCHIVE_URL, timeout=60) as response:
+            temporary.write_bytes(response.read())
+        temporary.replace(ARCHIVE)
+    observed = sha256(ARCHIVE)
+    if observed != ARCHIVE_SHA256:
+        raise RuntimeError(f"arXiv archive SHA-256 mismatch: {observed}")
+
+
 def main() -> None:
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+    ensure_archive()
     with tarfile.open(ARCHIVE, "r:gz") as archive:
         members = {member.name for member in archive.getmembers() if member.isfile()}
         for required in (FIGURE_MEMBER, TEX_MEMBER, README_MEMBER):
@@ -51,7 +67,7 @@ def main() -> None:
         raise RuntimeError(f"missing expected source assertions: {missing}")
 
     result = {
-        "source": "https://arxiv.org/e-print/2602.07252",
+        "source": ARCHIVE_URL,
         "archive_sha256": sha256(ARCHIVE),
         "archive_member_count": len(members),
         "recovered_figure_member": FIGURE_MEMBER,
@@ -61,12 +77,12 @@ def main() -> None:
         "exact_embedding_stream_recovered": False,
         "dated_numeric_alarm_series_recovered": False,
         "figure_asset_recovered": True,
-        "verdict": "falsified_literal_source_scope",
+        "verdict": "inconclusive_source_artifact_scope",
         "reason": (
             "The authoritative arXiv source recovers Figure-4 assets and the 384-D to PCA-20 protocol, "
-            "but it says the relevant post-pause alarm is Apr 30 after an Apr 3--28 sparse-data gap; "
-            "it does not report an Apr 13 alarm. The live wording's direct April-13-alignment reading is therefore not supported. "
-            "This is a source-asset audit, not an independent rerun of the unavailable embedding stream."
+            "and describes the Apr 30 post-J&J-pause reorganization after an Apr 3--28 sparse-data gap. "
+            "This supports source-level event alignment but does not provide the released embedding/alarm series needed "
+            "for an independent numeric rerun; the live claim is therefore inconclusive rather than falsified."
         ),
     }
     OUTPUT.write_text(json.dumps(result, indent=2) + "\n")

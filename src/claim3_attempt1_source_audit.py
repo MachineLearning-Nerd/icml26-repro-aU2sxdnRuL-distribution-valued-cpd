@@ -149,7 +149,7 @@ def main() -> None:
         },
         "generated_high_variance_manifest": generated,
         "verdict": "falsified_source_table_scope",
-        "verdict_reason": "The pinned full table's greatest high-variance (sigma=2) reduction against the best displayed Log-KDE bandwidth is about 61.54%, not 95%; its >=95% table rows are low-variance/tied-delay rows. Full empirical reproduction remains unavailable without Rscript/funcharts.",
+        "verdict_reason": "The pinned full table's greatest high-variance (sigma=2) reduction against the best displayed Log-KDE bandwidth is 72.5%, not 95%; its >=95% table rows are low-variance/tied-delay rows. Full empirical reproduction remains unavailable without Rscript/funcharts.",
     }
     (OUT / "result.json").write_text(json.dumps(result, indent=2))
     print(json.dumps({
