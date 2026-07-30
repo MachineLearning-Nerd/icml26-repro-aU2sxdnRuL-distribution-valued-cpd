@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "openreview_id": "aU2sxdnRuL",
-  "phase": "claim_4_attempt_2_public_data_unavailable",
-  "next_action": "claim_5_attempt_1_source_audit_and_cpu_reproduction",
+  "phase": "claim_5_attempt_1_source_faithful_data_unavailable",
+  "next_action": "claim_5_attempt_2_authoritative_reddit_data_and_paper_era_protocol_search",
   "active_run_ids": [],
   "completed_milestones": [
     "live_duplicate_gate",
@@ -17,7 +17,8 @@
     "claim_2_attempt_1_source_audit_and_finite_sample_cpu_check",
     "claim_3_attempt_1_source_audit_and_high_variance_generation",
     "claim_4_attempt_1_source_release_audit",
-    "claim_4_attempt_2_authoritative_public_data_availability_audit"
+    "claim_4_attempt_2_authoritative_public_data_availability_audit",
+    "claim_5_attempt_1_source_faithful_availability_audit"
   ],
   "failed_attempts": [
     {
@@ -61,6 +62,12 @@
       "attempt": "2",
       "outcome": "inconclusive",
       "reason": "Paper acknowledges direct data sharing; retrieved official FlowCAP-II URL is a Coming Soon page; pinned release has no files, labels, preprocessing, seed, or runner for a source-faithful evaluation."
+    },
+    {
+      "claim": "5",
+      "attempt": "1",
+      "outcome": "inconclusive",
+      "reason": "Paper documents d=20 SBERT/PCA qualitative case study, but cited released Dataverse input is access-request restricted and pinned release lacks raw input, embeddings, dated alarms, baseline outputs, and Figure-4 artifacts."
     }
   ],
   "claim_attempt_counts": {
@@ -68,10 +75,10 @@
     "2": 1,
     "3": 1,
     "4": 2,
-    "5": 0,
+    "5": 1,
     "6": 0
   },
-  "last_checkpoint": "2026-07-30T07:20:39.040261+00:00",
+  "last_checkpoint": "2026-07-30T07:24:53.141697+00:00",
   "last_known_git_commit": "80da277",
   "publication_allowed": false,
   "github_repository": "https://github.com/MachineLearning-Nerd/icml26-repro-aU2sxdnRuL-distribution-valued-cpd",

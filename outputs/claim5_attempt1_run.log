@@ -1,0 +1,54 @@
+{
+  "attempt": "claim_5_attempt_1_source_faithful_availability_audit",
+  "claim": "On Reddit vaccine-sentiment daily embedding streams (d=20, January-May 2021), IDD alarms align with real news events such as the April 13 J&J pause, while Euclidean-summary and moment-based baselines produce monotonic drift or noise unrelated to shocks.",
+  "sources": {
+    "paper_source": "https://export.arxiv.org/e-print/2602.07252",
+    "paper_source_sha256": "7c88af0f1ccb66458f0b396331bdee3b5aed26c1b041730e891900f38a5591f6",
+    "pinned_author_repository": "https://github.com/yyzeng43/IDD-icml@c5b1db4060e5081e5c487f91792dc18c17603fd0",
+    "dataverse_dataset": "https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/XJTBQM",
+    "dataverse_metadata_sha256": "7794a9ad46488dbcfc4e3b49ff8e6e8fd7a8ae3a1e78dd3f252b171a41db5dac",
+    "external_event_reference": "https://www.cdc.gov/mmwr/volumes/70/wr/mm7017e2.htm",
+    "external_event_reference_note": "Retained as an official CDC contemporaneous J&J safety record; this audit does not infer alarm alignment from it."
+  },
+  "paper_protocol": {
+    "daily_batches": true,
+    "minimum_30_comments": true,
+    "sbert_model": true,
+    "embedding_dimension_384": true,
+    "pca_dimension_20": true,
+    "phase_dates": true,
+    "jj_pause_date": true,
+    "qualitative_only": true
+  },
+  "runner_protocol": {
+    "default_representation_is_sentiment3d": true,
+    "pca20_is_optional": true,
+    "embedding_model_declared": true,
+    "daily_windows": true,
+    "default_cutoff_is_jj_eua": true,
+    "jj_pause_marked": true,
+    "all_phaseII_days_labeled_changed": true
+  },
+  "availability": {
+    "dataverse_released": true,
+    "target_file_name": "SummaryResults_Covid_All.tab",
+    "target_file_access_request": true,
+    "target_file_md5": "25a3b3de956885ba52b221f7f50ed7c7",
+    "pinned_release_contains_reddit_raw_csv": false,
+    "pinned_release_contains_precomputed_embeddings": false,
+    "pinned_release_contains_paper_figure_outputs": false
+  },
+  "source_scope_findings": {
+    "paper_describes_embedding_pca20": true,
+    "pinned_runner_default_is_not_embedding_pca20": true,
+    "runner_default_cutoff_differs_from_paper_revised_phase_dates": true,
+    "runner_labels_all_phaseII_as_changed": true,
+    "independent_event_alignment_computed": false
+  },
+  "decision": {
+    "cpu_source_faithful_run_executed": false,
+    "exact_run_possible_from_released_inputs": false,
+    "outcome": "inconclusive_source_faithful_data_and_outputs_unavailable",
+    "reason": "The paper documents a d=20 SBERT/PCA qualitative study, but the pinned runner defaults to 3-D sentiment features and a different J&J-EUA cutoff. The cited released Dataverse metadata marks SummaryResults_Covid_All.tab as fileAccessRequest=true, and the pinned release contains no raw Reddit input, precomputed embeddings, result series, alarms, or Figure-4 outputs. Therefore the date/alarm alignment and baseline behavior cannot be independently recomputed on CPU. This is an availability/protocol finding, not a refutation of the underlying Reddit observations."
+  }
+}
