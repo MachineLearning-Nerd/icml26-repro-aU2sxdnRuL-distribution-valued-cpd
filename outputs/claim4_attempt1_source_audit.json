@@ -1,0 +1,30 @@
+{
+  "attempt": "claim_4_attempt_1_source_and_release_audit",
+  "paper_source": {
+    "url": "https://export.arxiv.org/e-print/2602.07252",
+    "main_tex_sha256": "7c88af0f1ccb66458f0b396331bdee3b5aed26c1b041730e891900f38a5591f6",
+    "flowcap_protocol_fragments": {
+      "dimension_7": "distribution-valued stream in $\\mathcal{P}_2(\\mathbb{R}^7)$",
+      "cells_per_measurement": "random subsample of $N=2,000$ cells",
+      "healthy_calibration": "sequence of 300 healthy samples",
+      "monitoring_length": "test stream of 300 samples",
+      "aml_fraction": "injecting 80\\% AML-positive samples"
+    }
+  },
+  "pinned_upstream": {
+    "repository": "https://github.com/yyzeng43/IDD-icml",
+    "commit": "c5b1db4060e5081e5c487f91792dc18c17603fd0",
+    "flowcap_or_aml_or_cytometry_tracked_paths": [],
+    "readme_mentions_flowcap": false,
+    "readme_case_study": true
+  },
+  "literal_claim_consistency": {
+    "main_text_reports_arl1_approximately_1": true,
+    "appendix_reports_idd_arl1_between_2_and_3": true,
+    "main_text_says_hotelling_precision_below_0_4": true,
+    "main_text_explicitly_says_hotelling_f1_below_0_4": false
+  },
+  "outcome": "falsified_literal_source_scope",
+  "reason": "The public code/release contains no FlowCAP/AML/cytometry data, loader, or runner, so no source-faithful CPU table reproduction is executable. More importantly, the live claim calls Hotelling T2 F1 <0.4, while the pinned main text states precision <0.4; the appendix also reports IDD ARL1 approximately 2--3, conflicting with the main-text approximately-1 wording. This source audit does not establish a dataset-level result.",
+  "next_action": "claim_4_attempt_2_locate_public_flowcap_data_and_reconstruct_protocol_only_if_exact_files_and_labels_are_available"
+}
