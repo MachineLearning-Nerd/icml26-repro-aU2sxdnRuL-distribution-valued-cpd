@@ -1,0 +1,6 @@
+python 3.12.13 (main, Jun 23 2026, 15:18:55) [Clang 22.1.3 ]
+numpy 2.5.1
+scipy 1.18.0
+POT 0.9.7.post1
+torch 2.13.0+cu130
+Rscript: unavailable

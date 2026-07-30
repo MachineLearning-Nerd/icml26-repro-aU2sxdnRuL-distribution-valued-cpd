@@ -1,0 +1,51 @@
+{
+  "scope": "toy",
+  "upstream_file": "upstream/IDD-icml/gaussian_translation/ot_mfpca.py",
+  "ot_method": "emd",
+  "r_funcharts_used": false,
+  "phase_i_clouds": 3,
+  "phase_ii_clouds": 2,
+  "points_per_cloud": 4,
+  "direct_translation_delta": 0.6,
+  "direct_translation_map_max_abs_error": 8.881784197001252e-16,
+  "direct_translation_w2_squared": 0.35999999999999976,
+  "expected_translation_w2_squared": 0.36,
+  "negative_control_identity_w2_squared": 0.0,
+  "negative_control_passed": true,
+  "upstream_phase_i_tangent_norms": [
+    0.009999999999999997,
+    1.2017802852976352e-30,
+    0.009999999999999976
+  ],
+  "upstream_phase_ii_tangent_norms": [
+    0.0024999999999999905,
+    0.35999999999999893
+  ],
+  "pca_t2_spe": {
+    "phase_i_t2": [
+      1.0000000000000002,
+      3.165189248586605e-62,
+      1.0000000000000004
+    ],
+    "phase_ii_t2": [
+      0.25000000000000006,
+      35.99999999999996
+    ],
+    "phase_i_spe": [
+      2.5037089277034066e-33,
+      3.2869204384208763e-32,
+      5.354085245396516e-32
+    ],
+    "phase_ii_spe": [
+      5.429677995713715e-31,
+      5.941108692445745e-30
+    ],
+    "retained_eigenvalue": 0.1199999999999998
+  },
+  "claim_1_full_scope_verified": false,
+  "limitations": [
+    "Four points per cloud and three Phase-I streams are toy scale.",
+    "The R/funcharts upstream mFPCA stage was unavailable because Rscript is absent.",
+    "NumPy PCA/T\u00b2/SPE is an independent transparent diagnostic, not a substitute for the released R stage."
+  ]
+}
