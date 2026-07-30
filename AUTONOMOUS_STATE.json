@@ -97,6 +97,13 @@
   "last_checkpoint": "2026-07-30T08:25:00Z",
   "last_known_git_commit": "17901127d3dcce706f3482bc726fd87d349b5cc2",
   "publication_allowed": true,
+  "last_queue_check": {
+    "checked_at_utc": "2026-07-30T08:30:38Z",
+    "result": "waiting_for_hf_quota_reset",
+    "retry_not_before_utc": "2026-07-31T08:25:00Z",
+    "canonical_backlog_entries_for_orid": 1,
+    "public_git_head": "9d5e031ad794132d3835ab2dfbb68cd69f57b846"
+  },
   "publication_queue": {
     "status": "queued",
     "reason": "HF HTTP 429 Space-creation daily quota",
