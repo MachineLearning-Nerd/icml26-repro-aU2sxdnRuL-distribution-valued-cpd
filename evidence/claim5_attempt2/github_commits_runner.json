@@ -1,0 +1,84 @@
+[
+  {
+    "sha": "d1fb8f01a52b16778bedc2b9d60adaa7a2eaef17",
+    "node_id": "C_kwDOR0Ma89oAKGQxZmI4ZjAxYTUyYjE2Nzc4YmVkYzJiOWQ2MGFkYWE3YTJlYWVmMTc",
+    "commit": {
+      "author": {
+        "name": "yyzeng43",
+        "email": "yingyanzeng@vt.edu",
+        "date": "2026-05-20T14:35:28Z"
+      },
+      "committer": {
+        "name": "yyzeng43",
+        "email": "yingyanzeng@vt.edu",
+        "date": "2026-05-20T14:35:28Z"
+      },
+      "message": "Replace figures with reproducibility scripts",
+      "tree": {
+        "sha": "b501725af96e0380be38ce13e1ba067c3595f07f",
+        "url": "https://api.github.com/repos/yyzeng43/IDD-icml/git/trees/b501725af96e0380be38ce13e1ba067c3595f07f"
+      },
+      "url": "https://api.github.com/repos/yyzeng43/IDD-icml/git/commits/d1fb8f01a52b16778bedc2b9d60adaa7a2eaef17",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null,
+        "verified_at": null
+      }
+    },
+    "url": "https://api.github.com/repos/yyzeng43/IDD-icml/commits/d1fb8f01a52b16778bedc2b9d60adaa7a2eaef17",
+    "html_url": "https://github.com/yyzeng43/IDD-icml/commit/d1fb8f01a52b16778bedc2b9d60adaa7a2eaef17",
+    "comments_url": "https://api.github.com/repos/yyzeng43/IDD-icml/commits/d1fb8f01a52b16778bedc2b9d60adaa7a2eaef17/comments",
+    "author": {
+      "login": "yyzeng43",
+      "id": 100038918,
+      "node_id": "U_kgDOBfZ5Bg",
+      "avatar_url": "https://avatars.githubusercontent.com/u/100038918?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/yyzeng43",
+      "html_url": "https://github.com/yyzeng43",
+      "followers_url": "https://api.github.com/users/yyzeng43/followers",
+      "following_url": "https://api.github.com/users/yyzeng43/following{/other_user}",
+      "gists_url": "https://api.github.com/users/yyzeng43/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/yyzeng43/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/yyzeng43/subscriptions",
+      "organizations_url": "https://api.github.com/users/yyzeng43/orgs",
+      "repos_url": "https://api.github.com/users/yyzeng43/repos",
+      "events_url": "https://api.github.com/users/yyzeng43/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/yyzeng43/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "yyzeng43",
+      "id": 100038918,
+      "node_id": "U_kgDOBfZ5Bg",
+      "avatar_url": "https://avatars.githubusercontent.com/u/100038918?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/yyzeng43",
+      "html_url": "https://github.com/yyzeng43",
+      "followers_url": "https://api.github.com/users/yyzeng43/followers",
+      "following_url": "https://api.github.com/users/yyzeng43/following{/other_user}",
+      "gists_url": "https://api.github.com/users/yyzeng43/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/yyzeng43/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/yyzeng43/subscriptions",
+      "organizations_url": "https://api.github.com/users/yyzeng43/orgs",
+      "repos_url": "https://api.github.com/users/yyzeng43/repos",
+      "events_url": "https://api.github.com/users/yyzeng43/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/yyzeng43/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "12c5cd1df41617216d3ce7ef512c92eb51039770",
+        "url": "https://api.github.com/repos/yyzeng43/IDD-icml/commits/12c5cd1df41617216d3ce7ef512c92eb51039770",
+        "html_url": "https://github.com/yyzeng43/IDD-icml/commit/12c5cd1df41617216d3ce7ef512c92eb51039770"
+      }
+    ]
+  }
+]

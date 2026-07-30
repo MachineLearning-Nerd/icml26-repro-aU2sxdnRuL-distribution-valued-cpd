@@ -1,0 +1,17 @@
+{
+  "runner_path_commits": [
+    {
+      "sha": "d1fb8f01a52b16778bedc2b9d60adaa7a2eaef17",
+      "date": "2026-05-20T14:35:28Z",
+      "message": "Replace figures with reproducibility scripts"
+    }
+  ],
+  "release_count": 0,
+  "tag_count": 0,
+  "missing_module_import": true,
+  "isolated_import_repair_exit_code": 1,
+  "isolated_import_repair_still_fails": true,
+  "paper_era_embedding_or_figure_outputs_recovered": false,
+  "verdict": "inconclusive",
+  "reason": "The public path history has one post-paper reproducibility-script commit and no releases/tags; the source imports an absent simulation package, and no recoverable paper-era embedding cache, dated alarm series, baseline output, or Figure-4 result is present."
+}
