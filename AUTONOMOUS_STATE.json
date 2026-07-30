@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "openreview_id": "aU2sxdnRuL",
-  "phase": "review_remediation_incomplete",
-  "next_action": "upgrade_or_replace_trackio_to_attach_session_trace_and_rebuild_poster_with_two_manifested_paper_figures_before_rereview",
+  "phase": "publication_ready_for_final_review",
+  "next_action": "run_fresh_independent_final_review_before_publication",
   "active_run_ids": [],
   "completed_milestones": [
     "live_duplicate_gate",
@@ -94,7 +94,7 @@
     "5": 3,
     "6": 1
   },
-  "last_checkpoint": "2026-07-30T07:52:41.955563+00:00",
+  "last_checkpoint": "2026-07-30T08:00:00Z",
   "last_known_git_commit": "94b0edd",
   "publication_allowed": false,
   "github_repository": "https://github.com/MachineLearning-Nerd/icml26-repro-aU2sxdnRuL-distribution-valued-cpd",
@@ -111,8 +111,9 @@
     "reason": "For fixed d, the printed K bound scales as epsilon^(-2d) under the source regularity chain; dimension-free control is rejected.",
     "evidence": "outputs/claim6_attempt1_audit.md"
   },
-  "review_remediation_blockers": [
-    "Installed Trackio 0.31.5 has no `logbook attach trace` command required by the challenge README; no trace was fabricated.",
-    "Poster has no two manifested paper figures, so posterly asset-provenance gate remains NOT_RUN."
-  ]
+  "review_remediation_blockers": [],
+  "review_remediation_evidence": {
+    "trackio": "Trackio 0.34.0 isolated environment attached the persisted Pi session trace; outputs/trackio_trace_readback.txt confirms a scrubbed 611-event trace.",
+    "poster": "logbook/FIGURE_MANIFEST.json manifests two unmodified arXiv-source figures; logbook/GATE_REPORT.json records every posterly gate PASS."
+  }
 }

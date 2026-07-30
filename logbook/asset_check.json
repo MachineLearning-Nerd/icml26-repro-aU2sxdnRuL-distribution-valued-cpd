@@ -1,0 +1,54 @@
+{
+  "gate": "asset",
+  "status": "WARN",
+  "checks": [
+    {
+      "id": "paper_fig_count",
+      "severity": "hard",
+      "status": "PASS",
+      "detail": "2 img[data-source=paper] (>= 2 required)"
+    },
+    {
+      "id": "asset_provenance",
+      "severity": "hard",
+      "status": "PASS",
+      "detail": "asset paper-copula-shift: resolves, from_paper, fields complete, file exists, sha256 matches."
+    },
+    {
+      "id": "asset_provenance",
+      "severity": "hard",
+      "status": "PASS",
+      "detail": "asset paper-multimodal-reweight: resolves, from_paper, fields complete, file exists, sha256 matches."
+    },
+    {
+      "id": "fig_area",
+      "severity": "hard",
+      "status": "PASS",
+      "detail": "asset paper-copula-shift: 5.14% of poster (>= 1.50%)."
+    },
+    {
+      "id": "fig_resolution",
+      "severity": "warn",
+      "status": "WARN",
+      "detail": "asset paper-copula-shift: natural 1069x934 = 1.71x rendered (624x546); >= 1.5x floor but below 2.0x target -- consider a higher-DPI crop."
+    },
+    {
+      "id": "fig_area",
+      "severity": "hard",
+      "status": "PASS",
+      "detail": "asset paper-multimodal-reweight: 4.95% of poster (>= 1.50%)."
+    },
+    {
+      "id": "fig_resolution",
+      "severity": "warn",
+      "status": "WARN",
+      "detail": "asset paper-multimodal-reweight: natural 1069x934 = 1.74x rendered (613x536); >= 1.5x floor but below 2.0x target -- consider a higher-DPI crop."
+    },
+    {
+      "id": "total_fig_area",
+      "severity": "hard",
+      "status": "PASS",
+      "detail": "total paper-image area = 15.53% of body (>= 12.00%)."
+    }
+  ]
+}

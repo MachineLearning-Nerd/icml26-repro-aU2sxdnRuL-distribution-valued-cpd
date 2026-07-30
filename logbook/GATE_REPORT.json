@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "skill": "posterly",
-  "timestamp": "2026-07-30T07:43:02Z",
+  "timestamp": "2026-07-30T07:59:00Z",
   "poster_html": "/home/dineshai/Drives/Code/AllCode/ReproduceICML/papers/icml26-repro-aU2sxdnRuL-distribution-valued-cpd/logbook/poster.html",
   "canvas": {
     "source": "page-rule",
@@ -134,12 +134,73 @@
     {
       "name": "asset",
       "severity": "hard",
-      "status": "NOT_RUN",
-      "command": [],
+      "status": "PASS",
+      "command": [
+        "/home/dineshai/Drives/Code/AllCode/ReproduceICML/papers/icml26-repro-aU2sxdnRuL-distribution-valued-cpd/.venv-posterly/bin/python",
+        "/tmp/posterly/tools/asset_check.py",
+        "/home/dineshai/Drives/Code/AllCode/ReproduceICML/papers/icml26-repro-aU2sxdnRuL-distribution-valued-cpd/logbook/poster.html",
+        "--manifest",
+        "/home/dineshai/Drives/Code/AllCode/ReproduceICML/papers/icml26-repro-aU2sxdnRuL-distribution-valued-cpd/logbook/FIGURE_MANIFEST.json",
+        "--json",
+        "/home/dineshai/Drives/Code/AllCode/ReproduceICML/papers/icml26-repro-aU2sxdnRuL-distribution-valued-cpd/logbook/asset_check.json"
+      ],
       "summary": {
-        "not_run": "no --manifest: real-figure provenance gate opted out (NOT verified)"
+        "gate": "asset",
+        "status": "WARN",
+        "checks": [
+          {
+            "id": "paper_fig_count",
+            "severity": "hard",
+            "status": "PASS",
+            "detail": "2 img[data-source=paper] (>= 2 required)"
+          },
+          {
+            "id": "asset_provenance",
+            "severity": "hard",
+            "status": "PASS",
+            "detail": "asset paper-copula-shift: resolves, from_paper, fields complete, file exists, sha256 matches."
+          },
+          {
+            "id": "asset_provenance",
+            "severity": "hard",
+            "status": "PASS",
+            "detail": "asset paper-multimodal-reweight: resolves, from_paper, fields complete, file exists, sha256 matches."
+          },
+          {
+            "id": "fig_area",
+            "severity": "hard",
+            "status": "PASS",
+            "detail": "asset paper-copula-shift: 5.14% of poster (>= 1.50%)."
+          },
+          {
+            "id": "fig_resolution",
+            "severity": "warn",
+            "status": "WARN",
+            "detail": "asset paper-copula-shift: natural 1069x934 = 1.71x rendered (624x546); >= 1.5x floor but below 2.0x target -- consider a higher-DPI crop."
+          },
+          {
+            "id": "fig_area",
+            "severity": "hard",
+            "status": "PASS",
+            "detail": "asset paper-multimodal-reweight: 4.95% of poster (>= 1.50%)."
+          },
+          {
+            "id": "fig_resolution",
+            "severity": "warn",
+            "status": "WARN",
+            "detail": "asset paper-multimodal-reweight: natural 1069x934 = 1.74x rendered (613x536); >= 1.5x floor but below 2.0x target -- consider a higher-DPI crop."
+          },
+          {
+            "id": "total_fig_area",
+            "severity": "hard",
+            "status": "PASS",
+            "detail": "total paper-image area = 15.53% of body (>= 12.00%)."
+          }
+        ]
       },
-      "artifacts": []
+      "artifacts": [
+        "/home/dineshai/Drives/Code/AllCode/ReproduceICML/papers/icml26-repro-aU2sxdnRuL-distribution-valued-cpd/logbook/asset_check.json"
+      ]
     },
     {
       "name": "measure",
@@ -153,7 +214,7 @@
       ],
       "summary": {
         "exit_code": 0,
-        "tail": "[measure] viewport = 2304 x 2880 px\n[measure] columns found: 2\n  col0    last-card-bottom =  2648.47 px\n  col1    last-card-bottom =  2648.44 px\n  spread = 0.03 px   (target < 5.0 px)\n  intercard gap in [26.45 (col0), 26.45 (col0)] px   (target [12.0, 50.0])\n  gap -> footer in [48.97, 49.00] px   (target [30.0, 50.0])\n[measure] PASS"
+        "tail": "[measure] viewport = 2304 x 2880 px\n[measure] columns found: 2\n  col0    last-card-bottom =  2657.16 px\n  col1    last-card-bottom =  2658.50 px\n  spread = 1.34 px   (target < 5.0 px)\n  intercard gap in [26.45 (col0), 26.45 (col0)] px   (target [12.0, 50.0])\n  gap -> footer in [38.94, 40.28] px   (target [30.0, 50.0])\n[measure] PASS"
       },
       "artifacts": []
     },

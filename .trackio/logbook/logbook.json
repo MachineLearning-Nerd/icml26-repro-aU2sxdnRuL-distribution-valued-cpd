@@ -1,11 +1,14 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "title": "Reproduction: Beyond Euclidean Summaries: Online Change Point Detection for Distribution-Valued Data",
   "emoji": "🎯",
-  "space_id": null,
+  "space_id": "DineshAI/repro-beyond-euclidean-summaries-online-change-point-detection-for-distribution-valued-data",
   "paper": null,
-  "tags": [],
-  "updated_at": "2026-07-30T07:43:13+00:00",
+  "tags": [
+    "icml2026-repro",
+    "paper-aU2sxdnRuL"
+  ],
+  "updated_at": "2026-07-30T07:59:23+00:00",
   "root": {
     "slug": "index",
     "title": "Reproduction: Beyond Euclidean Summaries: Online Change Point Detection for Distribution-Valued Data",
@@ -61,6 +64,30 @@
       }
     ]
   },
-  "agent_view_tokens": 3776,
-  "revision": "1785397393785962628"
+  "traces": [
+    {
+      "id": "019fb203-890c-7fcf-b075-c43fd0c1f5bd",
+      "title": "Final publication-remediation session",
+      "provider": "Pi",
+      "model": "gpt-5.6-terra",
+      "started_at": "2026-07-30T07:53:23.980000+00:00",
+      "ended_at": "2026-07-30T07:59:22.885000+00:00",
+      "duration_ms": 358905,
+      "event_count": 611,
+      "turn_count": 30,
+      "source_available": true,
+      "attached_at": "2026-07-30T07:54:32+00:00",
+      "index_file": "traces/019fb203-890c-7fcf-b075-c43fd0c1f5bd/index.json"
+    }
+  ],
+  "workspace": {
+    "file": "workspace.json",
+    "file_count": 2,
+    "total_size": 1736,
+    "bucket_id": null
+  },
+  "agent_view_tokens": 3823,
+  "trace_view_tokens": 28299,
+  "workspace_view_tokens": 36,
+  "revision": "0b6a821980d14cd36b3f"
 }

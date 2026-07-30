@@ -1,0 +1,31 @@
+{
+  "source": {
+    "paper": "Beyond Euclidean Summaries: Online Change Point Detection for Distribution-Valued Data",
+    "arxiv_id": "2602.07252",
+    "source_archive_url": "https://arxiv.org/e-print/2602.07252",
+    "source_archive_sha256": "6d4af865d403a1c4f72ed3ef8057069212ac1633aa79410b4607b04a8b9edb87",
+    "license_note": "Figures are unmodified files extracted from the authors' arXiv source archive and are used here as attributed paper figures for a reproduction logbook."
+  },
+  "figures": [
+    {
+      "asset_id": "paper-multimodal-reweight",
+      "file": "assets/paper_figures/multimodal-reweight-delay-vs-arl0.png",
+      "from_paper": true,
+      "page": "paper source main0.tex Figure 1, left subfigure (lines 876-893)",
+      "bbox": [0, 0, 1069, 934],
+      "dpi": 300,
+      "sha256": "55cba136d7e954a7423083b35299e597a04bf31d1ac71fbab59d3b7a95300dc2",
+      "natural_px": [1069, 934]
+    },
+    {
+      "asset_id": "paper-copula-shift",
+      "file": "assets/paper_figures/copula-shift-delay-vs-arl0.png",
+      "from_paper": true,
+      "page": "paper source main0.tex Figure 1, right subfigure (lines 876-893)",
+      "bbox": [0, 0, 1069, 934],
+      "dpi": 300,
+      "sha256": "f32c8b017ca038ee5f93ed3306fd56f8bd67cb08ecb6b4e6fd2fb546d35973d2",
+      "natural_px": [1069, 934]
+    }
+  ]
+}

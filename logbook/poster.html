@@ -812,9 +812,14 @@
     :root { --u: 1mm; }
   }
 
-/* Evidence-card balancing after print measurement. */
-.column:nth-child(1) .card:last-child { padding-bottom: calc(22 * var(--u)); }
-.column:nth-child(2) .card:last-child { padding-bottom: calc(15 * var(--u)); }
+/* Compact evidence layout reserves verified space for two manifested paper figures. */
+
+.card { padding: calc(2 * var(--u)) calc(5 * var(--u)); }
+.section-title { font-size: var(--fs-6); margin-bottom: calc(1 * var(--u)); gap: calc(3 * var(--u)); }
+.section-title .num { width: calc(20 * var(--u)); height: calc(20 * var(--u)); font-size: var(--fs-4); }
+.body-text, .card p, .card li { font-size: var(--fs-3); line-height: 1.18; }
+.column:nth-child(1) .card:last-child { padding-bottom: calc(50 * var(--u)); }
+.column:nth-child(2) .card:last-child { padding-bottom: calc(46 * var(--u)); }
 </style>
 </head>
 <body>
@@ -823,14 +828,14 @@
 <div class="body-grid" data-measure-role="body">
 <div class="column" data-measure-role="column">
 <div class="card highlight" data-measure-role="card" data-logbook-target="executive-summary"><div class="section-title"><span class="num">1</span><span class="st-text">Outcome</span></div><p class="body-text">Six live claims were audited against the pinned paper source and official release. One scoped theorem audit is verified; four literal source claims are falsified; the tangent-space mechanism remains inconclusive with toy evidence.</p></div>
-<div class="card" data-measure-role="card" data-logbook-target="claim-1-tangent-space-idd-mapping"><div class="section-title"><span class="num">2</span><span class="st-text">Tangent-space mapping</span></div><p class="body-text">Three reduced CPU transport audits pass translation, scale, and deformation identities with expected negative controls. The source-faithful R/funcharts mFPCA path is unavailable, so Claim 1 is not called verified.</p></div>
+<div class="card" data-measure-role="card" data-logbook-target="claim-1-tangent-space-idd-mapping"><div class="section-title"><span class="num">2</span><span class="st-text">Tangent-space mapping</span></div><p class="body-text">Three reduced CPU transport audits pass translation, scale, and deformation identities with expected negative controls. The source-faithful R/funcharts mFPCA path is unavailable, so Claim 1 is not called verified.</p><div class="figure"><img src="assets/paper_figures/copula-shift-delay-vs-arl0.png" data-source="paper" data-asset-id="paper-copula-shift" class="w-60" alt="Paper Figure 1 right: copula-shift delay versus ARL0"></div></div>
 <div class="card" data-measure-role="card" data-logbook-target="claim-2-empirical-quantile-arl"><div class="section-title"><span class="num">3</span><span class="st-text">False-alarm bound</span></div><p class="body-text">The fixed-threshold theorem supports its displayed bound. The empirical-quantile corollary adds the finite-sample term 2/(n0+1); omitting it falsifies the literal live wording.</p></div>
 <div class="card highlight" data-measure-role="card" data-logbook-target="claim-6-finite-dimensional-epsilon-isometry"><div class="section-title"><span class="num">4</span><span class="st-text">Finite-dimensional theorem</span></div><p class="body-text">Theorem 3.14 gives K proportional to epsilon^(-2d) under the stated regularity chain. Nine finite-K algebra checks pass; a dimension-free control fails.</p></div>
 </div>
 <div class="column" data-measure-role="column">
-<div class="card highlight" data-measure-role="card" data-logbook-target="claim-3-synthetic-delay-reduction"><div class="section-title"><span class="num">5</span><span class="st-text">Synthetic Table 1</span></div><p class="body-text">Pinned high-variance rows give a maximum 72.5% reduction against the best displayed Log-KDE, not 95%. Released generator inputs ran; full R/mFPCA table execution remains&nbsp;unavailable.</p></div>
-<div class="card" data-measure-role="card" data-logbook-target="claim-4-flowcap-ii-aml-detection"><div class="section-title"><span class="num">6</span><span class="st-text">FlowCAP-II</span></div><p class="body-text">The public release lacks FlowCAP data, labels, and runner. The live claim changes Hotelling precision to F1 and conflicts with appendix ARL1 result rather than its headline description.</p></div>
-<div class="card" data-measure-role="card" data-logbook-target="claim-5-reddit-event-alignment"><div class="section-title"><span class="num">7</span><span class="st-text">Reddit timeline</span></div><p class="body-text">The authoritative Figure-4 source reports an April 30 post-gap reorganization after an April 3--28 sparse-data gap, not a direct April 13 alarm.</p></div>
+<div class="card highlight" data-measure-role="card" data-logbook-target="claim-3-synthetic-delay-reduction"><div class="section-title"><span class="num">5</span><span class="st-text">Synthetic Table 1</span></div><p class="body-text">Pinned high-variance rows give a maximum 72.5% reduction against the best displayed Log-KDE, not 95%.</p><div class="figure"><img src="assets/paper_figures/multimodal-reweight-delay-vs-arl0.png" data-source="paper" data-asset-id="paper-multimodal-reweight" class="w-60" alt="Paper Figure 1 left: multimodal reweighting delay versus ARL0"></div></div>
+<div class="card" data-measure-role="card" data-logbook-target="claim-4-flowcap-ii-aml-detection"><div class="section-title"><span class="num">6</span><span class="st-text">FlowCAP-II</span></div><p class="body-text">The public release lacks FlowCAP data, labels, and runner. The live claim changes Hotelling precision to F1 and conflicts with appendix ARL1 result rather than its&nbsp;headline&nbsp;description.</p></div>
+<div class="card" data-measure-role="card" data-logbook-target="claim-5-reddit-event-alignment"><div class="section-title"><span class="num">7</span><span class="st-text">Reddit timeline</span></div><p class="body-text">The authoritative Figure-4 source reports an April 30 post-gap reorganization after an April 3--28 sparse-data gap, not a&nbsp;direct&nbsp;April&nbsp;13&nbsp;alarm.</p></div>
 <div class="card highlight" data-measure-role="card" data-logbook-target="conclusion"><div class="section-title"><span class="num">8</span><span class="st-text">Reproducibility</span></div><p class="body-text">All scripts, tests, source pins, raw logs, and hashes are public. No HF Job or Bucket was used; unavailable source artifacts are documented instead of replaced with proxies.</p><ul class="mt-3"><li>Public code at the pinned commit.</li><li>Exact live claims retained with hashes.</li></ul></div>
 </div></div>
 <div class="footer" data-measure-role="footer"><div><strong class="method-name">IDD reproduction audit</strong> &middot; CPU-only &middot; source-pinned</div><div>Code: <span class="repo">github.com/MachineLearning-Nerd/icml26-repro-aU2sxdnRuL-distribution-valued-cpd</span></div></div></div></body>

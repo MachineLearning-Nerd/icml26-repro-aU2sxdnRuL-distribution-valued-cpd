@@ -2,7 +2,7 @@
   canvas: 60.96 x 76.2 cm portrait (source: page-rule)
   preflight [hard] -> PASS
   style     [hard] -> PASS
-  asset     [hard] -> NOT_RUN
+  asset     [hard] -> PASS
   measure   [hard] -> PASS
   polish    [hard] -> PASS
   overall: PASS   hard_failures: 0   warnings: 0
