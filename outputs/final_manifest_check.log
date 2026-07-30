@@ -1,0 +1,17 @@
+evidence/claim4_attempt1/main0.tex: OK
+outputs/claim4_attempt1_source_audit.json: OK
+evidence/claim5_attempt1/cdc_mmwr_jj_pause.html: OK
+evidence/claim5_attempt1/dataverse_metadata.json: OK
+evidence/claim5_attempt1/SummaryResults_Covid_All.tab: OK
+evidence/claim5_attempt2/github_commits_runner.json: OK
+evidence/claim5_attempt2/github_releases.json: OK
+evidence/claim5_attempt2/github_tags.json: OK
+outputs/claim5_attempt2/protocol_history_audit.json: OK
+outputs/claim5_attempt2/repaired_import_exit_code.txt: OK
+outputs/claim5_attempt2/repaired_import_runner.log: OK
+outputs/claim5_attempt2/test.log: OK
+evidence/claim5_attempt3/arxiv_source.tar: OK
+evidence/claim5_attempt3/reddit_figure4_source.pdf: OK
+result.json: OK
+run.log: OK
+test.log: OK

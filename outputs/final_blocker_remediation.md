@@ -25,7 +25,7 @@
   --manifest logbook/FIGURE_MANIFEST.json --report logbook/GATE_REPORT.json --strict-polish
 ```
 
-All gates passed. `logbook/GATE_REPORT.json` records asset provenance pass for both figures and total paper-image area 15.41% of the body.
+The final gate run passes. `logbook/GATE_REPORT.json` records asset provenance pass for both figures and total paper-image area 15.53% of the body. The earlier reviewed gate report contained two nonfatal resolution warnings; they were warnings rather than hard failures. After the final text/layout regeneration, the final gate report emits no warnings.
 
 ## Validation
 

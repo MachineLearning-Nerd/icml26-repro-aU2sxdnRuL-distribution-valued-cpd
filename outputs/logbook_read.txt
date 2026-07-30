@@ -35,7 +35,7 @@
 
 ### Executive summary · markdown · `cell_404a32eac18f` · 2026-07-30 07:37
 
-The six-claim contract was audited against the pinned paper source and [official code commit](https://github.com/yyzeng43/IDD-icml/tree/c5b1db4060e5081e5c487f91792dc18c17603fd0). Claim 6 is verified as a scoped theorem/numerical audit; Claims 2--5 are falsified as literally worded because their live wording conflicts with the source theorem, table arithmetic, metric, or Figure-4 timeline. Claim 1 has three retained toy mechanism audits but remains inconclusive because the source-faithful R/funcharts paper-scale route is unavailable. This CPU-only work used no Hugging Face Job or Bucket; all code and evidence are in the public [reproduction repository](https://github.com/MachineLearning-Nerd/icml26-repro-aU2sxdnRuL-distribution-valued-cpd).
+The six-claim contract was audited against the pinned paper source and [official code commit](https://github.com/yyzeng43/IDD-icml/tree/c5b1db4060e5081e5c487f91792dc18c17603fd0). Claim 6 is verified as a scoped theorem/numerical audit; Claims 2--4 are falsified as literally worded. Claim 5 is inconclusive because the source supports post-pause event alignment but released artifacts do not permit an independent numeric rerun. Claim 1 has three retained toy mechanism audits but remains inconclusive because the source-faithful R/funcharts paper-scale route is unavailable. This CPU-only work used no Hugging Face Job or Bucket; all code and evidence are in the public [reproduction repository](https://github.com/MachineLearning-Nerd/icml26-repro-aU2sxdnRuL-distribution-valued-cpd).
 
 ## Scope & cost
 
@@ -45,7 +45,7 @@ The six-claim contract was audited against the pinned paper source and [official
 | Hardware | Local CPU only | Paper-scale CPU/R environment plus unreleased data artifacts |
 | Compute time | Short deterministic CPU audits; no billed Job | Not reproducible from the pinned public release |
 | Cost | $0 billed; no HF Job/Bucket used | Unknown |
-| Outcome | 1 scoped verification, 4 literal-source falsifications, 1 inconclusive with toy evidence | Not established |
+| Outcome | 1 scoped verification, 3 literal-source falsifications, 2 inconclusive (Claim 1 has toy evidence) | Not established |
 
 ### Reproduction poster · figure · `cell_779206d5f49f` · 2026-07-30 07:43
 
@@ -125,9 +125,9 @@ On Reddit vaccine-sentiment d=20 streams, alarms align with events such as the A
 
 ## Evidence and outcome
 
-**Falsified for the literal April-13 alignment wording.** Attempt 1 checksum-matched the public Dataverse input but found no paper-era 20-D embeddings, dated alarm series, baseline outputs, or working runner. Attempt 2 audited release history and packaging with the same result. The independent third route recovered the authoritative arXiv source archive and Figure-4 asset: it specifies 384-D MiniLM embeddings/PCA-20 and reports an **April 30 post-gap reorganization** after an April 3--28 sparse-data gap. April 13 occurs inside that gap, so this is not a direct observed April-13 alarm. Numeric streams were not replaced with a proxy.
+**Inconclusive.** Attempt 1 checksum-matched the public Dataverse input but found no paper-era 20-D embeddings, dated alarm series, baseline outputs, or working runner. Attempt 2 audited release history and packaging with the same result. The independent third route recovered the authoritative arXiv source archive and Figure-4 asset: it specifies 384-D MiniLM embeddings/PCA-20 and reports an **April 30 post-gap reorganization** after an April 3--28 sparse-data gap. This supports post-pause event alignment, but released numeric streams needed for an independent rerun are unavailable. Numeric streams were not replaced with a proxy.
 
-Evidence: `outputs/claim5_attempt{1,2,3}_audit.md`, `evidence/claim5_attempt3/arxiv_source.tar`, Figure-4 PDF, hashes, `src/claim5_attempt3_arxiv_archive_audit.py`, and `tests/test_claim5_attempt3.py` (1 passed).
+Evidence: `outputs/claim5_attempt{1,2,3}_audit.md`, official arXiv source `https://arxiv.org/e-print/2602.07252` (downloaded and SHA-256-verified by `src/claim5_attempt3_arxiv_archive_audit.py`), Figure-4 PDF, hashes, and `tests/test_claim5_attempt3.py` (1 passed).
 
 Source pin: [official code commit](https://github.com/yyzeng43/IDD-icml/tree/c5b1db4060e5081e5c487f91792dc18c17603fd0). No Hub model/dataset/Job/Bucket was used.
 
@@ -157,7 +157,7 @@ Source pin: [official code commit](https://github.com/yyzeng43/IDD-icml/tree/c5b
 - **Claim 2 — falsified as written:** the empirical-quantile result includes the source's finite-sample `+2/(n0+1)` correction, omitted by the live wording.
 - **Claim 3 — falsified as written:** the pinned high-variance Table-1 maximum against the best displayed Log-KDE is 72.5%, not 95%.
 - **Claim 4 — falsified as written:** the live wording changes Hotelling precision to F1 and conflicts with the appendix ARL1; an exact FlowCAP route is not public.
-- **Claim 5 — falsified as written:** the authoritative Figure-4 source describes an April 30 post-gap reorganization, not a direct April 13 alarm.
+- **Claim 5 — inconclusive:** the authoritative Figure-4 source supports post-pause event alignment, but released artifacts do not provide the numeric streams needed for an independent source-faithful rerun.
 - **Claim 6 — verified, scoped:** the printed finite-K bound is polynomial in precision for fixed dimension under the stated regularity conditions; it is not dimension-free.
 
 ## Reproducibility notes

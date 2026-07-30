@@ -11,7 +11,7 @@
 - **Claim 2 — falsified as written:** the empirical-quantile result includes the source's finite-sample `+2/(n0+1)` correction, omitted by the live wording.
 - **Claim 3 — falsified as written:** the pinned high-variance Table-1 maximum against the best displayed Log-KDE is 72.5%, not 95%.
 - **Claim 4 — falsified as written:** the live wording changes Hotelling precision to F1 and conflicts with the appendix ARL1; an exact FlowCAP route is not public.
-- **Claim 5 — falsified as written:** the authoritative Figure-4 source describes an April 30 post-gap reorganization, not a direct April 13 alarm.
+- **Claim 5 — inconclusive:** the authoritative Figure-4 source supports post-pause event alignment, but released artifacts do not provide the numeric streams needed for an independent source-faithful rerun.
 - **Claim 6 — verified, scoped:** the printed finite-K bound is polynomial in precision for fixed dimension under the stated regularity conditions; it is not dimension-free.
 
 ## Reproducibility notes

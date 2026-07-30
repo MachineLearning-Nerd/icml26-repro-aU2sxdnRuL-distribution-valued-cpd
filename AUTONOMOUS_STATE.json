@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "openreview_id": "aU2sxdnRuL",
-  "phase": "publication_ready_for_final_review",
-  "next_action": "run_fresh_independent_final_review_before_publication",
+  "phase": "publication_ready_for_publish",
+  "next_action": "publish_trackio_logbook_then_read_back_public_space",
   "active_run_ids": [],
   "completed_milestones": [
     "live_duplicate_gate",
@@ -94,9 +94,9 @@
     "5": 3,
     "6": 1
   },
-  "last_checkpoint": "2026-07-30T08:00:00Z",
+  "last_checkpoint": "2026-07-30T08:15:00Z",
   "last_known_git_commit": "94b0edd",
-  "publication_allowed": false,
+  "publication_allowed": true,
   "github_repository": "https://github.com/MachineLearning-Nerd/icml26-repro-aU2sxdnRuL-distribution-valued-cpd",
   "setup_content_commit": "70f84e135f0d0921dcecd15cbbb3a0f057209679",
   "claim_3_outcome": {
@@ -114,6 +114,7 @@
   "review_remediation_blockers": [],
   "review_remediation_evidence": {
     "trackio": "Trackio 0.34.0 isolated environment attached the persisted Pi session trace; outputs/trackio_trace_readback.txt confirms a scrubbed 611-event trace.",
-    "poster": "logbook/FIGURE_MANIFEST.json manifests two unmodified arXiv-source figures; logbook/GATE_REPORT.json records every posterly gate PASS."
+    "poster": "logbook/FIGURE_MANIFEST.json manifests two unmodified arXiv-source figures; logbook/GATE_REPORT.json records every posterly gate PASS.",
+    "final_prepublication_remediation": "Claim 5 verdict propagation complete; clean CPython 3.12 bootstrap installs POT and CPU-only torch and passes 18 tests; all retained manifests, poster gates, and official validator pass. The unpublished Space 401 is expected until trackio logbook publish."
   }
 }
