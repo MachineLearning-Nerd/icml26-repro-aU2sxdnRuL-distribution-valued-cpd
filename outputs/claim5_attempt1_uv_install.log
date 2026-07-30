@@ -1,0 +1,11 @@
+Using Python 3.12.13 environment at: .venv-claim1-attempt2
+Resolved 10 packages in 309ms
+warning: Failed to hardlink files; falling back to full copy. This may lead to degraded performance.
+         If the cache and target directories are on different filesystems, hardlinking may not be supported.
+         If this is intentional, set `export UV_LINK_MODE=copy` or use `--link-mode=copy` to suppress this warning.
+Installed 5 packages in 417ms
+ + joblib==1.5.3
+ + narwhals==2.24.0
+ + pandas==3.0.5
+ + scikit-learn==1.9.0
+ + threadpoolctl==3.6.0

@@ -32,23 +32,33 @@
   "availability": {
     "dataverse_released": true,
     "target_file_name": "SummaryResults_Covid_All.tab",
-    "target_file_access_request": true,
+    "metadata_marks_file_access_request": true,
     "target_file_md5": "25a3b3de956885ba52b221f7f50ed7c7",
+    "downloaded_input_present": true,
+    "downloaded_input_md5_matches_metadata": true,
     "pinned_release_contains_reddit_raw_csv": false,
     "pinned_release_contains_precomputed_embeddings": false,
     "pinned_release_contains_paper_figure_outputs": false
+  },
+  "input_coverage": {
+    "rows": 12915,
+    "earliest_date": "2020-04-24",
+    "latest_date": "2021-05-06",
+    "jan_to_may_2021_rows": 11713,
+    "jan_to_may_2021_distinct_days": 105
   },
   "source_scope_findings": {
     "paper_describes_embedding_pca20": true,
     "pinned_runner_default_is_not_embedding_pca20": true,
     "runner_default_cutoff_differs_from_paper_revised_phase_dates": true,
     "runner_labels_all_phaseII_as_changed": true,
+    "source_runner_import_failure": true,
     "independent_event_alignment_computed": false
   },
   "decision": {
     "cpu_source_faithful_run_executed": false,
     "exact_run_possible_from_released_inputs": false,
     "outcome": "inconclusive_source_faithful_data_and_outputs_unavailable",
-    "reason": "The paper documents a d=20 SBERT/PCA qualitative study, but the pinned runner defaults to 3-D sentiment features and a different J&J-EUA cutoff. The cited released Dataverse metadata marks SummaryResults_Covid_All.tab as fileAccessRequest=true, and the pinned release contains no raw Reddit input, precomputed embeddings, result series, alarms, or Figure-4 outputs. Therefore the date/alarm alignment and baseline behavior cannot be independently recomputed on CPU. This is an availability/protocol finding, not a refutation of the underlying Reddit observations."
+    "reason": "The archived Dataverse input was retrieved and its MD5 matches the authoritative metadata, but the pinned runner defaults to 3-D sentiment features and a different J&J-EUA cutoff rather than the paper's d=20 revised protocol. It also fails before data processing because it imports a missing simulation package. The pinned release contains no paper-era precomputed embeddings, dated alarm/result series, or Figure-4 artifact. Therefore date/alarm alignment and baseline behavior cannot yet be independently recomputed on CPU. This is an availability/protocol finding, not a refutation of the underlying Reddit observations."
   }
 }

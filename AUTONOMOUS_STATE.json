@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "openreview_id": "aU2sxdnRuL",
-  "phase": "claim_5_attempt_1_source_faithful_data_unavailable",
-  "next_action": "claim_5_attempt_2_authoritative_reddit_data_and_paper_era_protocol_search",
+  "phase": "claim_5_attempt_1_runner_dependency_and_output_gap",
+  "next_action": "claim_5_attempt_2_reconstruct_paper_era_dependency_path_and_protocol",
   "active_run_ids": [],
   "completed_milestones": [
     "live_duplicate_gate",
@@ -67,7 +67,7 @@
       "claim": "5",
       "attempt": "1",
       "outcome": "inconclusive",
-      "reason": "Paper documents d=20 SBERT/PCA qualitative case study, but cited released Dataverse input is access-request restricted and pinned release lacks raw input, embeddings, dated alarms, baseline outputs, and Figure-4 artifacts."
+      "reason": "Checksum-matched Dataverse input is available, but the pinned runner defaults to 3-D sentiment/different cutoff and fails before processing on a missing simulation import; no paper-era embeddings, dated alarms, baseline outputs, or Figure-4 artifact are released."
     }
   ],
   "claim_attempt_counts": {
@@ -78,7 +78,7 @@
     "5": 1,
     "6": 0
   },
-  "last_checkpoint": "2026-07-30T07:24:53.141697+00:00",
+  "last_checkpoint": "2026-07-30T07:27:09.753598+00:00",
   "last_known_git_commit": "80da277",
   "publication_allowed": false,
   "github_repository": "https://github.com/MachineLearning-Nerd/icml26-repro-aU2sxdnRuL-distribution-valued-cpd",

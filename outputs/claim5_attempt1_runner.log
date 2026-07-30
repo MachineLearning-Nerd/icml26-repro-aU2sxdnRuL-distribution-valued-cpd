@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/home/dineshai/Drives/Code/AllCode/ReproduceICML/papers/icml26-repro-aU2sxdnRuL-distribution-valued-cpd/upstream/IDD-icml/case_study/run_reddit_vax.py", line 33, in <module>
+    from ot_mfpca_flow import fit_ot_phaseI_for_rep, export_ot_phaseII_ic
+  File "/home/dineshai/Drives/Code/AllCode/ReproduceICML/papers/icml26-repro-aU2sxdnRuL-distribution-valued-cpd/upstream/IDD-icml/idd_core/ot_mfpca_flow.py", line 9, in <module>
+    from simulation.OT_KDE_Comp.run_scripts_all import save_tangents_for_R
+ModuleNotFoundError: No module named 'simulation'
+exit=1
