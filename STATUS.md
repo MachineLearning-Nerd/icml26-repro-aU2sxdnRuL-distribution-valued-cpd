@@ -8,7 +8,7 @@
 - Paper: https://arxiv.org/abs/2602.07252
 - Official code pin: https://github.com/yyzeng43/IDD-icml@c5b1db4060e5081e5c487f91792dc18c17603fd0
 - Compute policy: Hugging Face cpu-upgrade only; no GPU or paid Jobs without a later explicit documented need.
-- GitHub repository: https://github.com/MachineLearning-Nerd/icml26-repro-aU2sxdnRuL-distribution-valued-cpd
+- GitHub repository: https://github.com/MachineLearning-Nerd/icml26-repro-aU2sxdnRuL-distribution-valued-cpd @ 372314edc6fec88f51673a7b4cea3f012914e5b4
 - Current phase: claim_1_attempt_1_toy_complete
 - Claim 1 state: toy mechanism audit complete; full claim unverified. Exact 1-D translation radial identity passed, while the identity-map negative control failed as expected. See `outputs/claim1_attempt1_audit.md`.
 - Claim 2–6 states: unverified
