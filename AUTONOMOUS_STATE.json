@@ -21,7 +21,8 @@
     "6": 0
   },
   "last_checkpoint": "2026-07-30T06:51:28Z",
-  "last_known_git_commit": "3c6e0318ec194db0e95e13c7b82e576b324a7c96",
+  "last_known_git_commit": "70f84e135f0d0921dcecd15cbbb3a0f057209679",
   "publication_allowed": false,
-  "github_repository": "https://github.com/MachineLearning-Nerd/icml26-repro-aU2sxdnRuL-distribution-valued-cpd"
+  "github_repository": "https://github.com/MachineLearning-Nerd/icml26-repro-aU2sxdnRuL-distribution-valued-cpd",
+  "setup_content_commit": "70f84e135f0d0921dcecd15cbbb3a0f057209679"
 }
