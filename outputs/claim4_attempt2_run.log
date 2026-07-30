@@ -4,7 +4,7 @@
     "paper_source": "https://export.arxiv.org/e-print/2602.07252",
     "paper_source_sha256": "7c88af0f1ccb66458f0b396331bdee3b5aed26c1b041730e891900f38a5591f6",
     "official_flowcap_page": "https://flowcap.org/flowcap2/",
-    "official_flowcap_page_sha256": "0d36a23f6eefd0c45678e9dc713d32702e5274f12981bdb2d7d14572a16d27e7",
+    "official_flowcap_page_sha256": "0d9a7070436e72afa190594b675df058a57e28f28bf14580374a23eb9c7c9322",
     "pinned_author_repository": "https://github.com/yyzeng43/IDD-icml@c5b1db4060e5081e5c487f91792dc18c17603fd0"
   },
   "authoritative_observations": {
