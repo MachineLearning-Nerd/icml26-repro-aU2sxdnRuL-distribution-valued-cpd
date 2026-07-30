@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "openreview_id": "aU2sxdnRuL",
-  "phase": "claim_1_attempt_3_toy_complete",
-  "next_action": "claim_1_falsification_attempt_test_literal_source_convention_and_protocol_scope",
+  "phase": "claim_1_falsification_complete_inconclusive",
+  "next_action": "claim_2_attempt_1_audit_theorem_3_10_and_cpu_calibration_path",
   "active_run_ids": [],
   "completed_milestones": [
     "live_duplicate_gate",
@@ -12,7 +12,8 @@
     "claim_1_test_scaffold",
     "claim_1_attempt_1_source_audit_and_deterministic_toy",
     "claim_1_attempt_2_pinned_empirical_ot_cpu_toy",
-    "claim_1_attempt_3_clean_room_quantile_audit"
+    "claim_1_attempt_3_clean_room_quantile_audit",
+    "claim_1_falsification_atomic_non_monge_scope_test"
   ],
   "failed_attempts": [
     {
@@ -32,6 +33,12 @@
       "attempt": "3",
       "outcome": "toy",
       "reason": "Independent multi-family 1-D quantile isometry, source-direction comparison, and PCA/T2/SPE audit pass, but paper-scale stream and released R/funcharts mFPCA remain absent."
+    },
+    {
+      "claim": "1",
+      "attempt": "falsification",
+      "outcome": "inconclusive",
+      "reason": "Pinned barycentric projection violates the unqualified radial equality for an atomic non-Monge source, but this violates the intended theorem regularity conditions and does not refute Equation 6/Proposition 3.4."
     }
   ],
   "claim_attempt_counts": {
@@ -42,7 +49,7 @@
     "5": 0,
     "6": 0
   },
-  "last_checkpoint": "2026-07-30T07:03:12.993907+00:00",
+  "last_checkpoint": "2026-07-30T07:05:33.764580+00:00",
   "last_known_git_commit": "372314edc6fec88f51673a7b4cea3f012914e5b4",
   "publication_allowed": false,
   "github_repository": "https://github.com/MachineLearning-Nerd/icml26-repro-aU2sxdnRuL-distribution-valued-cpd",

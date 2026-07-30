@@ -1,0 +1,35 @@
+{
+  "construction": {
+    "source": "delta_0",
+    "target": "0.5*delta_-1 + 0.5*delta_1",
+    "source_support": [
+      [
+        0.0
+      ]
+    ],
+    "target_support": [
+      [
+        -1.0
+      ],
+      [
+        1.0
+      ]
+    ],
+    "coupling": [
+      [
+        0.5,
+        0.5
+      ]
+    ]
+  },
+  "pinned_upstream_projection": [
+    [
+      0.0
+    ]
+  ],
+  "source_tangent_norm_squared": 0.0,
+  "coupling_w2_squared": 1.0,
+  "equality_gap": 1.0,
+  "deterministic_map_exists": false,
+  "interpretation": "The source implementation's barycentric projection is [0], yielding zero tangent norm, while the optimal-coupling W2^2 is 1. The radial isometry therefore cannot be applied to this non-Monge, atomic source construction without additional assumptions. This tests an over-broad literal reading only; it does not refute Equation 6/Proposition 3.4 under their intended regularity/Monge-map conditions."
+}
