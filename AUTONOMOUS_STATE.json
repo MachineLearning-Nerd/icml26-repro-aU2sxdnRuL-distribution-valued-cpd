@@ -105,6 +105,7 @@
     "trace_dataset": "DineshAI/repro-aU2sxdnRuL-distribution-valued-cpd-traces",
     "artifact_bucket": "DineshAI/repro-aU2sxdnRuL-distribution-valued-cpd-artifacts",
     "uploaded_artifacts_uncertain": true,
+    "anonymous_remote_check": "2026-07-30T08:25:00Z: Space, trace dataset, and artifact dataset endpoints each returned HTTP 401; treat existence/readability as unresolved until quota-reset retry/readback.",
     "validator_evidence": "outputs/official_validator_publish_target.log",
     "publish_error_evidence": "outputs/trackio_publish_short_target.log",
     "canonical_backlog": "../../icml-2026-reproduction-challenge/scripts/backlog.json"
