@@ -3,3 +3,4 @@ __pycache__/
 .venv/
 upstream/IDD-icml/.git/
 upstream/
+outputs/claim3_attempt1/generated_data/
