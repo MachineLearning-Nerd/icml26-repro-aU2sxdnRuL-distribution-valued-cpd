@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "openreview_id": "aU2sxdnRuL",
-  "phase": "logbook_ready_for_independent_review",
-  "next_action": "independent_logbook_and_evidence_review_then_final_publication_gate",
+  "phase": "review_remediation_incomplete",
+  "next_action": "upgrade_or_replace_trackio_to_attach_session_trace_and_rebuild_poster_with_two_manifested_paper_figures_before_rereview",
   "active_run_ids": [],
   "completed_milestones": [
     "live_duplicate_gate",
@@ -82,8 +82,8 @@
     {
       "claim": "5",
       "attempt": "3",
-      "outcome": "falsified",
-      "reason": "Authoritative arXiv source recovers the Figure-4 asset and PCA-20 protocol but reports Apr 30 post-gap reorganization after an Apr 3--28 sparse-data gap, not a direct Apr 13 alarm; exact numeric streams remain unavailable."
+      "outcome": "inconclusive",
+      "reason": "Authoritative source supports post-pause alignment, but unavailable released numeric streams prevent independent rerun; it does not falsify the broader live wording."
     }
   ],
   "claim_attempt_counts": {
@@ -94,8 +94,8 @@
     "5": 3,
     "6": 1
   },
-  "last_checkpoint": "2026-07-30T07:34:45.768001+00:00",
-  "last_known_git_commit": "80da277",
+  "last_checkpoint": "2026-07-30T07:52:41.955563+00:00",
+  "last_known_git_commit": "94b0edd",
   "publication_allowed": false,
   "github_repository": "https://github.com/MachineLearning-Nerd/icml26-repro-aU2sxdnRuL-distribution-valued-cpd",
   "setup_content_commit": "70f84e135f0d0921dcecd15cbbb3a0f057209679",
@@ -110,5 +110,9 @@
     "scope": "source theorem and finite-K algebra; not empirical proof",
     "reason": "For fixed d, the printed K bound scales as epsilon^(-2d) under the source regularity chain; dimension-free control is rejected.",
     "evidence": "outputs/claim6_attempt1_audit.md"
-  }
+  },
+  "review_remediation_blockers": [
+    "Installed Trackio 0.31.5 has no `logbook attach trace` command required by the challenge README; no trace was fabricated.",
+    "Poster has no two manifested paper figures, so posterly asset-provenance gate remains NOT_RUN."
+  ]
 }
