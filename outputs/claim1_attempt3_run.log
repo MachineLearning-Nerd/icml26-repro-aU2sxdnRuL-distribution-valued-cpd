@@ -1,0 +1,38 @@
+{
+  "method": "clean_room_equal_weight_1d_quantile_transport",
+  "seed_or_construction": "deterministic linspace support, no RNG",
+  "n_support": 12,
+  "phase1_clouds": 4,
+  "families": {
+    "translation": {
+      "radial_tangent_mean_square": 0.42250000000000004,
+      "quantile_w2_square": 0.42250000000000004,
+      "identity_map_mean_square": 0.0,
+      "identity_control_gap": 0.42250000000000004
+    },
+    "scale": {
+      "radial_tangent_mean_square": 0.0965300625,
+      "quantile_w2_square": 0.0965300625,
+      "identity_map_mean_square": 0.0,
+      "identity_control_gap": 0.0965300625
+    },
+    "non_affine_shape": {
+      "radial_tangent_mean_square": 0.014136992315666674,
+      "quantile_w2_square": 0.014136992315666674,
+      "identity_map_mean_square": 0.0,
+      "identity_control_gap": 0.014136992315666674
+    }
+  },
+  "negative_controls": {
+    "correct_non_affine_w2_square": 0.014136992315666674,
+    "wrong_reference_w2_square": 0.09605279231566666,
+    "wrong_reference_gap": 0.08191579999999998,
+    "uncentered_raw_map_second_moment": 0.4936327289823333,
+    "uncentered_gap": 0.4794957366666666
+  },
+  "independent_pca_t2_spe": {
+    "t2": 0.0415739755979643,
+    "spe": 0.16746543146666668,
+    "leading_eigenvalue": 0.0524
+  }
+}
