@@ -1,0 +1,19 @@
+{
+  "retrieved_at_utc": "2026-07-30T06:51:27.255644+00:00",
+  "openreview_id": "aU2sxdnRuL",
+  "submission_number": 30280,
+  "title": "Beyond Euclidean Summaries: Online Change Point Detection for Distribution-Valued Data",
+  "claim_count": 6,
+  "max_points": 12,
+  "claim_precedence": "claims_anchored.json replaces claims.json for a matching OpenReview ID",
+  "live_snapshot": "outputs/live/20260730T065029Z/eligible_candidates.json",
+  "source_urls": {
+    "openreview": "https://openreview.net/forum?id=aU2sxdnRuL",
+    "arxiv": "https://arxiv.org/abs/2602.07252",
+    "official_code": "https://github.com/yyzeng43/IDD-icml"
+  },
+  "sha256": {
+    "metadata.json": "803ae792b3aaebf86a211042a6fce4c036930d7529cf7d3582baa200c3647a67",
+    "live_claims.json": "4bc6444889902ed6ea29b52ed88b766e73c541cccfaab3be4baa31a5419c7b67"
+  }
+}

@@ -1,0 +1,26 @@
+[
+  {
+    "text": "The Intrinsic Distribution-valued (IDD) method maps streaming empirical distributions to a tangent space at the pre-change Frechet barycenter in 2-Wasserstein space using the radial isometry W_2^2(mu_bar, mu) = ||T_{mu_bar}^{mu} - Id||^2_{L2(mu_bar)}, then applies Hotelling's T^2 and SPE statistics in that tangent space (Equation 6, Proposition 3.4).",
+    "status": "unverified"
+  },
+  {
+    "text": "Theorem 3.10 gives a sequential false-alarm-control guarantee of the form ARL_0 >= n_0 + 1 + 1/(alpha_T2 + alpha_SPE) via empirical quantile calibration (Section 3, Theorem 3.10).",
+    "status": "unverified"
+  },
+  {
+    "text": "On Gaussian-translation synthetic streams, IDD achieves up to a 95% reduction in detection delay compared to the best-tuned Log-KDE baseline in high-variance settings, at matched ARL_0 (Table 1).",
+    "status": "unverified"
+  },
+  {
+    "text": "On the FlowCAP-II flow cytometry dataset (7-dimensional), IDD detects abnormal AML cell populations with F1 approximately 0.75 and ARL_1 approximately 1, versus F1 below 0.4 for Hotelling's T^2 (Real-world case study, Section 5).",
+    "status": "unverified"
+  },
+  {
+    "text": "On Reddit vaccine-sentiment daily embedding streams (d=20, January-May 2021), IDD's change-point alarms align with real news events such as the April 13 J&J pause, while Euclidean-summary and moment-based baselines produce monotonic drift or noise unrelated to these shocks (Figure 4).",
+    "status": "unverified"
+  },
+  {
+    "text": "Theorem 3.14 establishes an epsilon-isometry result showing the number of principal components needed for a finite-dimensional tangent-space approximation scales polynomially with the target precision under Lipschitz regularity (Theorem 3.14).",
+    "status": "unverified"
+  }
+]

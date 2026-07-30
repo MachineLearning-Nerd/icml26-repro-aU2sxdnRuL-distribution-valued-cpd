@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "openreview_id": "aU2sxdnRuL",
+  "phase": "source_pinned_claim_1_scaffold",
+  "next_action": "audit_upstream_algorithm_and_execute_claim_1_attempt_1_on_cpu",
+  "active_run_ids": [],
+  "completed_milestones": ["live_duplicate_gate", "live_contract_saved", "upstream_source_pinned", "environment_manifest", "claim_1_test_scaffold"],
+  "failed_attempts": [],
+  "claim_attempt_counts": {"1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0},
+  "last_checkpoint": "2026-07-30T06:51:28Z",
+  "last_known_git_commit": null,
+  "publication_allowed": false
+}
