@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "openreview_id": "aU2sxdnRuL",
-  "phase": "claim_5_attempt_2_protocol_history_gap",
-  "next_action": "claim_5_attempt_3_search_paper_supplement_and_author_materials_for_exact_reddit_outputs",
+  "phase": "claim_5_attempt_3_arxiv_source_scope_falsified",
+  "next_action": "claim_6_attempt_1_audit_epsilon_isometry_theorem",
   "active_run_ids": [],
   "completed_milestones": [
     "live_duplicate_gate",
@@ -19,7 +19,8 @@
     "claim_4_attempt_1_source_release_audit",
     "claim_4_attempt_2_authoritative_public_data_availability_audit",
     "claim_5_attempt_1_source_faithful_availability_audit",
-    "claim_5_attempt_2_history_and_packaging_audit"
+    "claim_5_attempt_2_history_and_packaging_audit",
+    "claim_5_attempt_3_authoritative_arxiv_source_asset_audit"
   ],
   "failed_attempts": [
     {
@@ -75,6 +76,12 @@
       "attempt": "2",
       "outcome": "inconclusive",
       "reason": "GitHub exposes one post-paper runner commit and no releases/tags; the pinned runner still fails on an absent simulation package after an isolated import-path attempt, and no paper-era embeddings, dated alarm series, baselines, or Figure-4 outputs are recoverable."
+    },
+    {
+      "claim": "5",
+      "attempt": "3",
+      "outcome": "falsified",
+      "reason": "Authoritative arXiv source recovers the Figure-4 asset and PCA-20 protocol but reports Apr 30 post-gap reorganization after an Apr 3--28 sparse-data gap, not a direct Apr 13 alarm; exact numeric streams remain unavailable."
     }
   ],
   "claim_attempt_counts": {
@@ -82,10 +89,10 @@
     "2": 1,
     "3": 1,
     "4": 2,
-    "5": 2,
+    "5": 3,
     "6": 0
   },
-  "last_checkpoint": "2026-07-30T07:29:13.838031+00:00",
+  "last_checkpoint": "2026-07-30T07:32:21.128931+00:00",
   "last_known_git_commit": "80da277",
   "publication_allowed": false,
   "github_repository": "https://github.com/MachineLearning-Nerd/icml26-repro-aU2sxdnRuL-distribution-valued-cpd",

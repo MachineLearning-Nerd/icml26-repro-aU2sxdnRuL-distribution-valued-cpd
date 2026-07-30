@@ -1,0 +1,21 @@
+{
+  "source": "https://arxiv.org/e-print/2602.07252",
+  "archive_sha256": "6d4af865d403a1c4f72ed3ef8057069212ac1633aa79410b4607b04a8b9edb87",
+  "archive_member_count": 209,
+  "recovered_figure_member": "arixv/figures/approachB_embed_pca20_D_first50_phase1_phase2_monitoring_manuscript.pdf",
+  "recovered_figure_sha256": "a7f6cb993cf3c7c6826014c418386dc727dafe7c9aa0d125887c687b1a092bf8",
+  "readme_reddit_references": [],
+  "source_assertions": {
+    "protocol_384_to_20": true,
+    "phase_dates": true,
+    "april_13_event": true,
+    "source_records_april_30_not_april_13_alarm": true,
+    "source_records_sparse_gap": true,
+    "figure_caption_present": true
+  },
+  "exact_embedding_stream_recovered": false,
+  "dated_numeric_alarm_series_recovered": false,
+  "figure_asset_recovered": true,
+  "verdict": "falsified_literal_source_scope",
+  "reason": "The authoritative arXiv source recovers Figure-4 assets and the 384-D to PCA-20 protocol, but it says the relevant post-pause alarm is Apr 30 after an Apr 3--28 sparse-data gap; it does not report an Apr 13 alarm. The live wording's direct April-13-alignment reading is therefore not supported. This is a source-asset audit, not an independent rerun of the unavailable embedding stream."
+}

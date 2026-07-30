@@ -14,7 +14,7 @@
 - Claim 2 state: falsified as literally written. Theorem 3.10 supplies the displayed fixed-threshold bound, while the source empirical-quantile corollary has the finite-sample `+ 2/(n0+1)` denominator correction. See `outputs/claim2_attempt1_audit.md`.
 - Claim 3 state: falsified for literal source-table scope; see `outputs/claim3_attempt1_audit.md`.
 - Claim 4 state: literal source scope is falsified by Attempt 1. Attempt 2 independently found no source-faithful public evaluation route: the paper acknowledges direct data sharing, the retrieved FlowCAP-II URL is a Coming Soon page, and the pinned release lacks files, labels, preprocessing, seed, and runner. This availability finding is not a dataset-level refutation. See `outputs/claim4_attempt1_audit.md` and `outputs/claim4_attempt2_audit.md`.
-- Claim 5 state: Attempt 1 is inconclusive because the checksum-matched data and runner do not supply the paper-era PCA-20 inputs/results; Attempt 2 is also inconclusive after source-history, tag/release, and packaging-path audit found no recoverable paper-era outputs and an absent `simulation` dependency. See `outputs/claim5_attempt1_audit.md` and `outputs/claim5_attempt2_audit.md`.
+- Claim 5 state: falsified for the live claim's literal April-13-alignment wording. Attempt 3 recovered the authoritative arXiv Figure-4 asset and source protocol, which documents Apr 30 post-gap reorganization after an Apr 3--28 sparse-data gap rather than a direct Apr 13 alarm. The unreleased numeric embedding/alarm stream was not substituted with a proxy. See `outputs/claim5_attempt3_audit.md`.
 - Claim 6 state: unverified.
-- Next action: Claim 5 Attempt 3 — search paper supplement/author materials for exact Reddit outputs, then falsification if still unavailable.
+- Next action: Claim 6 Attempt 1 — audit and test the epsilon-isometry theorem scope.
 - Publication status: not started
