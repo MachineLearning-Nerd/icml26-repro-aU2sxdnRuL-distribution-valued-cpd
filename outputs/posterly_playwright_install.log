@@ -1,0 +1,13 @@
+Using Python 3.12.13 environment at: .venv-posterly
+Resolved 4 packages in 163ms
+Downloading playwright (45.2MiB)
+ Downloaded playwright
+Prepared 2 packages in 12.23s
+warning: Failed to hardlink files; falling back to full copy. This may lead to degraded performance.
+         If the cache and target directories are on different filesystems, hardlinking may not be supported.
+         If this is intentional, set `export UV_LINK_MODE=copy` or use `--link-mode=copy` to suppress this warning.
+Installed 4 packages in 75ms
+ + greenlet==3.5.4
+ + playwright==1.61.0
+ + pyee==13.0.1
+ + typing-extensions==4.16.0

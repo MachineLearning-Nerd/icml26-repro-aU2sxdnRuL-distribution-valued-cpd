@@ -1,0 +1,9 @@
+[run_gates] /home/dineshai/Drives/Code/AllCode/ReproduceICML/papers/icml26-repro-aU2sxdnRuL-distribution-valued-cpd/logbook/poster.html
+  canvas: 60.96 x 76.2 cm portrait (source: page-rule)
+  preflight [hard] -> PASS
+  style     [hard] -> PASS
+  asset     [hard] -> NOT_RUN
+  measure   [hard] -> PASS
+  polish    [hard] -> PASS
+  overall: PASS   hard_failures: 0   warnings: 0
+[run_gates] report -> /home/dineshai/Drives/Code/AllCode/ReproduceICML/papers/icml26-repro-aU2sxdnRuL-distribution-valued-cpd/logbook/GATE_REPORT.json

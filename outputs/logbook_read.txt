@@ -1,0 +1,166 @@
+# Reproduction: Beyond Euclidean Summaries: Online Change Point Detection for Distribution-Valued Data
+
+## Pages
+
+| Page |
+| --- |
+| [Executive summary](#/executive-summary) |
+| [Claim 1: tangent-space IDD mapping](#/claim-1-tangent-space-idd-mapping) |
+| [Claim 2: empirical-quantile ARL](#/claim-2-empirical-quantile-arl) |
+| [Claim 3: synthetic delay reduction](#/claim-3-synthetic-delay-reduction) |
+| [Claim 4: FlowCAP-II AML detection](#/claim-4-flowcap-ii-aml-detection) |
+| [Claim 5: Reddit event alignment](#/claim-5-reddit-event-alignment) |
+| [Claim 6: finite-dimensional epsilon-isometry](#/claim-6-finite-dimensional-epsilon-isometry) |
+| [Conclusion](#/conclusion) |
+
+### Reproduction index · markdown · `cell_d3880e2ff45b` · 2026-07-30 07:37
+
+# Reproduction: Beyond Euclidean Summaries: Online Change Point Detection for Distribution-Valued Data
+
+## Pages
+| Page |
+| --- |
+| [Executive summary](#/executive-summary) |
+| [Claim 1: tangent-space IDD mapping](#/claim-1-tangent-space-idd-mapping) |
+| [Claim 2: empirical-quantile ARL](#/claim-2-empirical-quantile-arl) |
+| [Claim 3: synthetic delay reduction](#/claim-3-synthetic-delay-reduction) |
+| [Claim 4: FlowCAP-II AML detection](#/claim-4-flowcap-ii-aml-detection) |
+| [Claim 5: Reddit event alignment](#/claim-5-reddit-event-alignment) |
+| [Claim 6: finite-dimensional epsilon-isometry](#/claim-6-finite-dimensional-epsilon-isometry) |
+| [Conclusion](#/conclusion) |
+
+> Agent view: markdown bodies are inline; code cells show the command, a code head, and an output tail; figures inline small raw data. Fetch full payloads with `trackio logbook read cell <id> [--full|--raw|--html]`.
+
+## Executive summary · `executive-summary`
+
+### Executive summary · markdown · `cell_404a32eac18f` · 2026-07-30 07:37
+
+The six-claim contract was audited against the pinned paper source and [official code commit](https://github.com/yyzeng43/IDD-icml/tree/c5b1db4060e5081e5c487f91792dc18c17603fd0). Claim 6 is verified as a scoped theorem/numerical audit; Claims 2--5 are falsified as literally worded because their live wording conflicts with the source theorem, table arithmetic, metric, or Figure-4 timeline. Claim 1 has three retained toy mechanism audits but remains inconclusive because the source-faithful R/funcharts paper-scale route is unavailable. This CPU-only work used no Hugging Face Job or Bucket; all code and evidence are in the public [reproduction repository](https://github.com/MachineLearning-Nerd/icml26-repro-aU2sxdnRuL-distribution-valued-cpd).
+
+## Scope & cost
+
+| | This reproduction | Full replication |
+| --- | --- | --- |
+| Scope | Source-pinned theorem/table/provenance audits; small deterministic CPU transport checks | Source-scale mFPCA/OT, synthetic and real-data streams |
+| Hardware | Local CPU only | Paper-scale CPU/R environment plus unreleased data artifacts |
+| Compute time | Short deterministic CPU audits; no billed Job | Not reproducible from the pinned public release |
+| Cost | $0 billed; no HF Job/Bucket used | Unknown |
+| Outcome | 1 scoped verification, 4 literal-source falsifications, 1 inconclusive with toy evidence | Not established |
+
+### Reproduction poster · figure · `cell_779206d5f49f` · 2026-07-30 07:43
+
+HTML figure: 390.4k chars (--html).
+
+## Claim 1: tangent-space IDD mapping · `claim-1-tangent-space-idd-mapping`
+
+### Claim 1 evidence · markdown · `cell_c68f92cb01d3` · 2026-07-30 07:37
+
+## Exact claim
+
+The IDD method maps distributions to the pre-change Fréchet-barycenter tangent space using the stated radial isometry and applies Hotelling T²/SPE.
+
+## Evidence and outcome
+
+**Inconclusive; toy evidence retained.** Three distinct reduced-scale CPU audits verify the 1-D translation/scale/non-affine empirical-quantile transport identity and reject identity-map, wrong-reference, and uncentered-map controls. The pinned empirical OT path also passed at reduced scale, but the source-faithful paper-scale R/funcharts mFPCA route is unavailable. A one-time atomic non-Monge counterexample shows the equality is not unconditional, but violates the intended regularity conditions and therefore is not a refutation.
+
+Commands and raw evidence: `outputs/claim1_attempt{1,2,3}_*.{md,json,log}` and `outputs/claim1_falsification_*`; tests include `tests/test_claim1_attempt*.py` and `tests/test_claim1_falsification.py` (7 tests passed in the retained suite).
+
+Source pin: [yyzeng43/IDD-icml@c5b1db4](https://github.com/yyzeng43/IDD-icml/tree/c5b1db4060e5081e5c487f91792dc18c17603fd0). No Hub model/dataset/Job/Bucket was used.
+
+## Claim 2: empirical-quantile ARL · `claim-2-empirical-quantile-arl`
+
+### Claim 2 evidence · markdown · `cell_49090d38f409` · 2026-07-30 07:37
+
+## Exact claim
+
+Theorem 3.10 gives `ARL0 >= n0 + 1 + 1/(alpha_T2 + alpha_SPE)` via empirical quantile calibration.
+
+## Evidence and outcome
+
+**Falsified as literally written.** The pinned theorem gives the displayed fixed-threshold result under its marginal-exceedance assumptions. The source's empirical-quantile finite-sample corollary instead has denominator `alpha_T2 + alpha_SPE + 2/(n0+1)`. A deterministic CPU null-stream audit (4,000 seeded replications, `n0=200`) produced a calibrated global-ARL proxy 241.4: below the literal 251 bound but above the corrected 234.39 bound; the half-threshold control fell to 207.56.
+
+Evidence: `outputs/claim2_attempt1_audit.md`, `outputs/claim2_attempt1_empirical_arl.json`, logs/hashes, `src/claim2_attempt1_empirical_arl.py`, and `tests/test_claim2_attempt1.py`. This does not challenge the corrected theorem.
+
+Source pin: [official code commit](https://github.com/yyzeng43/IDD-icml/tree/c5b1db4060e5081e5c487f91792dc18c17603fd0). No Hub model/dataset/Job/Bucket was used.
+
+## Claim 3: synthetic delay reduction · `claim-3-synthetic-delay-reduction`
+
+### Claim 3 evidence · markdown · `cell_6bfedd1375dc` · 2026-07-30 07:37
+
+## Exact claim
+
+On high-variance Gaussian-translation streams, IDD achieves up to a 95% delay reduction over the best-tuned Log-KDE at matched ARL0.
+
+## Evidence and outcome
+
+**Falsified for literal source-table scope.** The source-faithful generator completed the full `d=5, sigma=2, delta=0.1` input family (10 deterministic replicates, 200 Phase-I/200 IC/200 OC distributions, 100 particles). The unavailable `Rscript`/funcharts mFPCA dependency prevented the full Table-1 rerun, so the generated inputs are not represented as table reproduction. Parsing all pinned Table-1 rows found the largest high-variance reduction against the best displayed Log-KDE is **72.5%** (`1.1` vs `4.0`), not 95%; no row reaches 95% against the best baseline. The matched-ARL raw threshold outputs are also unreleased.
+
+Evidence: `outputs/claim3_attempt1_audit.md`, `outputs/claim3_attempt1/`, `src/claim3_attempt1_source_audit.py`, and `tests/test_claim3_attempt1.py`.
+
+Source pin: [official code commit](https://github.com/yyzeng43/IDD-icml/tree/c5b1db4060e5081e5c487f91792dc18c17603fd0). No Hub model/dataset/Job/Bucket was used.
+
+## Claim 4: FlowCAP-II AML detection · `claim-4-flowcap-ii-aml-detection`
+
+### Claim 4 evidence · markdown · `cell_224915fd991d` · 2026-07-30 07:37
+
+## Exact claim
+
+On 7-D FlowCAP-II, IDD has F1 about 0.75 and ARL1 about 1, versus Hotelling T² F1 below 0.4.
+
+## Evidence and outcome
+
+**Falsified for literal source scope.** The paper describes the 7-D/2,000-cell/300-calibration/300-monitoring/80%-AML protocol, but the pinned release has no FlowCAP/AML/cytometry data, loader, labels, preprocessing, seed, or runner. The live wording also changes the source's Hotelling **precision** below 0.4 into F1 below 0.4; the appendix gives IDD ARL1 about 2--3, differing from the main-text approximately 1. A distinct authoritative availability audit found the cited FlowCAP-II URL is a Coming Soon page and the paper acknowledges direct data sharing; no substitute dataset was used.
+
+Evidence: `outputs/claim4_attempt1_audit.md`, `outputs/claim4_attempt2_audit.md`, availability JSON/logs, source excerpts, and `tests/test_claim4_source_audit.py`.
+
+Source pin: [official code commit](https://github.com/yyzeng43/IDD-icml/tree/c5b1db4060e5081e5c487f91792dc18c17603fd0). No Hub model/dataset/Job/Bucket was used.
+
+## Claim 5: Reddit event alignment · `claim-5-reddit-event-alignment`
+
+### Claim 5 evidence · markdown · `cell_b490a00aa3e7` · 2026-07-30 07:37
+
+## Exact claim
+
+On Reddit vaccine-sentiment d=20 streams, alarms align with events such as the April 13 J&J pause while baseline summaries show unrelated drift/noise.
+
+## Evidence and outcome
+
+**Falsified for the literal April-13 alignment wording.** Attempt 1 checksum-matched the public Dataverse input but found no paper-era 20-D embeddings, dated alarm series, baseline outputs, or working runner. Attempt 2 audited release history and packaging with the same result. The independent third route recovered the authoritative arXiv source archive and Figure-4 asset: it specifies 384-D MiniLM embeddings/PCA-20 and reports an **April 30 post-gap reorganization** after an April 3--28 sparse-data gap. April 13 occurs inside that gap, so this is not a direct observed April-13 alarm. Numeric streams were not replaced with a proxy.
+
+Evidence: `outputs/claim5_attempt{1,2,3}_audit.md`, `evidence/claim5_attempt3/arxiv_source.tar`, Figure-4 PDF, hashes, `src/claim5_attempt3_arxiv_archive_audit.py`, and `tests/test_claim5_attempt3.py` (1 passed).
+
+Source pin: [official code commit](https://github.com/yyzeng43/IDD-icml/tree/c5b1db4060e5081e5c487f91792dc18c17603fd0). No Hub model/dataset/Job/Bucket was used.
+
+## Claim 6: finite-dimensional epsilon-isometry · `claim-6-finite-dimensional-epsilon-isometry`
+
+### Claim 6 evidence · markdown · `cell_0d4c9cf2c327` · 2026-07-30 07:37
+
+## Exact claim
+
+Theorem 3.14 gives an epsilon-isometry finite-dimensional tangent approximation with principal-component count polynomial in precision under Lipschitz regularity.
+
+## Evidence and outcome
+
+**Verified, scoped theorem/numerical audit.** The pinned theorem gives `K >= (A_X C_K/(epsilon² tr(Gamma)))^d` under bounded-domain, Hölder-density, optimal-transport, Lipschitz-kernel, and trace conditions. A CPU algebra audit over dimensions 1/2/5 and three epsilon-halving pairs passed all nine checks, recovering epsilon^(-2d) scaling. A control dropping `d` failed: at epsilon .2→.1, actual K ratios were 16 (`d=2`) and 1024 (`d=5`), versus invalid dimension-free ratio 4.
+
+Evidence: `outputs/claim6_attempt1_audit.md`, `outputs/claim6_attempt1/result.json`, `src/claim6_attempt1_theorem_audit.py`, `tests/test_claim6_attempt1.py`, logs, and hashes. This is not an empirical proof and does not establish dimension-free behavior.
+
+Source pin: [official code commit](https://github.com/yyzeng43/IDD-icml/tree/c5b1db4060e5081e5c487f91792dc18c17603fd0). No Hub model/dataset/Job/Bucket was used.
+
+## Conclusion · `conclusion`
+
+### Conclusion · markdown · `cell_7d55b96f9f00` · 2026-07-30 07:37
+
+## Overall findings
+
+- **Claim 1 — inconclusive:** three toy transport/tangent-space mechanism audits passed; the required released paper-scale R/funcharts mFPCA path was unavailable. The atomic non-Monge counterexample only rejects an unqualified reading, not the theorem under its regularity assumptions.
+- **Claim 2 — falsified as written:** the empirical-quantile result includes the source's finite-sample `+2/(n0+1)` correction, omitted by the live wording.
+- **Claim 3 — falsified as written:** the pinned high-variance Table-1 maximum against the best displayed Log-KDE is 72.5%, not 95%.
+- **Claim 4 — falsified as written:** the live wording changes Hotelling precision to F1 and conflicts with the appendix ARL1; an exact FlowCAP route is not public.
+- **Claim 5 — falsified as written:** the authoritative Figure-4 source describes an April 30 post-gap reorganization, not a direct April 13 alarm.
+- **Claim 6 — verified, scoped:** the printed finite-K bound is polynomial in precision for fixed dimension under the stated regularity conditions; it is not dimension-free.
+
+## Reproducibility notes
+
+Evidence, scripts, tests, source hashes, and the pinned upstream tree are in the public [GitHub repository](https://github.com/MachineLearning-Nerd/icml26-repro-aU2sxdnRuL-distribution-valued-cpd). No Hugging Face model, dataset, Job, or Bucket was used; unavailable source-faithful data and R/funcharts dependencies are documented rather than replaced with proxies. The exact live contract is retained in `contract/live_claims.json`.
+

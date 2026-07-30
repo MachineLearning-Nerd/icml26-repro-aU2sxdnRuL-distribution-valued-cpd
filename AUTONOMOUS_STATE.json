@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "openreview_id": "aU2sxdnRuL",
-  "phase": "claim_6_attempt_1_verified_scoped",
-  "next_action": "independent_review_then_logbook_and_final_gate_planning",
+  "phase": "logbook_ready_for_independent_review",
+  "next_action": "independent_logbook_and_evidence_review_then_final_publication_gate",
   "active_run_ids": [],
   "completed_milestones": [
     "live_duplicate_gate",
@@ -21,7 +21,8 @@
     "claim_5_attempt_1_source_faithful_availability_audit",
     "claim_5_attempt_2_history_and_packaging_audit",
     "claim_5_attempt_3_authoritative_arxiv_source_asset_audit",
-    "claim_6_attempt_1_source_theorem_audit_and_finite_k_check"
+    "claim_6_attempt_1_source_theorem_audit_and_finite_k_check",
+    "logbook_assembled_and_official_local_validator_passed"
   ],
   "failed_attempts": [
     {

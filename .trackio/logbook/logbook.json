@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "title": "Reproduction: Beyond Euclidean Summaries: Online Change Point Detection for Distribution-Valued Data",
+  "emoji": "🎯",
+  "space_id": null,
+  "paper": null,
+  "tags": [],
+  "updated_at": "2026-07-30T07:43:13+00:00",
+  "root": {
+    "slug": "index",
+    "title": "Reproduction: Beyond Euclidean Summaries: Online Change Point Detection for Distribution-Valued Data",
+    "file": "pages/index.md",
+    "children": [
+      {
+        "slug": "executive-summary",
+        "title": "Executive summary",
+        "file": "pages/executive-summary/page.md",
+        "children": []
+      },
+      {
+        "slug": "claim-1-tangent-space-idd-mapping",
+        "title": "Claim 1: tangent-space IDD mapping",
+        "file": "pages/claim-1-tangent-space-idd-mapping/page.md",
+        "children": []
+      },
+      {
+        "slug": "claim-2-empirical-quantile-arl",
+        "title": "Claim 2: empirical-quantile ARL",
+        "file": "pages/claim-2-empirical-quantile-arl/page.md",
+        "children": []
+      },
+      {
+        "slug": "claim-3-synthetic-delay-reduction",
+        "title": "Claim 3: synthetic delay reduction",
+        "file": "pages/claim-3-synthetic-delay-reduction/page.md",
+        "children": []
+      },
+      {
+        "slug": "claim-4-flowcap-ii-aml-detection",
+        "title": "Claim 4: FlowCAP-II AML detection",
+        "file": "pages/claim-4-flowcap-ii-aml-detection/page.md",
+        "children": []
+      },
+      {
+        "slug": "claim-5-reddit-event-alignment",
+        "title": "Claim 5: Reddit event alignment",
+        "file": "pages/claim-5-reddit-event-alignment/page.md",
+        "children": []
+      },
+      {
+        "slug": "claim-6-finite-dimensional-epsilon-isometry",
+        "title": "Claim 6: finite-dimensional epsilon-isometry",
+        "file": "pages/claim-6-finite-dimensional-epsilon-isometry/page.md",
+        "children": []
+      },
+      {
+        "slug": "conclusion",
+        "title": "Conclusion",
+        "file": "pages/conclusion/page.md",
+        "children": []
+      }
+    ]
+  },
+  "agent_view_tokens": 3776,
+  "revision": "1785397393785962628"
+}
