@@ -1,0 +1,18 @@
+{
+  "absolute_error": 0.0,
+  "analytic_w2_sq": 0.5625,
+  "delta": 0.75,
+  "hotelling_t2_rank1": 177.4332755488297,
+  "model": "1-D equal-variance Gaussian translation; analytic radial map",
+  "n_points": 256,
+  "negative_control_identity_norm_sq": 0.0,
+  "negative_control_separation": 0.5625,
+  "phase1_vectors": 40,
+  "phase2_shift": [
+    0.75,
+    0.05
+  ],
+  "radial_norm_sq": 0.5625,
+  "seed": 20260730,
+  "spe_rank1": 0.2976867114700875
+}
