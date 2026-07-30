@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "openreview_id": "aU2sxdnRuL",
-  "phase": "publication_ready_for_publish",
-  "next_action": "publish_trackio_logbook_then_read_back_public_space",
+  "phase": "publication_queued_hf_space_creation_quota",
+  "next_action": "after_2026-07-31T08:25:00Z_or_confirmed_quota_reset_check_remote_resources_then_publish_once_and_read_back",
   "active_run_ids": [],
   "completed_milestones": [
     "live_duplicate_gate",
@@ -94,9 +94,21 @@
     "5": 3,
     "6": 1
   },
-  "last_checkpoint": "2026-07-30T08:15:00Z",
-  "last_known_git_commit": "94b0edd",
+  "last_checkpoint": "2026-07-30T08:25:00Z",
+  "last_known_git_commit": "17901127d3dcce706f3482bc726fd87d349b5cc2",
   "publication_allowed": true,
+  "publication_queue": {
+    "status": "queued",
+    "reason": "HF HTTP 429 Space-creation daily quota",
+    "retry_not_before_utc": "2026-07-31T08:25:00Z",
+    "space_id": "DineshAI/repro-aU2sxdnRuL-distribution-valued-cpd",
+    "trace_dataset": "DineshAI/repro-aU2sxdnRuL-distribution-valued-cpd-traces",
+    "artifact_bucket": "DineshAI/repro-aU2sxdnRuL-distribution-valued-cpd-artifacts",
+    "uploaded_artifacts_uncertain": true,
+    "validator_evidence": "outputs/official_validator_publish_target.log",
+    "publish_error_evidence": "outputs/trackio_publish_short_target.log",
+    "canonical_backlog": "../../icml-2026-reproduction-challenge/scripts/backlog.json"
+  },
   "github_repository": "https://github.com/MachineLearning-Nerd/icml26-repro-aU2sxdnRuL-distribution-valued-cpd",
   "setup_content_commit": "70f84e135f0d0921dcecd15cbbb3a0f057209679",
   "claim_3_outcome": {
