@@ -1,0 +1,18 @@
+{
+  "verdict": "verified_scoped",
+  "checks": 9,
+  "negative_controls": [
+    {
+      "dimension": 2,
+      "actual_ratio": 16.0,
+      "dropped_dimension_prediction": 4.0,
+      "control_rejected": true
+    },
+    {
+      "dimension": 5,
+      "actual_ratio": 1024.0,
+      "dropped_dimension_prediction": 4.0,
+      "control_rejected": true
+    }
+  ]
+}

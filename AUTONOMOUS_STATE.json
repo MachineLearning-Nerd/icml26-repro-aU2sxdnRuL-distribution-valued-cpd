@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "openreview_id": "aU2sxdnRuL",
-  "phase": "claim_5_attempt_3_arxiv_source_scope_falsified",
-  "next_action": "claim_6_attempt_1_audit_epsilon_isometry_theorem",
+  "phase": "claim_6_attempt_1_verified_scoped",
+  "next_action": "independent_review_then_logbook_and_final_gate_planning",
   "active_run_ids": [],
   "completed_milestones": [
     "live_duplicate_gate",
@@ -20,7 +20,8 @@
     "claim_4_attempt_2_authoritative_public_data_availability_audit",
     "claim_5_attempt_1_source_faithful_availability_audit",
     "claim_5_attempt_2_history_and_packaging_audit",
-    "claim_5_attempt_3_authoritative_arxiv_source_asset_audit"
+    "claim_5_attempt_3_authoritative_arxiv_source_asset_audit",
+    "claim_6_attempt_1_source_theorem_audit_and_finite_k_check"
   ],
   "failed_attempts": [
     {
@@ -90,9 +91,9 @@
     "3": 1,
     "4": 2,
     "5": 3,
-    "6": 0
+    "6": 1
   },
-  "last_checkpoint": "2026-07-30T07:32:21.128931+00:00",
+  "last_checkpoint": "2026-07-30T07:34:45.768001+00:00",
   "last_known_git_commit": "80da277",
   "publication_allowed": false,
   "github_repository": "https://github.com/MachineLearning-Nerd/icml26-repro-aU2sxdnRuL-distribution-valued-cpd",
@@ -102,5 +103,11 @@
     "scope": "literal source-table wording only",
     "reason": "maximum computed sigma=2 reduction against best displayed Log-KDE is 72.5%, not 95%; no full empirical R/mFPCA execution because Rscript is absent",
     "evidence": "outputs/claim3_attempt1_audit.md"
+  },
+  "claim_6_outcome": {
+    "verdict": "verified_scoped",
+    "scope": "source theorem and finite-K algebra; not empirical proof",
+    "reason": "For fixed d, the printed K bound scales as epsilon^(-2d) under the source regularity chain; dimension-free control is rejected.",
+    "evidence": "outputs/claim6_attempt1_audit.md"
   }
 }

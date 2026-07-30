@@ -18,3 +18,5 @@
 - Claim 6 state: unverified.
 - Next action: Claim 6 Attempt 1 — audit and test the epsilon-isometry theorem scope.
 - Publication status: not started
+- Claim 6 state: verified (scoped theorem audit). The pinned epsilon-isometry theorem gives K >= (A_X C_K/(epsilon^2 tr(Gamma)))^d under its bounded-domain/Hölder/OT/Lipschitz-kernel assumptions; finite-K algebra checks and a dropped-dimension negative control pass. See `outputs/claim6_attempt1_audit.md`.
+- Next action: independent review, then construct the complete logbook/final evidence gate; publication remains disallowed.

@@ -1,0 +1,120 @@
+{
+  "attempt": "claim_6_attempt_1",
+  "scope": "source-pinned theorem/assumption audit plus finite-K algebra check",
+  "source": {
+    "file": "paper_source/main0.tex",
+    "sha256": "7c88af0f1ccb66458f0b396331bdee3b5aed26c1b041730e891900f38a5591f6"
+  },
+  "theorem_source_excerpt": "\\begin{theorem}[$\\varepsilon$-Isometry]\\label{thm:holder-tail}Let the domain $\\mathcal{X} \\subset \\mathbb{R}^d$ and the covariance kernel $\\mathcal{K}$ satisfy the conditions of Proposition~\\ref{prop:kernel_lipschitz}. \nLet $\\{\\lambda_m\\}_{m\\ge 1}$ be the eigenvalues of the covariance operator $\\Gamma$ in non-increasing order.\nThen, there exists a constant $A_{\\mathcal{X}}$ depending only on the domain dimension $d$ such that the tail sum of eigenvalues satisfies:\n\\begin{align}\\label{eq:tail_bound}\n\\sum_{m > K} \\lambda_m \\le A_{\\mathcal{X}} C_{\\mathcal{K}} K^{-1/d} .\n\\end{align}\nConsequently, to achieve an $\\varepsilon$-isometry in mean square (\\ie relative reconstruction error $\\le \\varepsilon^2$), the required number of principal components $K$ scales as:\n\\begin{align}\n    K \\ge \\left( \\frac{A_{\\mathcal{X}} C_{\\mathcal{K}}}{\\varepsilon^2 \\operatorname{tr}(\\Gamma)} \\right)^d\n\\end{align}\n\\end{theorem}",
+  "assumptions_found": [
+    "bounded convex domain",
+    "Holder densities",
+    "uniform Lipschitz tangent fields",
+    "uniform bounded tangent fields",
+    "kernel Lipschitz condition"
+  ],
+  "theorem_markers_found": [
+    "eigenvalue tail",
+    "relative error target",
+    "component lower bound"
+  ],
+  "fixed_constants": {
+    "A_X_times_C_K": 3.0,
+    "trace_Gamma": 2.0
+  },
+  "epsilon_scaling_checks": [
+    {
+      "dimension": 1,
+      "epsilon_coarse": 0.4,
+      "epsilon_fine": 0.2,
+      "observed_k_ratio": 4.0,
+      "expected_epsilon_minus_2d_ratio": 4.0,
+      "absolute_error": 0.0
+    },
+    {
+      "dimension": 1,
+      "epsilon_coarse": 0.2,
+      "epsilon_fine": 0.1,
+      "observed_k_ratio": 4.0,
+      "expected_epsilon_minus_2d_ratio": 4.0,
+      "absolute_error": 0.0
+    },
+    {
+      "dimension": 1,
+      "epsilon_coarse": 0.1,
+      "epsilon_fine": 0.05,
+      "observed_k_ratio": 4.0,
+      "expected_epsilon_minus_2d_ratio": 4.0,
+      "absolute_error": 0.0
+    },
+    {
+      "dimension": 2,
+      "epsilon_coarse": 0.4,
+      "epsilon_fine": 0.2,
+      "observed_k_ratio": 16.0,
+      "expected_epsilon_minus_2d_ratio": 16.0,
+      "absolute_error": 0.0
+    },
+    {
+      "dimension": 2,
+      "epsilon_coarse": 0.2,
+      "epsilon_fine": 0.1,
+      "observed_k_ratio": 16.0,
+      "expected_epsilon_minus_2d_ratio": 16.0,
+      "absolute_error": 0.0
+    },
+    {
+      "dimension": 2,
+      "epsilon_coarse": 0.1,
+      "epsilon_fine": 0.05,
+      "observed_k_ratio": 16.0,
+      "expected_epsilon_minus_2d_ratio": 16.0,
+      "absolute_error": 0.0
+    },
+    {
+      "dimension": 5,
+      "epsilon_coarse": 0.4,
+      "epsilon_fine": 0.2,
+      "observed_k_ratio": 1024.0,
+      "expected_epsilon_minus_2d_ratio": 1024.0,
+      "absolute_error": 0.0
+    },
+    {
+      "dimension": 5,
+      "epsilon_coarse": 0.2,
+      "epsilon_fine": 0.1,
+      "observed_k_ratio": 1024.0,
+      "expected_epsilon_minus_2d_ratio": 1024.0,
+      "absolute_error": 0.0
+    },
+    {
+      "dimension": 5,
+      "epsilon_coarse": 0.1,
+      "epsilon_fine": 0.05,
+      "observed_k_ratio": 1024.0,
+      "expected_epsilon_minus_2d_ratio": 1024.0,
+      "absolute_error": 0.0
+    }
+  ],
+  "negative_controls": [
+    {
+      "dimension": 2,
+      "actual_ratio": 16.0,
+      "dropped_dimension_prediction": 4.0,
+      "control_rejected": true
+    },
+    {
+      "dimension": 5,
+      "actual_ratio": 1024.0,
+      "dropped_dimension_prediction": 4.0,
+      "control_rejected": true
+    }
+  ],
+  "verdict": "verified_scoped",
+  "verdict_reason": "The source establishes K >= (A_X C_K/(epsilon^2 tr(Gamma)))^d under its stated regularity chain. For fixed d this is polynomial in target precision; the numerical algebra checks epsilon^{-2d} scaling and rejects the dropped-dimension reading.",
+  "limitations": [
+    "This is a source/proof-route audit, not an empirical proof of the theorem.",
+    "The polynomial degree is 2d, so the guarantee is not dimension-free.",
+    "The source requires bounded convex domain, Holder-density/OT regularity, uniform Lipschitz and bounded tangent fields, and the covariance-kernel condition."
+  ]
+}
