@@ -1,0 +1,163 @@
+## Source text FlowCAP references
+162-In model-free settings, a common construction is to compare ``past'' and ``recent'' segments via a sequential two-sample statistic (often kernel-based) and to stop when this statistic exceeds a threshold~\citep{harchaoui2008kernelcpa,li2015mstatistic,chang2019kernel}.
+163-More recent work targets high-dimensional streams through computationally efficient, constant-memory recursions (\eg random-feature approximations and multi-timescale exponential averages)~\citep{keriven2020newma}.
+164-At the same time, CPD has been extended beyond Euclidean vectors to random objects located on manifolds or more general metric spaces~\citep{wang2013locality,bouchard2020riemannian, dubey2020frechet, wang2024non}.
+165-
+166:However, many modern sensing and observational systems produce batches of observations at each time step (\eg thousands of cells in flow cytometry, or a burst of user-generated content).
+167-The natural representation of the observation at time $t$ is the empirical measure $\mu_t=\frac1{N_t}\sum_{j=1}^{N_t}\delta_{X_{t,j}}$, \rev{where $X_{t,j} \in \mathbb{R}^d$ denotes the $N_t$ observed realizations in the batch at time $t$,}
+168-and CPD becomes testing for changes in the law of a distribution-valued process $\{\mu_t\}_{t\ge 1}$~\citep{horvath2021monitoring}.
+169-In this regime, one may either (i) compare batches via sequential two-sample discrepancies, or (ii) monitor a vector-valued functional of $\mu_t$ obtained from moments or learned feature maps.
+170-These strategies effectively test changes in selected functionals of $\mu_t$.
+--
+191-    % We establish the radial identity that links $W_2(\bar{\mu},\mu)$ to the $L^2(\bar{\mu})$ norm of the associated displacement field, providing a reference-centered local linearization of $\mathcal W_2$ at $\bar{\mu}$. The displacement field can then be used to monitor the change of distribution.
+192-    \item %Practical sequential detector via tangent-space subspace learning.
+193-    We develop a two-chart online monitoring procedure leveraging Multivariate Functional PCA (MFPCA) to derive Hotelling's $T^2$ and Squared Prediction Error (SPE) statistics in the Wasserstein tangent space, providing a scalable detector with data-driven threshold calibration.
+194-    \item %Theory and strong empirical evidence on complex shifts.
+195:    We provide theoretical guarantees and demonstrate performance on extensive simulations and two real-world case studies (FlowCAP abnormal-cell detection and public opinion monitoring on Reddit), where distributional geometry shifts are central. Across these settings, the proposed approach consistently achieves strong detection power for distributional and dependence-geometry perturbations while outperforming moment-based or model-free online CPD approaches.
+196-\end{enumerate}
+197-% Change point detection (CPD) focuses on the problem of identifying abrupt changes in sequential data streams while controlling false alarms.
+198-% As a foundational tool for sequential decision-making, CPD has been broadly deployed  in industrial quality control, audio signal processing, financial analysis, bioinformatics, and social science, \citep{page1954continuous, kossinets2006empirical, jandhyala2013inference,aminikhanghahi2018real, truong2019supervised, truong2020selective}, etc.
+199-% CPD methods can be divided into two main branches: offline and online methods.
+--
+209-% CPD beyond Euclidean domains has been studied for time series of graphs via locality statistics \citep{wang2013locality}, for general metric-space–valued data objects primarily in the offline setting via Fréchet-type scans \citep{dubey2020frechet}, and for manifold-valued data streams via Riemannian change detection methods, including offline detectors for structured matrix manifolds \citep{bouchard2020riemannian} and nonparametric online CPD on Riemannian manifolds \citep{wang2024non}.
+210-
+211-% % batch as window - summary statistics | batch as observations and batch as windows
+212-
+213:% In many scientific and industrial workflows, however, data naturally arrives as a batch of observations at each time (\eg batch process monitoring in one manufacturing cycle, thousands of cells in flow cytometry, streams of user-generated content on the social network, \etc)
+214-% Therefore, the natural observations at time $t$ is an empirical measure $\mu_t$ constructed from $\{X_{t,j}\}_{j=1}^{n_t}$,  the CPD problem becomes detecting changes in the law governing the distribution-valued process $\{\mu_t\}_{t\ge 1}$.
+215-% As emphasized in ~\citep{horvath2021monitoring}, this setting is fundamentally different from classical sequential detection based on a single observation per time point, precisely because each time index provides a large within-time sample and the target of monitoring is the evolving distribution itself.
+216-% Despite the prevalence of such data, literature on online CPD for distribution-valued streams remains limited.
+217-% The online CPD approaches for a single observation per time point are ill-suited for this setting, as they fail to capture the intrinsic geometry of the space of probability measures with full distributional information.
+--
+233-%     \item \yz{Need to adjust }We prove that the optimal transport maps $T_i$ are the isometric embedding of the distance between the distribution-valued samples on the $L^2$ Hilbert space.
+234-%     This key observation enables us to establish a monitoring geometry by linearizing the Wasserstein geometry through mapping distribution-valued samples to tangent vector fields in a shared Hilbert space, where standard statistical tools become applicable.
+235-%     Thus, we develop a practical two-chart monitoring framework that adapts Hotelling's $T^2$ and Squared Prediction Error (SPE) statistics to the Wasserstein tangent space through Multivariate Functional Principal Component Analysis (MFPCA).
+236-%     This framework provides the first complete solution for monitoring distribution-valued processes with model-free control rules.
+237:%     \item Empirically, we validate the proposed \algoname control chart through extensive simulations and two real-world case studies: (i) abnormal-cell detection in FlowCAP flow cytometry data, and (ii) detecting  polarization  in Reddit COVID-19 vaccine comments.
+238-%     Across these settings, the proposed approach consistently achieves strong detection power for distributional and dependence-geometry perturbations while  demonstrating the advantage of the proposed geometry-aware CPD for distribution-valued samples over conventional moment-based or model-free online CPD approaches.
+239-
+240-% \end{enumerate}
+241-
+--
+839-% (3) \textbf{Fr\'echet CPD (F-CPD)} \citep{dubey2020frechet}: A graph-based change-point detector for metric spaces. Since F-CPD is designed for offline single change-point detection, we adapted it for the online setting by computing its graph-based statistics on consecutive sliding windows;
+840-% (4) \textbf{Shewhart-type Control Charts:} We applied the classical \textbf{Hotelling's $T^2$} control chart to the vector of simple summary statistics (mean and variance) extracted from each batch, serving as a naive Euclidean baseline.
+841-
+842-\section{Numerical Experiments}
+843:We evaluate the proposed \algoname\ against baselines on synthetic batch streams (continuous and discrete) and two real-world case studies: (i) Acute Myeloid Leukemia (AML) detection~\citep{aghaeepour2013critical}, and (ii) Vaccine sentiment monitoring~\citep{DVN/XJTBQM_2022}.
+844:All implementation detail are provided in Appendix~\ref{app:sim_details_dist}, \ref{app:sim_details_dist}, \ref{app:aml_details} \ref{app:case:reddit}.
+845-
+846-\paragraph{Baselines.}
+847-We compare \algoname\ against five representative baselines categorized by their underlying geometric representation.
+848-First, Euclidean summary baselines include Shewhart-type charts~\citep{xie2021sequential} (\eg Hotelling's $T^2$ or attribute charts), which reduce distributions to simple moments like means or variances.
+--
+852-\paragraph{Metrics.} We evaluate performance via the standard false-alarm-delay trade-off.
+853-For a stopping time $\tau$ and change-point $\kappa$, we report the in-control average run length $\mathrm{ARL}_0=\mathbb E_{\infty}[\tau]$ (expected time to false alarm) and the detection delay $\mathrm{ARL}_1=\mathbb E_{\kappa}[\tau-\kappa\mid \tau>\kappa]$\rev{, where $\mathbb E_{\infty}[\cdot]$ denotes the
+854-expectation under $H_0$}.
+855-All methods are calibrated to a fixed target $\mathrm{ARL}_0$ to compare $\mathrm{ARL}_1$ (smaller is better).
+856:\rev{The pre-change calibration length is $n_0=300$ for all synthetic and FlowCAP-II experiments and $n_0=50$ for the Reddit study (constrained by data availability). A sensitivity discussion is in Appendix~\ref{app:n0_sensitivity}.}
+857-
+858-\subsection{Synthetic Experiments}
+859-\label{sec:sim_design}
+860-We generate distribution-valued streams $\{\mu_t\}$ by pushing forward a reference measure $\bar\mu$ via convex potentials (continuous), where it is verified to yield optimal transport maps in Appendix~\ref{app:cyclic_monotone}, and by simulating count and categorical processes (discrete).
+--
+974-
+975-\subsection{Real-World Case Studies}
+976-
+977-\textbf{1. Abnormal Cell Detection }
+978:We apply our framework to the detection of Acute Myeloid Leukemia (AML) using the FlowCAP-II dataset~\citep{aghaeepour2013critical}.
+979:Flow cytometry data is naturally distribution-valued: each patient sample consists of thousands of single cells, where each cell is a vector of multidimensional fluorescence markers.
+980-We model these patient samples as a distribution-valued stream in $\mathcal{P}_2(\mathbb{R}^7)$.
+981:The objective is to detect AML-positive subjects.
+982:We calibrate the detector on a reference set of healthy samples and monitor a test stream containing injected AML-positive patients (see Appendix~\ref{app:aml_details}).
+983-\begin{figure}[t]
+984-  \centering
+985-  \includegraphics[width=\linewidth]{figures/tradeoff_F1_vs_ARL0_singlecol.png}
+986:  \caption{\rev{AML detection on FlowCAP-II. \textbf{Left:} F1-score versus $\mathrm{ARL}_0$. \textbf{Right:} detection delay $\mathrm{ARL}_1$ versus $\mathrm{ARL}_0$. \algoname\ (red diamond) attains the highest F1 ($\approx 0.75$) and the lowest $\mathrm{ARL}_1$ across the full $\mathrm{ARL}_0$ range.}}
+987-  \label{fig:real:tradeoff}
+988-\end{figure}
+989-
+990-% \textbf{Results:}
+991-% \rev{Figure~\ref{fig:real:tradeoff} reports both the F1-score (left) and the detection delay $\mathrm{ARL}_1$ (right) against $\mathrm{ARL}_0$. \algoname\ attains the highest F1 ($\approx 0.75$) with fast detection ($\mathrm{ARL}_1 \approx 1$), simultaneously dominating on both axes, which indicates that our geometric-aware statistic captures the intrinsic shape of the leukemic shift while preserving near-perfect precision ($\approx 0.99$).}
+992:% \rev{The two metrics evaluate complementary aspects of detection: $\mathrm{ARL}_1$ measures first-detection delay, whereas F1 measures batch-level labeling accuracy across the entire stream. NEWMA's kernel statistic raises a broader alarm pattern (precision $\approx 0.83$, higher recall), reaching an F1 close to \algoname\ at lenient $\mathrm{ARL}_0$ targets ($30\!-\!75$), but its first alarm arrives later, so \algoname\ remains the fastest detector across the full $\mathrm{ARL}_0$ range. At stricter targets ($\mathrm{ARL}_0>75$), the ranking on F1 and $\mathrm{ARL}_1$ can differ because the two metrics reward different operating points; the right panel shows \algoname\ maintains the smallest $\mathrm{ARL}_1$ throughout (see Appendix~\ref{app:aml_details} for a detailed precision/recall breakdown).}
+993-% In contrast, Hotelling's $T^2$ yields low precision ($<0.4$) because reducing distributions to simple moments discards critical sub-population structures.
+994-% Meanwhile, Log-KDE suffers severe detection latency, confirming its struggle with high-dimensional density estimation.
+995-%   % \vspace{-1em}
+996-
+997-\textbf{Results:}
+998-\rev{Figure~\ref{fig:real:tradeoff} reports F1 (left) and detection delay $\mathrm{ARL}_1$ (right) versus $\mathrm{ARL}_0$. \algoname\  attains the highest F1 ($\approx 0.75$) with near-immediate detection ($\mathrm{ARL}_1 \approx 1$) and near-perfect precision ($\approx 0.99$), indicating that our geometric-aware statistic captures the intrinsic shape of the leukemic shift.}
+999:\rev{NEWMA's kernel statistic produces broader alarms (precision $\approx 0.83$, higher recall) and matches \algoname\ on F1 at lenient $\mathrm{ARL}_0$ targets ($30\!-\!75$), but its first alarm arrives later, so \algoname\ remains the fastest detector across the full $\mathrm{ARL}_0$ range (see Appendix~\ref{app:aml_details}).}
+1000-In contrast, Hotelling's $T^2$ yields low precision ($<0.4$) because reducing distributions to simple moments discards critical sub-population structures.
+1001-Meanwhile, Log-KDE suffers severe detection latency, confirming its struggle with high-dimensional density estimation.
+1002-
+1003-\begin{figure}[!t]
+--
+1042-Future work will explore incremental barycenter updates, and investigate scalable OT approximations to  mitigate computational latency and estimation error in high dimensions.
+1043-
+1044-
+1045-\section*{Acknowledgements}
+1046:The authors would like to thank Dr. Ryan Brinkman for generously sharing the FlowCAP II dataset directly with us. We also extend our gratitude to Dr. Wenmeng Tian for her insightful discussions and valuable feedback on this work.
+1047-This work was supported by the National Science Foundation [Awards CMMI-2543434, CMMI-2430998] and the American Heart Association Collaborative Science [Award 23CSA1052735].
+1048-
+1049-
+1050-
+--
+1697-
+1698-\section{Sensitivity to Pre-Change Calibration Length $n_0$}\label{app:n0_sensitivity}
+1699-
+1700-\paragraph{Experimental settings.}
+1701:We use $n_0 = 300$ for all synthetic experiments and the FlowCAP-II case study, and $n_0 = 50$ for the Reddit case study, where a longer pre-change window is unavailable due to data availability constraints.
+1702-
+1703-\paragraph{Role of $n_0$.}
+1704-The calibration length $n_0$ governs three estimation tasks: (i) the Fr\'echet barycenter $\bar{\mu}$; (ii) the eigendecomposition of the empirical covariance operator $\widehat{\mathcal{C}}$ (MFPCA); and (iii) the empirical quantile thresholds. Corollary~\ref{cor:arl_empquant} quantifies the finite-sample effect on (iii) directly: the lower bound on $\mathrm{ARL}_0$ contains an additive correction of $2/(n_0+1)$, which equals $0.007$ for $n_0=300$ (negligible) but $0.039$ for $n_0=50$ (non-trivial at aggressive false-alarm rates). This finite-sample inflation partially explains our choice of a qualitative evaluation for the Reddit case study.
+1705-Functional eigenpair consistency requires $n_0 \to \infty$ with estimation error $O(n_0^{-1/2})$ for fixed truncation $K$ \citep{hall2006properties}, which provides sufficient accuracy at $n_0 = 300$ for the truncation levels used here ($K \le 10$). Empirical barycenters enjoy finite-sample concentration in metric spaces with curvature bounds, so the barycenter approximation error in our setting is dominated by within-batch sampling error rather than $n_0$ when $n_0$ is moderately large.
+--
+1730-Copula shift              & Strong (small $N$)                  & Log-KDE competitive at large $N$ \\
+1731-Gaussian translation      & Disadvantage (small $\delta$)       & Hotelling $T^2$ better for pure mean shifts \\
+1732-Poisson spike (Fig.~\ref{fig:dis:tradeoff1})  & Moderate disadvantage & $C$-CHART better (specialized detector) \\
+1733-Ordered categorical       & Advantage                            & --- \\
+1734:AML FlowCAP (Fig.~\ref{fig:real:tradeoff})    & Best overall         & NEWMA comparable at low $\mathrm{ARL}_0$ \\
+1735-\bottomrule
+1736-\end{tabular}}
+1737-\end{table}
+1738-
+--
+1747-\paragraph{Poisson spike injection.} The $C$-CHART is a specialized count detector monitoring the sufficient statistic $S_t = \sum_i x_{t,i}$; spike injection inflates exactly this quantity, so $C$-CHART achieves shorter delays than \algoname\ by design. \algoname\ still outperforms Log-KDE since OT geometry preserves discrete spike structure better than kernel smoothing.
+1748-
+1749-\paragraph{Ordered categorical drift.} \algoname\ exploits the ordinal metric and detects coherent mass flow more efficiently than attribute charts, which treat classes as nominal.
+1750-
+1751:\paragraph{FlowCAP-II AML.} \algoname\ achieves the highest F1 ($\approx 0.75$) with $\mathrm{ARL}_1\approx 1$ and near-perfect precision ($\approx 0.99$). NEWMA is comparable in F1 at lenient $\mathrm{ARL}_0$ thresholds (30--75) due to its higher recall (precision $\approx 0.83$, recall $\approx 0.52$) but later first detection. At stricter thresholds ($\mathrm{ARL}_0>75$) NEWMA's F1 advantage at a single $\mathrm{ARL}_0$ cross-section coexists with a larger $\mathrm{ARL}_1$, reflecting the difference between batch-level labeling accuracy and first-detection speed.
+1752-
+1753-\paragraph{Reddit sentiment.} Qualitative evaluation only; \algoname\ produces sharp alarms aligned with the J\&J pause and subsequent policy shifts, whereas NEWMA exhibits monotonic drift and F-CPD high variance unrelated to events.
+1754-
+1755-\section{Computational Cost: Phase I and Phase II Timing}\label{app:timing}
+1756:Tables~\ref{tab:phaseI_timing}--\ref{tab:phaseII_timing} report per-sample timing (ms) for all methods across our synthetic configurations. Phase I (offline calibration) ranges from $\sim$0.2~ms ($d{=}1,\,N{=}50$) to $\sim$867~ms ($d{=}50,\,N{=}300$); this is a one-time cost. Phase II (online monitoring) is substantially cheaper: under $50$~ms for $d\le 10$ and $\sim$272~ms at $d{=}50,\,N{=}300$. Competitors KDE-Marginal scale similarly ($\sim$172~ms), F-CPD incurs $12$--$20$~ms but with weaker detection power, while Shewhart/Hotelling $T^2$ is fastest ($<1.5$~ms) but fails to detect higher-order distributional changes. For the real case studies, FlowCAP-II ($d{=}7,\,N_t{=}500$) has Phase II cost $\sim$2.9~s, practical given minute-to-hour batch arrivals; Reddit ($d{=}20,\,N_t\in[20,412]$) has Phase II cost $\sim$0.19~s, well below daily monitoring frequency.
+1757-\input{tables/PhaseI_timing.tex}
+1758-\input{tables/PhaseII_timing.tex}
+1759-
+1760-\section{Implementation Details and Hyperparameters}\label{app:impl_details}
+--
+1790-
+1791-
+1792-
+1793-
+1794:\section{Details on Flow Cytometry Case Study}
+1795:\label{app:aml_details}
+1796-
+1797-\subsection{Dataset and Preprocessing}
+1798:The dataset is derived from the FlowCAP-II challenge~\citep{aghaeepour2013critical}, comprising 2,874 peripheral blood or bone marrow measurements collected from 359 subjects (316 healthy donors and 43 AML patients). Note that multiple measurements are available for each subject.
+1799:We treat each flow cytometry measurement as a distinct distribution-valued observation. From each measurement, we extract a random subsample of $N=2,000$ cells to form the empirical measure $\mu_t$.
+1800-Each cell is represented in $d=7$ dimensions, consisting of forward scatter (FSC), side scatter (SSC), CD45 expression, and 4 other lineage markers.
+1801-
+1802-
+1803-\subsection{Change Point Detection Experiment Setup}
+1804-We structure the experiment as a sequential change-point detection task with two phases:
+1805-(1) Pre-change Calibration Phase: We utilize a sequence of 300 healthy samples to estimate the reference distribution $\bar{\mu}$ and calibrate the detection threshold to satisfy a target $\mathrm{ARL}_0$.
+1806:(2) Monitoring Phase: We monitor a test stream of 300 samples. This stream is constructed by injecting 80\% AML-positive samples (randomly sampled from the AML patient pool) interspersed with healthy samples.
+1807-Since ground truth diagnosis labels are available for every sample, we evaluate performance using both detection delay ($\mathrm{ARL}_1$) and classification metrics (F1-score, Precision/Recall) at the batch level.
+1808-
+1809-\paragraph{Precision/recall breakdown.}
+1810-Figure~\ref{fig:real:tradeoff} in the main text reports both the F1-score (left panel) and the detection delay $\mathrm{ARL}_1$ (right panel) versus $\mathrm{ARL}_0$. The two metrics evaluate distinct quantities: $\mathrm{ARL}_1$ measures first-detection delay (lower is faster), whereas F1 measures batch-level labeling accuracy across the full stream. \algoname\ achieves near-perfect precision ($\approx 0.99$) by raising fewer but highly reliable alarms, yielding the fastest first detection ($\mathrm{ARL}_1$ between $\sim$2 and $\sim$3) and the highest F1. NEWMA fires more liberally (precision $\approx 0.83$, recall $\approx 0.52$), boosting F1 at lenient $\mathrm{ARL}_0$ targets but at the cost of a later first alarm ($\mathrm{ARL}_1\approx 3.6$--$3.8$). Hence the two methods reflect different trade-offs between first-detection speed and overall labeling coverage. \algoname\ is consistently faster in first detection across the entire $\mathrm{ARL}_0$ range.
+\n## GitHub repository search
+\n## DuckDuckGo
+7bd8f2bf9b41ced1389bbf24ae1e4d9-2715fb5fbd4f8b0e5f866ddcaafe1a6c-20aea7f2aa5e638ca32149b59c647948&q=FlowCAP II AML dataset official download&o=ctfXFHhjxGc54kdK1KmYYdtC6fnWSeVVEjh4Zw4PGfKvlHqhr4mwKHbdoL2DBxxH%0A&r=inc" target="ifr" method="POST"></form>
+7bd8f2bf9b41ced1389bbf24ae1e4d9-2715fb5fbd4f8b0e5f866ddcaafe1a6c-20aea7f2aa5e638ca32149b59c647948&q=FlowCAP II AML dataset official download&o=ctfXFHhjxGc54kdK1KmYYdtC6fnWSeVVEjh4Zw4PGfKvlHqhr4mwKHbdoL2DBxxH%0A&r=inc" method="POST">

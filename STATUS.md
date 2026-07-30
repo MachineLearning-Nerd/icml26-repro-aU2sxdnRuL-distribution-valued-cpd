@@ -13,7 +13,7 @@
 - Claim 1 state: Three distinct toy routes are complete; full claim remains unverified. Attempt 3 independently verifies the 1-D empirical quantile radial identity for translation, scale, and non-affine deformation (all absolute errors `0.0`) and rejects identity-map, wrong-reference, and uncentered-map controls. The full released R/funcharts mFPCA/paper-scale path remains absent. See `outputs/claim1_attempt3_quantile_audit.md`.
 - Claim 2 state: falsified as literally written. Theorem 3.10 supplies the displayed fixed-threshold bound, while the source empirical-quantile corollary has the finite-sample `+ 2/(n0+1)` denominator correction. See `outputs/claim2_attempt1_audit.md`.
 - Claim 3 state: falsified for literal source-table scope; see `outputs/claim3_attempt1_audit.md`.
-- Claim 4 state: falsified for literal source scope. The pinned release has no FlowCAP/AML/cytometry data or runner; the paper says Hotelling precision, not F1, is below 0.4, and its appendix reports IDD ARL_1 about 2–3 rather than about 1. See `outputs/claim4_attempt1_audit.md`.
+- Claim 4 state: literal source scope is falsified by Attempt 1. Attempt 2 independently found no source-faithful public evaluation route: the paper acknowledges direct data sharing, the retrieved FlowCAP-II URL is a Coming Soon page, and the pinned release lacks files, labels, preprocessing, seed, and runner. This availability finding is not a dataset-level refutation. See `outputs/claim4_attempt1_audit.md` and `outputs/claim4_attempt2_audit.md`.
 - Claim 5–6 states: unverified.
-- Next action: Claim 4 Attempt 2 — locate an authoritative public FlowCAP-II source and reconstruct only the exact released protocol if files, labels, and preprocessing are available.
+- Next action: Claim 5 Attempt 1 — source audit and CPU reproduction.
 - Publication status: not started

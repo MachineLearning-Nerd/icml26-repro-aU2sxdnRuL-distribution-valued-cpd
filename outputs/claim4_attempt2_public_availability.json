@@ -1,0 +1,24 @@
+{
+  "attempt": "claim_4_attempt_2_authoritative_public_data_availability",
+  "sources": {
+    "paper_source": "https://export.arxiv.org/e-print/2602.07252",
+    "paper_source_sha256": "7c88af0f1ccb66458f0b396331bdee3b5aed26c1b041730e891900f38a5591f6",
+    "official_flowcap_page": "https://flowcap.org/flowcap2/",
+    "official_flowcap_page_sha256": "0d36a23f6eefd0c45678e9dc713d32702e5274f12981bdb2d7d14572a16d27e7",
+    "pinned_author_repository": "https://github.com/yyzeng43/IDD-icml@c5b1db4060e5081e5c487f91792dc18c17603fd0"
+  },
+  "authoritative_observations": {
+    "paper_acknowledges_direct_dataset_sharing": true,
+    "official_flowcap_page_is_coming_soon": true,
+    "paper_protocol_fragments_missing": [],
+    "pinned_author_repository_data_paths": []
+  },
+  "reconstruction_decision": {
+    "exact_public_files_available": false,
+    "exact_public_labels_available": false,
+    "exact_public_preprocessing_and_stream_script_available": false,
+    "cpu_evaluation_run": false,
+    "outcome": "inconclusive_public_data_and_protocol_unavailable",
+    "reason": "The paper itself says the FlowCAP-II data were shared directly by Dr. Ryan Brinkman; the official FlowCAP-II URL retrieved for this audit is a Coming Soon page; and the pinned author repository contains no FlowCAP/AML/cytometry/FCS files or runner. The paper describes aggregate cohort and stream parameters, but not public source files, per-measurement labels, preprocessing, random seed, or stream-construction code. A source-faithful CPU evaluation is therefore not executable. This is an availability finding, not a dataset-level refutation."
+  }
+}
