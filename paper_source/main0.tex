@@ -1,0 +1,1899 @@
+
+%%%%%%%% ICML 2026 REORGANIZED PREAMBLE %%%%%%%%%%%%%%%%%
+
+\documentclass{article}
+
+% 1. Fundamental Math & Commands (Load early)
+\input{math_commands.tex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{amsthm}
+
+% 2. Core ICML Style & Pre-settings
+% Camera-ready version.
+\usepackage[accepted]{icml2026}
+
+% 3. Graphics & Tables
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{booktabs} 
+\usepackage{tabularx}
+\usepackage{array}
+% Note: [table] option for xcolor must be here to avoid "option clash" errors
+\usepackage[table]{xcolor} 
+
+% 4. Algorithms 
+% CRITICAL FIX: The ICML class often loads 'algorithm' internally or via style files.
+% We use 'algo2e' and 'resetcount' to prevent the "\listofalgorithms already defined" error.
+\usepackage[ruled,vlined,algo2e,resetcount]{algorithm2e}
+
+% 5. Hyperlinks & Referencing
+\usepackage{hyperref}
+\usepackage[capitalize,noabbrev]{cleveref} % Load after hyperref
+\crefname{equation}{Eq.}{Eqs.}
+
+% 6. Symbols & Utilities
+% \usepackage{romannum}  % removed: forces \pagenumbering{roman} globally; \romannumeral is a TeX primitive
+\usepackage{pifont}   % for checkmarks
+\usepackage{xspace}
+\usepackage[textsize=tiny]{todonotes}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% CUSTOM DEFINITIONS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Checkmark/X-mark commands
+\newcommand{\cmark}{\ding{51}}
+\newcommand{\xmark}{\ding{55}}
+\newcommand{\pmark}{\raisebox{0.2ex}{\small$\sim$}} 
+
+% Text macros
+\newcommand{\ie}{\textit{i.e.}, \xspace}
+\newcommand{\eg}{\textit{e.g.}, \xspace}
+\newcommand{\wo}{\textit{w/o} \xspace}
+\newcommand{\etc}{\textit{etc}. \xspace}
+\newcommand{\arlo}{$\mathrm{ARL}_1$\xspace}
+\newcommand{\arlz}{$\mathrm{ARL}_0$\xspace}
+\newcommand{\algoname}{\textsc{IDD}\xspace}
+
+
+% Camera-ready revision highlight (blue)
+\newcommand{\rev}[1]{\textcolor{black}{#1}}
+
+% Table column types
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{G}{>{\columncolor{gray!15}\raggedright\arraybackslash}X}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% THEOREM ENVIRONMENTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{assumption}[theorem]{Assumption}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% The \icmltitle you define below is probably too long as a header.
+% Therefore, a short form for the running title is supplied here:
+\icmltitlerunning{Online CPD for Distribution-valued Data}
+
+\begin{document}
+
+\twocolumn[
+\icmltitle{Beyond Euclidean Summaries: Online Change Point Detection for Distribution-Valued Data}
+\icmltitlerunning{Online CPD for Distribution-valued Data}
+  % \icmltitle{Online Change Point Detection for Distribution-Valued Data via Optimal Transport}
+
+  % It is OKAY to include author information, even for blind submissions: the
+  % style file will automatically remove it for you unless you've provided
+  % the [accepted] option to the icml2026 package.
+
+  % List of affiliations: The first argument should be a (short) identifier you
+  % will use later to specify author affiliations Academic affiliations
+  % should list Department, University, City, Region, Country Industry
+  % affiliations should list Company, City, Region, Country
+
+  % You can specify symbols, otherwise they are numbered in order. Ideally, you
+  % should not use this facility. Affiliations will be numbered in order of
+  % appearance and this is the preferred way.
+  \icmlsetsymbol{equal}{*}
+
+  \begin{icmlauthorlist}
+    \icmlauthor{Yingyan Zeng}{xxx}
+    \icmlauthor{Yujing (Zipan) Huang}{yyy}
+    \icmlauthor{Xiaoyu Chen}{yyy}
+  \end{icmlauthorlist}
+
+  \icmlaffiliation{xxx}{Department of Mechanical, Materials, and Industrial Engineering, University of Cincinnati, Cincinnati, USA.}
+  \icmlaffiliation{yyy}{Department of Industrial and Systems Engineering, University at Buffalo, Buffalo, USA}
+ 
+
+  \icmlcorrespondingauthor{Xiaoyu Chen}{xchen325@buffalo.edu}
+
+  % You may provide any keywords that you find helpful for describing your
+  % paper; these are used to populate the "keywords" metadata in the PDF but
+  % will not be shown in the document
+  % \icmlkeywords{Machine Learning, ICML}
+
+  \vskip 0.3in
+]
+
+
+
+
+% this must go after the closing bracket ] following \twocolumn[ ...
+
+% This command actually creates the footnote in the first column listing the
+% affiliations and the copyright notice. The command takes one argument, which
+% is text to display at the start of the footnote. The \icmlEqualContribution
+% command is standard text for equal contribution. Remove it (just {}) if you
+% do not need this facility.
+
+% Use ONE of the following lines. DO NOT remove the command.
+% If you have no special notice, KEEP empty braces:
+\printAffiliationsAndNotice{}  % no special notice (required even if empty)
+% Or, if applicable, use the standard equal contribution text:
+% \printAffiliationsAndNotice{\icmlEqualContribution}
+
+\begin{abstract}
+
+Existing online change-point detection (CPD) methods rely on fixed-dimensional Euclidean summaries, implicitly assuming that distributional changes are well captured by moment-based or feature-based representations.
+They can obscure important changes in distributional shape or geometry. We propose an intrinsic distribution-valued CPD framework that treats streaming batch data as a stochastic process on the 2-Wasserstein space. Our method detects changes in the law of this process by mapping each empirical distribution to a tangent space relative to a pre-change Fréchet barycenter, yielding a reference-centered local linearization of 2-Wasserstein space. 
+This representation enables sequential detectors by adapting classical multivariate monitoring statistics to tangent fields. We provide theoretical guarantees and demonstrate, via synthetic and real-world experiments, that our approach detects complex distributional shifts with reduced detection delay at matched $\mathrm{ARL}_0$ compared with moments-based and model-free baselines.
+The code is available at \url{https://github.com/yyzeng43/IDD-icml}.
+
+\end{abstract}
+
+\section{Introduction}
+Online change point detection (CPD) aims to detect an abrupt change in a sequential data stream as quickly as possible while controlling false alarms.
+Formally, one constructs a stopping time $\tau$ and seeks small detection delay under post-change regimes subject to a lower bound on the no-change average run length $\mathrm{ARL}_0=\mathbb E_{\infty}[\tau]$~\citep{page1954continuous,truong2020selective}.
+Online CPD is a fundamental tool for monitoring nonstationarity and distribution shift in deployed learning systems, with applications spanning large-scale Machine Learning (ML) services, healthcare and bioinformatics, finance, and social platforms~\citep{aminikhanghahi2017survey,aminikhanghahi2018real,truong2019supervised}.
+
+Most online CPD methodologies are formulated for point-valued streams $\{x_t\}$ in Euclidean space.
+In model-free settings, a common construction is to compare ``past'' and ``recent'' segments via a sequential two-sample statistic (often kernel-based) and to stop when this statistic exceeds a threshold~\citep{harchaoui2008kernelcpa,li2015mstatistic,chang2019kernel}.
+More recent work targets high-dimensional streams through computationally efficient, constant-memory recursions (\eg random-feature approximations and multi-timescale exponential averages)~\citep{keriven2020newma}.
+At the same time, CPD has been extended beyond Euclidean vectors to random objects located on manifolds or more general metric spaces~\citep{wang2013locality,bouchard2020riemannian, dubey2020frechet, wang2024non}.
+
+However, many modern sensing and observational systems produce batches of observations at each time step (\eg thousands of cells in flow cytometry, or a burst of user-generated content).
+The natural representation of the observation at time $t$ is the empirical measure $\mu_t=\frac1{N_t}\sum_{j=1}^{N_t}\delta_{X_{t,j}}$, \rev{where $X_{t,j} \in \mathbb{R}^d$ denotes the $N_t$ observed realizations in the batch at time $t$,}
+and CPD becomes testing for changes in the law of a distribution-valued process $\{\mu_t\}_{t\ge 1}$~\citep{horvath2021monitoring}.
+In this regime, one may either (i) compare batches via sequential two-sample discrepancies, or (ii) monitor a vector-valued functional of $\mu_t$ obtained from moments or learned feature maps.
+These strategies effectively test changes in selected functionals of $\mu_t$.
+Consequently, they can have limited power when the departure is predominantly geometric, \ie when probability mass is redistributed through deformations of the support (translations, shape changes, multimodal reweighting) rather than through changes in low-order moments.
+This motivates treating each batch as a distribution-valued observation and modeling $\{\mu_t\}$ intrinsically on $(\mathcal P_2(\mathcal X),W_2)$, where the Wasserstein metric directly quantifies such mass-transport (geometric) changes.
+
+We therefore treat $\{\mu_t\}$ as a stochastic process taking values in the metric space $(\mathcal P_2(\mathcal X),W_2)$.
+Under quadratic cost, the $2$-Wasserstein distance metrizes discrepancies in mass displacement and is sensitive to changes in support and shape that are not well characterized by low-order moments~\citep{panaretos2019statistical}.
+From a computational perspective, modern optimal transport (OT) solvers (\eg entropic regularization and Sinkhorn iterations) make these geometric comparisons tractable at scale~\citep{cuturi2013sinkhorn}.
+For sequential monitoring, however, one must further construct a representation that (\romannumeral 1) respects the underlying Wasserstein geometry, (\romannumeral 2) lives in a common coordinate system across time, and (\romannumeral 3) admits principled calibration of false-alarm control.
+
+We address this by anchoring at a pre-change Fr\'echet barycenter $\bar{\mu}$ and mapping each $\mu_t$ to a tangent space through OT.
+Under mild regularity, the Brenier map yields the radial identity
+$W_2^2(\bar{\mu},\mu_t)=\|T_{\bar\mu}^{\mu_t}-\mathrm{Id}\|_{L^2(\bar\mu)}^2$,
+which furnishes a local linearization of \rev{($\mathcal{P}_2{\mathcal{X}},\mathcal W_2$)} at $\bar\mu$ in the Hilbert space $L^2(\bar\mu;\mathbb R^d)$.
+We then build an online detector by applying multivariate functional PCA with two classical quadratic monitoring statistics (Hotelling's $T^2$ and SPE), using a pre-change calibration step to set thresholds targeting a desired $\mathrm{ARL}_0$.
+
+\paragraph{Contributions.}
+We propose an intrinsic distribution-valued CPD (IDD) scheme with the following contributions:
+\begin{enumerate}
+    \item %Distribution-valued online CPD as a geometric problem.
+    We formulate online CPD for a distribution-valued stochastic process $\{\mu_t\}_{t\ge 1}$ and detect changes in its law by transporting each $\mu_t$ to a pre-change Fr\'echet barycenter $\bar{\mu}$, thereby working directly with Wasserstein geometry rather than moment-based or \textit{ad hoc} Euclidean summaries.
+    % \item %Local linearization at the barycenter.
+    % We establish the radial identity that links $W_2(\bar{\mu},\mu)$ to the $L^2(\bar{\mu})$ norm of the associated displacement field, providing a reference-centered local linearization of $\mathcal W_2$ at $\bar{\mu}$. The displacement field can then be used to monitor the change of distribution.
+    \item %Practical sequential detector via tangent-space subspace learning.
+    We develop a two-chart online monitoring procedure leveraging Multivariate Functional PCA (MFPCA) to derive Hotelling's $T^2$ and Squared Prediction Error (SPE) statistics in the Wasserstein tangent space, providing a scalable detector with data-driven threshold calibration.
+    \item %Theory and strong empirical evidence on complex shifts.
+    We provide theoretical guarantees and demonstrate performance on extensive simulations and two real-world case studies (FlowCAP abnormal-cell detection and public opinion monitoring on Reddit), where distributional geometry shifts are central. Across these settings, the proposed approach consistently achieves strong detection power for distributional and dependence-geometry perturbations while outperforming moment-based or model-free online CPD approaches.
+\end{enumerate}
+% Change point detection (CPD) focuses on the problem of identifying abrupt changes in sequential data streams while controlling false alarms.
+% As a foundational tool for sequential decision-making, CPD has been broadly deployed  in industrial quality control, audio signal processing, financial analysis, bioinformatics, and social science, \citep{page1954continuous, kossinets2006empirical, jandhyala2013inference,aminikhanghahi2018real, truong2019supervised, truong2020selective}, etc.
+% CPD methods can be divided into two main branches: offline and online methods.
+% In offline CPD, with the assumption that the entire sequence is available, the objective is to retrospectively localize one or multiple change points.
+% Online CPD methods target streaming data with the objective to determine the stop time with minimal delay after a change in the underlying distribution occurs~\citep{truong2020selective,li2025change}.
+% % In online CPD, data arrive in a stream, and the objective is to design a rule that raises an alarm with minimal delay after a change occurs while controlling false alarms~\citep{truong2020selective,li2025change}.
+% In many modern real-world deployments, such as advanced manufacturing systems, high-frequency trading, CPD needs to operate online to support real-time decision making.
+
+% % observation - utilize summary statistics (single, or multiple)
+% Despite extensive research in online CPD, most methods are designed for streams of single observations $\{x_t\}$.
+% In non-parametric settings, the standard strategy employs a sliding-window approach that continuously compares a reference window (\ie past observations) against a test window (recent observations) by computing a divergence statistic at each time step ~\citep{aminikhanghahi2017survey, chang2019kernel}.
+% Recent work has extended CPF to non-Euclidean space, addressing the challenges of monitoring complex data objects. 
+% CPD beyond Euclidean domains has been studied for time series of graphs via locality statistics \citep{wang2013locality}, for general metric-space–valued data objects primarily in the offline setting via Fréchet-type scans \citep{dubey2020frechet}, and for manifold-valued data streams via Riemannian change detection methods, including offline detectors for structured matrix manifolds \citep{bouchard2020riemannian} and nonparametric online CPD on Riemannian manifolds \citep{wang2024non}.
+
+% % batch as window - summary statistics | batch as observations and batch as windows
+
+% In many scientific and industrial workflows, however, data naturally arrives as a batch of observations at each time (\eg batch process monitoring in one manufacturing cycle, thousands of cells in flow cytometry, streams of user-generated content on the social network, \etc) 
+% Therefore, the natural observations at time $t$ is an empirical measure $\mu_t$ constructed from $\{X_{t,j}\}_{j=1}^{n_t}$,  the CPD problem becomes detecting changes in the law governing the distribution-valued process $\{\mu_t\}_{t\ge 1}$.
+% As emphasized in ~\citep{horvath2021monitoring}, this setting is fundamentally different from classical sequential detection based on a single observation per time point, precisely because each time index provides a large within-time sample and the target of monitoring is the evolving distribution itself.
+% Despite the prevalence of such data, literature on online CPD for distribution-valued streams remains limited.
+% The online CPD approaches for a single observation per time point are ill-suited for this setting, as they fail to capture the intrinsic geometry of the space of probability measures with full distributional information.
+% While \citet{horvath2021monitoring} proposed an online framework utilizing the weighted $L^2$-Wasserstein distance, the reliance on empirical quantile functions limits applicability strictly to univariate distributions, precluding generalization to the multivariate settings.
+
+
+%  % we treat each set of observations as one distribution-valued sample $\mu_i$ and view ${\mu_t}_{t\ge1}$ as a stochastic process taking values in the 2-Wasserstein space. 
+
+% % Existing approaches for distribution-valued streams remain limited: many practical pipelines still compress each batch into moments or Euclidean embeddings, which can miss changes in shape, dependence geometry, or other transport-relevant structure.
+% % At the same time, providing \emph{online} false-alarm control without strong parametric assumptions is nontrivial, because thresholds depend on the null behavior of the chosen statistic and the sequential protocol.
+% % These gaps motivate geometry-aware, model-free online CPD methods that operate directly on distribution-valued observations and admit practical, reference-calibrated control of false alarms.
+
+% \textbf{Contributions.} 
+% We investigate the paradigm of online CPD for a stochastic process $\{\mu_t\}_{t\ge1}$ taking values in the 2-Wasserstein space.
+% \begin{enumerate}
+%     \item In this paradigm, instead of monitoring the summary statistics of the batch data, we monitor the distribution-valued samples directly by detecting changes in the  law $\mathbb P$ of this stochastic process via the optimal transport maps $T_i$ which transform sample $\mu_i$ to an IC Fr{\'e}chet barycenter $\bar{\mu}$.
+%     In this way, our method preserves the full distributional information, enabling detection of shape variations, correlation shifts, and other geometric changes.
+%     \item By leveraging barycentric projection, the proposed framework applies to any class of distributions where a unique geodesic connects any pair of measures under the 2-Wasserstein metric, including continuous distributions (\ie univariate and multivariate) and discrete distributions (\eg Possion), providing a general model-free and non-parameteric framework.
+%     \item \yz{Need to adjust }We prove that the optimal transport maps $T_i$ are the isometric embedding of the distance between the distribution-valued samples on the $L^2$ Hilbert space. 
+%     This key observation enables us to establish a monitoring geometry by linearizing the Wasserstein geometry through mapping distribution-valued samples to tangent vector fields in a shared Hilbert space, where standard statistical tools become applicable.
+%     Thus, we develop a practical two-chart monitoring framework that adapts Hotelling's $T^2$ and Squared Prediction Error (SPE) statistics to the Wasserstein tangent space through Multivariate Functional Principal Component Analysis (MFPCA). 
+%     This framework provides the first complete solution for monitoring distribution-valued processes with model-free control rules.
+%     \item Empirically, we validate the proposed \algoname control chart through extensive simulations and two real-world case studies: (i) abnormal-cell detection in FlowCAP flow cytometry data, and (ii) detecting  polarization  in Reddit COVID-19 vaccine comments.
+%     Across these settings, the proposed approach consistently achieves strong detection power for distributional and dependence-geometry perturbations while  demonstrating the advantage of the proposed geometry-aware CPD for distribution-valued samples over conventional moment-based or model-free online CPD approaches.
+
+% \end{enumerate}
+
+
+% reference need to be detailed to the chapter contents
+
+\section{Related Work}
+
+
+% \begin{table*}[t]
+% \caption{Comparison of change-point detection frameworks. \textbf{\algoname} (Ours) uniquely combines online monitoring capabilities with a geometry-aware representation (tangent vector field) for multivariate distributions.}
+% \label{tab:cpd_comparison}
+% \begin{center}
+% \begin{small}
+% \begin{sc}
+% \begin{tabular}{l|ccc}
+% \toprule
+%  & Online & Multivariate & Geometric \\
+% Method & Detection & Distributions & Interpretation \\
+% \midrule
+% Classical ($T^2$, EWMA) & \textcolor{green}{\cmark} & \textcolor{red}{\xmark} & \textcolor{red}{\xmark} \\
+% \citet{li2019scan} (Scan-B) & \textcolor{green}{\cmark} & \textcolor{red}{\xmark} & \textcolor{red}{\xmark} \\
+% \citet{keriven2020newma} (NEWMA) & \textcolor{green}{\cmark} & \textcolor{red}{\xmark} & \textcolor{red}{\xmark} \\
+% \citet{dubey2020frechet} (Fréchet) & \textcolor{red}{\xmark} & \textcolor{green}{\cmark} & \textcolor{green}{\cmark} \\
+% \citet{horvath2021monitoring} (Seq-Quantile) & \textcolor{green}{\cmark} & \textcolor{red}{\xmark} & \textcolor{green}{\cmark} \\
+% \citet{zhang2025change} (SN-Object) & \textcolor{green}{\cmark} & \textcolor{green}{\cmark} & \textcolor{red}{\xmark} \\
+% \midrule
+% \textbf{Ours \algoname} & \textcolor{green}{\cmark} & \textcolor{green}{\cmark} & \textcolor{green}{\cmark} \\
+% \bottomrule
+% \end{tabular}
+% \end{sc}
+% \end{small}
+% \end{center}
+% \vskip -0.1in
+% \end{table*}
+
+
+\textbf{Statistical Process Control.} 
+The foundation of statistical process control (SPC) was established by \citet{shewhart1931economic}, who introduced control charts for monitoring process stability using summary statistics such as sample mean and range. While simple and interpretable, this framework compresses data into low-dimensional statistics, thereby missing shifts in the overall distribution shape. 
+% To enhance sensitivity to small shifts, \citet{page1954continuous} introduced the CUSUM (Cumulative Sum) chart, and \citet{roberts2000control} proposed the Exponentially Weighted Moving Average (EWMA) chart. \citet{lucas1990exponentially} provided a comprehensive analysis of EWMA charts, establishing their theoretical properties. These methods typically monitor univariate moments with i.i.d. assumptions for pre-change observations.
+Multivariate extensions have been developed to handle vector-valued processes. \citet{crosier1988multivariate} developed multivariate Cumulative Sum (CUSUM) procedures, while \citet{nelson1984shewhart} introduced supplementary pattern tests for Shewhart charts.
+However, these rules do not generalize naturally to distribution-valued data. 
+\citet{lowry1995review} provided a review of multivariate SPC methods, noting their limitations in handling non-Euclidean or high-dimensional data. 
+Crucially, \citet{woodall1999research} identified the challenges caused by the shift of distributions in pre-change phase. Our work addresses this gap by directly monitoring distributions in the Wasserstein space, capturing geometric shifts that summary-based charts would miss.
+
+% \textbf{Functional Control Charts and Multivariate Functional PCA}
+
+% With the advancement of sensing technology, functional control charts have extended classical SPC to infinite dimensional settings. 
+% \citet{jackson1979control} pioneered PCA-based monitoring using the two-chart scheme: Hotelling's $T^2$ for the principal subspace and the Squared Prediction Error (SPE) for residuals. This approach has been adapted for various functional settings. 
+% \citet{paynabar2013monitoring} used multilinear PCA for multichannel profiles, a concept we mirror by treating tangent basis coefficients as channels. 
+% \citet{capezza2023funcharts} provided the \texttt{funcharts} framework for multivariate functional monitoring, and \citet{berrendero2020mahalanobis} investigated Mahalanobis distance in functional settings for outlier detection.
+
+% For distribution-valued data, \citet{delicado2011dimensionality} proposed treating density functions as functional data. Similarly, \citet{happ2018multivariate} and \citet{chiou2014multivariate} developed multivariate FPCA frameworks that can combine different functional domains. A fundamental limitation of these methods is the assumption of a linear Hilbert space. Probability distributions reside in a non-linear Wasserstein space; treating them as standard functions (e.g., densities) ignores their intrinsic geometry. Our framework bridges this gap by using optimal transport to linearize distributions into a Hilbert space where these standard tools can be rigorously applied.
+
+\textbf{Statistics for Distribution-valued Samples.} Optimal transport provides the geometric foundation for our work. 
+% \citet{agueh2011barycenters} characterized Wasserstein barycenters, which is adopted as the pre-change reference point on Wasserstein space. 
+% \citet{cuturi2013sinkhorn} introduced the Sinkhorn distance for fast computation, making our real-time monitoring feasible. 
+\citet{panaretos2019statistical} provided a comprehensive review of Wasserstein statistics.
+% To perform inference, we rely on linearizing the space via tangent plane approximations. 
+\citet{bhattacharya2005large} established the asymptotic theory for Fréchet means on manifolds.
+\citet{petersen2016functional} proposed transforming densities to a Hilbert space for regression analysis, and \citet{bigot2017geodesic} developed geodesic principal component analysis (PCA) in Wasserstein space, though the latter is computationally demanding. 
+While \citet{chernozhukov2017monge} introduced OT-based ranks and \citet{sommerfeld2018inference} derived inference for empirical Wasserstein distances, these works focus largely on static analysis or batch testing. 
+Similarly, energy statistics~\citep{szekely2013energy} and kernel two-sample tests~\citep{gretton2012kernel} are powerful for hypothesis testing but lack the sequential control limits required for CPD. Our contribution is to operationalize these geometric insights into a CPD scheme.
+
+\textbf{Change-Point Detection.} 
+Our work builds upon the expanding literature on change-point detection (CPD) for non-Euclidean data. 
+\citet{xie2021sequential} provides a comprehensive review of classical sequential detection methods.
+For metric-valued data that belongs to a metric space, \citet{dubey2020frechet} established a framework for Fr\'echet change-point detection, while \citet{zhang2025change} and \citet{jiang2024two} developed self-normalization based inference for object-valued time series, respectively. 
+Specific to probability distributions, \citet{horvath2021monitoring} proposed a sequential monitoring procedure based on $L^2$-Wasserstein distances. However, these approaches often rely on scalar distances or operate in univariate settings, ignoring the direction of distributional shift.
+
+\section{Intrinsic Distribution-valued CPD}
+\subsection{Preliminaries and Assumptions}
+% Setup and Assumptions
+% unique geodesic  
+
+% 1. Observations $\{xt,j\}$ and empirical measure $\mu_t$	
+% 2. Assumption on the pre-change sampling/stability (what is i.i.d./independent and at which level)
+% 3. Wasserstein space and $W2$ (metirc geometry you will use)
+% 4. CPD hypotheses on $\mu_t$
+
+At each time index $t\in\{1,2,\dots\}$ we observe online streaming batch data, where a batch of $N_t$ samples
+$\{x_{t,1},\dots,x_{t,N_t}\}\subset\mathcal{X}\subset\mathbb{R}^d$ \rev{($X_{t,j}$ denotes the random variable and  $x_{t,j}$ its realization)}.
+We represent the batch by its empirical measure
+\[
+\mu_t \;:=\; \frac{1}{N_t}\sum_{j=1}^{N_t}\delta_{x_{t,j}} \in \mathcal{P}_2(\mathcal{X}),
+\]
+and view $\{\mu_t\}_{t\ge 1}$ as a distribution-valued time series sampled from a stochastic process taking values in the metric space $(\mathcal{P}_2(\mathcal{X}),W_2)$.
+Let $\mathcal{P}(\mathcal{X})$ denote the set of Borel probability measures on $\mathcal{X}$ and define
+\[
+\mathcal{P}_2(\mathcal{X})
+:= \Big\{\mu\in\mathcal{P}(\mathcal{X}) : \int_{\mathcal{X}}\|x\|^2\,\mu(dx) < \infty\Big\}.
+\]
+For $\mu,\nu\in\mathcal{P}_2(\mathcal{X})$, the squared 2-Wasserstein distance in \emph{Monge} form is
+\begin{align}
+W_2^2(\mu,\nu)
+\;: & =\;
+\inf_{T}\Big\{\int_{\mathcal{X}}\|x-T(x)\|^2\,\mu(dx)\;:\; \nonumber \\
+& T:\mathcal{X}\to\mathcal{X}\ \text{Borel},\ T_{\#}\mu=\nu\Big\},
+\label{eq:w2_monge}
+\end{align}
+where $T_{\#}\mu$ denotes the pushforward measure, \ie
+$T_{\#}\mu(B)=\mu(T^{-1}(B))$ for all Borel sets $B\subset\mathcal{X}$.
+When an optimal map exists, \cref{eq:w2_monge} coincides with the \emph{Kantorovich} formulation:
+\begin{align}
+W_2^2(\mu,\nu)
+\;=\;
+\inf_{\pi\in\Pi(\mu,\nu)} \int_{\mathcal{X}\times\mathcal{X}} \|x-y\|^2\,\pi(dx,dy),
+\label{eq:w2_kant}
+\end{align}
+where $\Pi(\mu,\nu)$ denotes the set of couplings with marginals $\mu$ and $\nu$.
+
+
+\begin{assumption}[Within-batch sampling]\label{assump:within_batch}
+For each $t$, conditional on an underlying distribution $\nu_t\in\mathcal{P}_2(\mathcal{X})$,
+the observations within the batch are i.i.d.:
+$x_{t,1},\dots,x_{t,N_t}\stackrel{iid}{\sim}\nu_t$.
+\end{assumption}
+
+We are interested in detecting the potential change in the distribution-valued sequence $\{\nu_t\}_{t=1}^{n}$ online, formulated as:
+\begin{align}
+\rev{H_0: \ \nu_t \stackrel{iid}{\sim} \mathbb{P}_1, \qquad t=1,\ldots,n,}  \label{eq:H0}
+\end{align} % Do we need iid here?
+where $\mathbb{P}_1$ is the common distribution of the samples (\ie the parent law) on the space of measures $\mathcal{P}_2(\mathcal{X})$. Note that $\mu_t$ is the empirical measure approximating the true underlying distribution $\nu_t$. Following the standard convention in sequential analysis~\citep{page1954continuous,truong2020selective}, we write $\mathbb{P}_\infty:=\mathbb{P}_1$ and $\mathbb{E}_\infty:=\mathbb{E}_{\mathbb{P}_1}$ to denote probability and expectation under the pre-change regime.
+Under the alternative, there exists an unknown change point $\kappa\in\{1,\ldots,n\}$ such that
+\begin{align}
+\rev{t < \kappa,\ \nu_t \sim \mathbb{P}_1,\quad t\geq \kappa,\ \nu_t \sim \mathbb{P}_2, \quad \operatorname{where } \mathbb{P}_1 \neq \mathbb{P}_2.}\label{eq:H1}
+\end{align}
+For clarity of exposition, \cref{eq:H1} is stated for a single change point.
+However, the proposed detection method can naturally detect multiple change points online.
+
+% We are interested in detecting the potential change in the distribution-valued sequence \rev{$\{\nu_t\}_{t=1}^{n}$} online, formulated as:
+% \begin{align}
+% H_0: \nu_t \stackrel{iid}{\sim} \mathbb{P}_1, \qquad t=1,\ldots,n,  \label{eq:H0}
+% \end{align} % 
+% where $\mathbb{P}_1$ is the common distribution of the samples (\ie the parent law) on the space of measures $\mathcal{P}_2(\mathcal{X})$.
+% Under the alternative, there exists an unknown change point $\kappa\in\{1,\ldots,n\}$ such that
+% \begin{align}
+% t < \kappa, \mu_t \sim \mathbb{P}_1, t\geq \kappa, \mu_t \sim \mathbb{P}_2, \operatorname{where } \mathbb{P}_1 \neq \mathbb{P}_2.\label{eq:H1}
+% \end{align}
+% For clarity of exposition, \cref{eq:H1} is stated for a single change point. 
+% However, the proposed detection method can naturally detect multiple change points online.
+
+
+We assume a pre-change period of the length $M\ge 1$ of the process, \rev{\ie $\nu_1,\dots,\nu_M \stackrel{iid}{\sim}\mathbb{P}_1$}.
+Let $\bar{\mu}$ denote the Fr\'echet barycenter of the measures in the pre-change calibration phase:
+\begin{align}
+\bar{\mu}\in\arg\min_{\nu\in\mathcal{P}_2(\mathcal{X})} \frac{1}{M}\sum_{t=1}^{M} W_2^2(\nu,\mu_t).
+\label{eq:barycenter}
+\end{align}
+
+\begin{assumption}[Regularity of the reference measure]\label{assump:ref_ac}
+$\bar{\mu}$ is absolutely continuous with respect to Lebesgue measure.
+\end{assumption}
+
+\begin{remark}
+Under quadratic cost $c(x,y)=\|x-y\|^2$, Assumption~\ref{assump:ref_ac} implies that for any
+$\mu\in\mathcal{P}_2(\mathbb{R}^d)$ there exists an optimal transport map
+$T_{\bar{\mu}\to\mu}$ pushing $\bar{\mu}$ to $\mu$, which is $\bar{\mu}$-a.e.\ unique (Brenier's theorem).
+Moreover, the McCann interpolation
+\[
+\mu_s := \big((1-s)\mathrm{Id}+sT_{\bar{\mu}\to\mu}\big)_{\#}\bar{\mu},\qquad s\in[0,1],
+\]
+defines the unique $W_2$-geodesic from $\bar{\mu}$ to $\mu$
+\citep{brenier1991polar,villani2008optimal}.
+% \yz{Maybe put this part later}
+% When $\mu$ is discrete and a Monge map may not exist, we compute OT via the Kantorovich formulation and use
+% barycentric projection to obtain a canonical map-valued representative.
+In our implementation, $\mu_t$ is empirical and we compute a Kantorovich plan and its barycentric projection (see Remark~\ref{rem:plan}).
+\end{remark}
+% Under Assumption~\ref{assump:ref_ac}, we represent each distribution-valued sample $\mu_t$ by the OT map
+% $T_t := T_{\bar{\mu}\to\mu_t}$ and perform online change
+% point detection by monitoring the evolution of $\{T_t\}_{t\ge 1}$ in the common tangent space at $\bar{\mu}$.
+
+
+% \yz{Put this part in the later section}
+% In practice, $\mu_t$ is estimated via the empirical measure  $\hat{\mu}_t$, for which an optimal Monge map may not exist.
+% We therefore compute $W_2$ via the Kantorovich formulation over couplings $\pi\in\Pi(\mu,\nu)$ and, when a map is
+% required (\eg for tangent representations), use barycentric projection of an optimal coupling to obtain a
+% canonical map-valued representative.
+
+% Isometric Embedding % Epsilon-isometry
+ % Our method detects changes in the law of this process by mapping empirical distributions to optimal transport (OT) displacement fields relative to a pre-change Fréchet barycenter. Leveraging a key isometry property of OT maps, we show that Wasserstein distances between distributions admit an exact linear representation in a common tangent space.
+% This geometric linearization enables the construction of practical sequential detectors by adapting classical multivariate monitoring statistics to the tangent space via functional analysis. The resulting framework thus preserves full distributional information.
+
+\subsection{Local Geometric Linearization via Optimal Transport}\label{sec:geom_lin}
+To enable sequential inference  on distribution-valued data, we map the empirical measure $\mu_t$ into a common Hilbert space by representing it through the optimal-transport displacement from the pre-change Fr\'echet barycenter $\bar{\mu}$.
+
+% Add reference of the Proposition | logrithm (check the reference)
+\begin{proposition}[Radial Isometry, Theorem~8.6 \cite{Villani2009OT}]\label{prop:radial_isometry}
+% \citet[Chapter~8, Section~8.4, Theorem~8.6]{Villani2009OT}
+Assume $\bar{\mu}\in\mathcal{P}_2(\mathbb{R}^d)$ is absolutely continuous with respect to Lebesgue measure, and consider the quadratic cost $c(x,y)=\|x-y\|^2$.
+Then for any $\mu\in\mathcal{P}_2(\mathbb{R}^d)$ there exists a $\bar{\mu}$-a.e.\ unique optimal transport map
+$T_{\bar{\mu}}^{\mu}$ such that $(T_{\bar{\mu}}^{\mu})_{\#}\bar{\mu}=\mu$.
+Defining the logarithm map in the tangent space
+\[
+v(\mu)\ :=\ T_{\bar{\mu}}^{\mu_t}-\mathrm{Id}\ \in L^2(\bar{\mu};\mathbb{R}^d),
+\]
+we have the identity
+\begin{equation}
+\label{eq:radial_isometry}
+W_2^2(\bar{\mu},\mu)
+\;=\;
+\int_{\mathcal{X}} \|v(\mu)(x)\|^2\,d\bar{\mu}(x)
+\;=\;
+\|v(\mu)\|_{L^2(\bar{\mu})}^2 .
+\end{equation}
+\end{proposition}
+
+% \paragraph{Tangent Space Embedding.}
+Proposition~\ref{prop:radial_isometry} establishes that the Wasserstein distance from the barycenter $\bar{\mu}$ is exactly preserved by the $L^2(\bar{\mu})$ norm of the OT displacement field.
+Motivated by this radial isometry, we represent each distribution-valued sample $\mu_t$ by its linearized embedding, \ie OT displacement field:
+\begin{align}
+    v_t\ :=\ T_{\bar\mu}^{\mu_t}-\mathrm{Id}\ \in L^2(\bar\mu;\mathbb R^d).
+\end{align}
+% Geometrically, $v_t$ constitutes a tangent vector field at the reference $\bar{\mu}$, allowing us to perform linear statistical analysis in the tangent space.
+Geometrically, $v_t$ corresponds to the Wasserstein logarithm map at reference measure $\bar{\mu}$, projecting the measure $\mu_t$ onto the tangent space at $\bar{\mu}$.
+This transformation maps the manifold $\mathcal{P}_2(\mathcal{X})$ into the tangent space $H:=L^2(\bar\mu;\mathbb R^d)$, allowing us to perform linear statistical analysis in the Hilbert space.
+Consequently, the problem of monitoring distributional shifts is transformed to monitoring a sequence of multivariate functional data, enabling standard covariance operators, functional analysis, and Hilbert-space statistics to be constructed directly on
+$\{v_t\}$, avoiding distributional information loss with Euclidean summaries.
+
+\begin{remark}\label{rem:plan}
+In practice, observed batches are discrete, where a deterministic Monge map may not exist. 
+We therefore solve the Kantorovich relaxation to obtain an optimal coupling $\pi_t \in \Pi(\bar{\mu}, \mu_t)$ and recover a map via the barycentric projection:
+\begin{align}
+    T_t^{\pi}(x) := \mathbb{E}_{\pi_t}[Y \mid X=x] = \int y \, \pi_t(dy\mid x),
+\end{align}
+% \rev{where $(X,Y) \sim \pi_t$ with marginals $X \sim \bar{\mu}$ and $Y \sim \mu_t$.}
+We then define the tangent field as $v_t(x) := T_t^{\pi}(x) - x$. 
+This projection provides a canonical vector field in $L^2(\bar{\mu}; \mathbb{R}^d)$ that coincides with the true Monge map whenever the latter exists. 
+For simplicity, we henceforth denote this projected field simply as $v_t$.
+\end{remark}
+
+To quantify the approximation gap when using a plan-based projection instead of a Monge map, we provide the following variance decomposition, which is a direct application of the $L^2$-projection property of conditional expectation \citep{doob1953stochastic,villani2021topics}.
+
+\begin{proposition}[Barycentric projection variance decomposition]\label{prop:baryproj_gap}
+Let $\mu,\nu\in\mathcal P_2(\mathcal X)$ and let $\pi\in\Pi(\mu,\nu)$ be any coupling with $(X,Y)\sim\pi$.
+Define the barycentric projection $T^{\pi}(x):=\mathbb E_{\pi}[Y\mid X=x]$ and the displacement field $v^{\pi}(x):=T^{\pi}(x)-x\in L^2(\mu;\mathbb R^d)$.
+Then the following decomposition holds:
+\begin{align}
+  \int_{\mathcal X}&\|x-T^{\pi}(x)\|^2\,\mu(dx)
+  = \int_{\mathcal X\times\mathcal X}\|x-y\|^2\,\pi(dx,dy) \notag \\
+  &\quad - \int_{\mathcal X}\mathbb E_{\pi}\!\big[\|Y-T^{\pi}(X)\|^2 \,\big|\, X=x\big]\,\mu(dx) 
+  \label{eq:baryproj_decomp}
+\end{align}
+and in particular
+\begin{align}\label{eq:baryproj_contraction}
+\|v^{\pi}\|_{L^2(\mu)}^2
+\;&=\;
+\int_{\mathcal X}\|x-T^{\pi}(x)\|^2\,\mu(dx)\\
+\;&\le\;
+\int_{\mathcal X\times\mathcal X}\|x-y\|^2\,\pi(dx,dy).
+\end{align}
+If $\pi^\star$ is an optimal coupling for $W_2^2(\mu,\nu)$, then $\|v^{\pi^\star}\|_{L^2(\mu)}^2\le W_2^2(\mu,\nu)$, with equality if and only if $\pi^\star$ is induced by a deterministic map (equivalently, $\mathrm{Var}_{\pi^\star}(Y\mid X)=0$ $\mu$-a.e.).
+\end{proposition}
+
+% \paragraph{From optimal transport maps to transport plans.}
+% \label{rem:plan}
+% In practice, each $\mu_t$ is empirical. 
+% Even when a Monge map exists in the continuum,
+% solving OT between empirical measures via the Kantorovich formulation returns an \emph{optimal plan}
+% $\pi_t\in\Pi(\bar{\mu},\mu_t)$ rather than a pointwise map. By disintegration,
+% $\pi_t(dy\,|\,x)$ is a conditional distribution with first marginal $\bar{\mu}$.
+% We summarize $\pi_t$ on the common domain of $\bar{\mu}$ via its \emph{barycentric projection}
+% \[
+% T_t^{\pi}(x)\;:=\;\int y\,\pi_t(dy\,|\,x), 
+% \qquad 
+% v_t^{\pi}(x)\;:=\;T_t^{\pi}(x)-x,
+% \]
+% which yields a displacement field $v_t^{\pi}\in H:=L^2(\bar{\mu};\mathbb{R}^d)$.
+% When the optimal coupling is induced by a Monge map $T_{\bar{\mu}\to\mu_t}$, we have
+% $T_t^{\pi}=T_{\bar{\mu}\to\mu_t}$ $\bar{\mu}$-a.e., hence $v_t^{\pi}$ coincides with the usual
+% Wasserstein logarithmic map at $\bar{\mu}$.
+% Otherwise, $T_t^{\pi}$ provides a canonical map-valued representative on the reference domain that
+% retains the geometry needed for our tangent-space inference.
+% For notational simplicity, we henceforth write $v_t$ for $v_t^{\pi}$ and define the centered field
+% $\tilde v_t := v_t-\bar v$.
+
+\subsection{The Optimal Transport-based Detector}
+\label{sec:ot_detector}
+Having mapped the distribution-valued stream data to the reference tangent space, we formulate the detection task as monitoring a sequence of multivariate functional observations. 
+In online CPD for high-dimensional and functional streams, the standard paradigm is subspace-based detection. 
+This strategy projects the functional observation onto a low-dimensional principal subspace (\textit{e.g.,} via Multivariate Functional PCA (MFPCA))~\citep{kuncheva2011change, skubalska2013random, bakdi2017new}.
+Motivated by this paradigm, we apply MFPCA to the displacement fields to obtain a finite-dimensional representation and orthogonal residual component, which produces an OT-based detector built from score-space statistic (\ie functional Hotelling $T^2$) and a complementary residual-energy statistic (\ie Squared Prediction Error (SPE)) on the tangent space.
+
+
+Let $\{v_t\}_{t=1}^{n_0}\subset H:=L^2(\bar\mu;\mathbb{R}^d)$ denote a reference sample of $n_0$ tangent vector fields collected from the pre-change process. 
+Define the pre-change sample mean $\bar v=\frac{1}{n_0}\sum_{t=1}^{n_0} v_t$ and centered fields $\tilde v_t=v_t-\bar v$.
+The empirical covariance operator $\widehat C:H\to H$ is
+\begin{align}\label{eq:cov-op}
+(\widehat C f)(\cdot)
+& =\frac{1}{n_0-1}\sum_{t=1}^{n_0}\langle f,\tilde v_t\rangle_H\,\tilde v_t(\cdot)
+\nonumber\\
+& =\frac{1}{n_0-1}\sum_{t=1}^{n_0}(\tilde v_t\otimes \tilde v_t)f,
+\end{align}
+where $(a\otimes b)f:=\langle f,b\rangle_H\,a$.
+
+
+Due to the finite rank of the empirical covariance operator $\widehat{\mathcal{C}}$, we employ a spectral decomposition strategy to regularize the inversion, justified by the Karhunen-Lo\`eve theorem.
+Let $\{(\widehat\lambda_m, \widehat\phi_m)\}_{m\ge 1}$ denote the eigenpairs derived from the pre-change reference sample, ordered such that $\widehat\lambda_1 \ge \widehat\lambda_2 \ge \dots \ge 0$, with orthonormal eigenfunctions $\{\widehat\phi_m\}$ spanning the principal directions of variation in $H$.
+For any newly observed tangent vector field $v_t$ from the online stream, we compute its centered displacement $\Delta_t := v_t - \bar{v}$ relative to the pre-change mean.
+By projecting $\Delta_t$ onto the eigenbasis $\{\widehat\phi_m\}$, we obtain the scores $\widehat\xi_{tm} := \langle \Delta_t, \widehat\phi_m \rangle_H$.
+By truncating the Karhunen-Lo\`eve expansion to the leading $K$ dimensions, we construct the functional Hotelling's $T^2$ statistic for the principal subspace:
+\begin{align}\label{eq:T2-mf}
+T_{t,K}^2 = \sum_{m=1}^K \frac{\widehat\xi_{tm}^2}{\widehat\lambda_m}.
+\end{align}
+\begin{remark}
+% [Eigenfunctions remain in the same tangent space]
+In the above MFPCA decomposition, the empirical covariance operator $\widehat{\mathcal{C}}$ maps any linear combination of the centered displacement $\tilde v_t$ back to the closure of the gradient subspace in $H$. 
+Consequently, its eigenfunctions $\{\phi_m\}_{m\ge 1}$ also lie in this same subspace. 
+Each $\phi_m$ is again a gradient field, so the principal component basis does not leave the tangent space $T_{\bar\mu}\mathcal{P}_2(\mathcal{X})$. 
+\end{remark}
+
+Simultaneously, we monitor residuals orthogonal to this subspace using the SPE, also known as the $Q$–statistic~\citep{jackson1979control}:
+\begin{align}\label{eq:SPE}
+\mathrm{SPE}_t = \big|(I - \widehat P_K)\Delta_t\big|_H^2 = \sum_{m > K} \widehat\xi_{tm}^2,
+\end{align}
+where $\widehat P_K$ denotes the orthogonal projection onto $\mathrm{span}\{\widehat\phi_1, \dots, \widehat\phi_K\}$.
+
+% \paragraph{Operator form.}
+Formally, the functional Hotelling's $T^2$ statistic can be written as
+$T_t^2=\langle \widehat C^\dagger \Delta_t,\Delta_t\rangle_H$,
+where $\widehat C^\dagger$ is the Moore--Penrose pseudoinverse of $\widehat C$.
+The computable expression \cref{eq:T2-mf} follows from the spectral decomposition of $\widehat C$
+(see Appendix~\ref{app:pseudo}).
+
+% \paragraph{Asymptotic Null Distribution and Calibration.}
+% To operationalize the detection statistics, we must determine thresholds $h_{T^2}$ and $h_{\mathrm{SPE}}$ that satisfy a target false-alarm rate $\alpha$.
+% Under standard regularity conditions for FPCA in separable Hilbert spaces (consistency of eigenpairs as $n_0\to\infty$) \citep{dauxois1982asymptotic,hall2006properties}, if the pre-change tangent fields are Gaussian in $H=L^2(\bar\mu;\mathbb R^d)$, the score-space statistic converges in distribution:\begin{equation}\label{eq:T2_asymp_main}T_{t,K}^2 \ \xrightarrow{d}\ \chi^2_K,\end{equation}where $\chi^2_K$ is the chi-square distribution with $K$ degrees of freedom \citep{horvath2012inference}.
+% While this provides a theoretical asymptotic reference, distribution-valued data in practice may exhibit non-Gaussianity.
+% Therefore, robust calibration is achieved by computing the empirical $(1-\alpha)$ quantiles of the pre-change statistics $\{T_{i,K}^2\}_{i=1}^{n_0}$ and $\{\mathrm{SPE}_i\}_{i=1}^{n_0}$, thereby accounting for finite-sample effects and deviations from normality.
+
+\subsection{Theoretical Properties and Threshold Calibration}\label{sec:theory_calibration}
+To derive the asymptotic behavior of the monitoring statistics, we introduce a regularity condition on the distributional generation process. 
+Motivated by Central Limit Theorems for Fr\'echet means on manifolds \citep{bhattacharya2008statistics, mattingly2023central}, we model the pre-change tangent fields as a Gaussian random field.
+\begin{assumption}[Pre-change Gaussian Structure]\label{ass:gaussian_process}
+The pre-change tangent vector fields $\{v_t\}_{t \le n_0}$ are independent and identically distributed (i.i.d.) realizations of a mean-zero Gaussian Random Element $V$ in the Hilbert space $H = L^2(\bar{\mu}; \mathbb{R}^d)$. 
+The process is fully characterized by a compact, positive trace-class covariance operator $\Gamma: H \to H$, with eigenvalues $\lambda_1 > \lambda_2 > \dots > 0$.
+\end{assumption}
+Under Assumption~\ref{ass:gaussian_process}, the functional Hotelling $T^2$ statistic defined in~\cref{eq:T2-mf} follows a known limiting distribution.
+
+\begin{proposition}[Asymptotic Null Distribution]\label{prop:asymptotic_null}
+Let the pre-change sample size $n_0 \to \infty$. 
+Under standard consistency conditions for empirical functional eigenpairs \citep{hall2006properties}, for any fixed truncation level $K$, the online Hotelling statistic $T_{t,K}^2$ for a new pre-change observation converges in distribution to a chi-squared random variable:
+\begin{align}\label{eq:chi_sq_limit}
+T_{t,K}^2 \ \xrightarrow{d} \ \chi^2_K.
+\end{align}
+Simultaneously, the residual statistic $\mathrm{SPE}_t$ converges to a weighted sum of independent chi-squared variables, $\sum_{m>K} \lambda_m Z_m^2$, where $Z_m \sim \mathcal{N}(0,1)$.
+\end{proposition}
+
+\begin{proof}See Appendix~\ref{app:proofs_Asy}.
+\end{proof}
+
+% \paragraph{Proof Sketch.}
+% Let $V$ denote the generic random field generating the pre-change process, with population covariance $\Gamma$ and eigenpairs $(\lambda_m, \phi_m)$.
+% Consider the empirical covariance $\widehat{\mathcal{C}}$ estimated from $n_0$ samples, with eigenpairs $(\widehat{\lambda}_m, \widehat{\phi}_m)$.
+% The projections of a new independent observation $v_t$ onto the sample eigenfunctions converge to the true principal scores, which are independent $\mathcal{N}(0, \lambda_m)$ variables. 
+% Scaling by $\widehat{\lambda}_m^{-1}$ and summing the squares yields the $\chi^2_K$ limit by Slutsky’s theorem. (See Appendix~\ref{app:proofs_Asy} for details).
+
+\paragraph{Calibration Strategy.}
+While Proposition~\ref{prop:asymptotic_null} suggests a parametric threshold $h_{T^2} = \chi^2_{K, 1-\alpha}$, real-world distribution-valued streams may exhibit non-Gaussian tail behavior. 
+To ensure robustness, we adopt a non-parametric calibration approach. We set the detection thresholds $h_{T^2}$ and $h_{\mathrm{SPE}}$ as the empirical $(1-\alpha)$ quantiles of the pre-change statistics $\{T_{t,K}^2\}_{t=1}^{n_0}$ and $\{\mathrm{SPE}_t\}_{t=1}^{n_0}$. 
+This data-driven strategy automatically accounts for finite-sample effects and the intractable infinite sum of eigenvalues in the SPE limit.
+
+%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%
+For distribution-valued streams, the null law of $(T_{t,K}^2,\mathrm{SPE}_t)$ is not available in closed form because it depends on the unknown pre-change distribution of tangent fields induced by the OT construction.
+Once the stream has been mapped into the monitoring statistics and a fixed threshold pair $(h_{T^2},h_{\mathrm{SPE}})$ has been chosen, sequential false-alarm control reduces to controlling the one-step exceedance probability under $\mathbb P_{\infty}$.
+The following theorem makes this reduction explicit (under i.i.d.\ monitoring statistics), and the corollary links our empirical-quantile calibration to an explicit finite-sample $\mathrm{ARL}_0$ lower bound.
+
+\begin{theorem}[Sequential false-alarm control under fixed thresholds]\label{thm:arl_control}
+Let $(h_{T^2}, h_{\mathrm{SPE}})$ be fixed thresholds. Under the assumption that the statistics are i.i.d.\ during the monitoring phase, the run-length $\tau$ follows a geometric distribution with success probability $p_{\infty} = \mathbb P_{\infty}(T_{1,K}^2>h_{T^2} \cup \mathrm{SPE}_1>h_{\mathrm{SPE}})$. 
+Consequently, the global Average Run Length is given by:
+\begin{equation}\mathrm{ARL}_0 = n_0+1 + \frac{1}{p_{\infty}} \ge n_0+1 + \frac{1}{\alpha_{T^2} + \alpha_{\mathrm{SPE}}}.
+\end{equation}\end{theorem}
+
+% \begin{theorem}[Sequential false-alarm control under fixed thresholds]\label{thm:arl_control}
+% Fix truncation $K$ and thresholds $h_{T^2},h_{\mathrm{SPE}}$.
+% Under the no-change law $\mathbb P_{\infty}$, assume the monitoring-phase pairs $\{(T_{t,K}^2,\mathrm{SPE}_t)\}_{t\ge n_0+1}$ are i.i.d.\ and independent of the Phase-I calibration segment used to construct $(h_{T^2},h_{\mathrm{SPE}})$.
+% Let the stopping time
+% \[
+% \tau \;:=\; \inf\Big\{t\ge n_0+1:\ T_{t,K}^2>h_{T^2}\ \text{or}\ \mathrm{SPE}_t>h_{\mathrm{SPE}}\Big\}.
+% \]
+% Then $\tau-(n_0+1)$ has a geometric distribution with success probability \citep[e.g., the classical run-length calculation for Shewhart-type charts;][]{shewhart1931economic,montgomery2020introduction}
+% \[
+% p_{\infty} := \mathbb P_{\infty}\!\Big(T_{1,K}^2>h_{T^2}\ \text{or}\ \mathrm{SPE}_1>h_{\mathrm{SPE}}\Big),
+% \]
+% and hence $\mathrm{ARL}_0=\mathbb E_{\infty}[\tau]=n_0+1+1/p_{\infty}$.
+% Moreover, if $\mathbb P_{\infty}(T_{1,K}^2>h_{T^2})\le \alpha_{T^2}$ and $\mathbb P_{\infty}(\mathrm{SPE}_1>h_{\mathrm{SPE}})\le \alpha_{\mathrm{SPE}}$, then by the union bound $p_{\infty}\le \alpha_{T^2}+\alpha_{\mathrm{SPE}}$ and therefore
+% \[
+% \mathrm{ARL}_0 \;\ge\; n_0+1+\frac{1}{\alpha_{T^2}+\alpha_{\mathrm{SPE}}}.
+% \]
+% \end{theorem}
+
+% \begin{corollary}[Empirical-quantile calibration implies ARL control]\label{cor:arl_empquant}
+% Assume the setting of Theorem~\ref{thm:arl_control}.
+% Suppose that under $\mathbb P_{\infty}$ the marginal distributions of $T_{t,K}^2$ and $\mathrm{SPE}_t$ are continuous, and let $\{T_{t,K}^2\}_{t=1}^{n_0}$ and $\{\mathrm{SPE}_t\}_{t=1}^{n_0}$ be the pre-change calibration samples.
+% Define thresholds as order statistics
+% \[
+% h_{T^2}:=T_{(k_{T^2})}^2,
+% \qquad
+% h_{\mathrm{SPE}}:=\mathrm{SPE}_{(k_{\mathrm{SPE}})},
+% \]
+% where $T_{(1)}^2\le\cdots\le T_{(n_0)}^2$ and $\mathrm{SPE}_{(1)}\le\cdots\le \mathrm{SPE}_{(n_0)}$, with
+% $k_{T^2}=\lceil (1-\alpha_{T^2})n_0\rceil$ and $k_{\mathrm{SPE}}=\lceil (1-\alpha_{\mathrm{SPE}})n_0\rceil$.
+% Then, for an independent monitoring-phase observation,
+% % \begin{align*}
+% %   \mathbb P_{\infty}(T_{1,K}^2>h_{T^2})&=\frac{n_0+1-k_{T^2}}{n_0+1}\le \alpha_{T^2}+\frac{1}{n_0+1},\\
+% % \mathbb P_{\infty}(\mathrm{SPE}_1>h_{\mathrm{SPE}})&=\frac{n_0+1-k_{\mathrm{SPE}}}{n_0+1}\le \alpha_{\mathrm{SPE}}+\frac{1}{n_0+1}.
+% % \end{align*}
+% % Consequently,
+% \begin{align*}
+% p_{\infty} &\le \alpha_{T^2}+\alpha_{\mathrm{SPE}}+\frac{2}{n_0+1},\\
+% \mathrm{ARL}_0 \;&\ge\; n_0+1+\frac{1}{\alpha_{T^2}+\alpha_{\mathrm{SPE}}+2/(n_0+1)}.
+% \end{align*}
+% \end{corollary}
+\begin{corollary}[Empirical-quantile calibration implies ARL control]\label{cor:arl_empquant}
+If thresholds are set as the $(1-\alpha)$ empirical quantiles from a calibration sample of size $n_0$, the marginal exceedance probabilities for an independent monitoring-phase observation satisfy $\mathbb P_{\infty}(\cdot > h) \le \alpha + \frac{1}{n_0+1}$. 
+Substituting this into Theorem~\ref{thm:arl_control} yields the finite-sample guarantee:\begin{align*}
+\mathrm{ARL}_0 \;&\ge\; n_0+1+\frac{1}{\alpha_{T^2}+\alpha_{\mathrm{SPE}}+2/(n_0+1)}.
+\end{align*}\end{corollary}
+
+\rev{
+\begin{proposition}[Detection delay under sustained post-change]\label{prop:arl1}
+Suppose that for $t \ge \kappa$ the tangent fields $\{v_t\}$ are
+i.i.d.\ Gaussian in $H$ with mean $m \neq 0$ and the same covariance
+operator $\Gamma$ as in Assumption~\ref{ass:gaussian_process}.
+Let $m_k = \langle m, \phi_k \rangle$ be the projections of the
+mean shift onto the pre-change eigenbasis, and set
+$\delta_T^2 = \sum_{k=1}^{K} m_k^2 / \lambda_k$.
+Then $T^2_{t,K} \sim \chi^2_K(\delta_T^2)$ and $\mathrm{SPE}_t$
+follows a generalized noncentral chi-square.
+Since $T^2$ and $\mathrm{SPE}$ are functions of orthogonal
+projections of a Gaussian field, they are independent, and
+$\mathrm{ARL}_1 = 1/[1-(1-p_T)(1-p_S)]$,
+where $p_T = \mathbb{P}(T^2_{t,K} > h_{T^2})$ and
+$p_S = \mathbb{P}(\mathrm{SPE}_t > h_{\mathrm{SPE}})$.
+See Appendix~\ref{app:arl1} for the derivation and a
+distribution-free bound.
+\end{proposition}
+% \begin{proposition}[Detection delay under sustained post-change]\label{prop:arl1}
+% Under Assumption~\ref{ass:gaussian_process}, suppose samples from $t\ge\kappa$ are i.i.d.\ from a post-change law $\mathbb{P}_2$ inducing a mean shift $m\in H$ in the tangent fields. Let $p_T = \mathbb P(T_{t,K}^2 > h_{T^2})$ with $T^2_{t,K} \sim \chi^2_K(\delta_T^2)$, $\delta_T^2 = m^\top\Lambda_K^{-1}m$, and $p_S = \mathbb P(\mathrm{SPE}_t > h_{\mathrm{SPE}})$. Then $T^2$ and $\mathrm{SPE}$ depend on orthogonal projections of $\Delta_t$ and are independent, so $\mathrm{ARL}_1 = 1/[1-(1-p_T)(1-p_S)]$. See Appendix~\ref{app:arl1} for the derivation and a non-Gaussian bound.
+% \end{proposition}
+}
+
+\paragraph{Monitoring Procedure.}
+\rev{The complete procedure is organized into two stages. Algorithm~\ref{alg:calibration} (pre-change calibration) computes the reference barycenter, tangent-space displacement fields,  funcational PCA eigenbasis $\{(\widehat\phi_m, \widehat\lambda_m)\}_{m=1}^K$, and empirical-quantile thresholds from the pre-change samples. Algorithm~\ref{alg:monitoring} (online monitoring) computes $T_{t,K}^2$ and $\mathrm{SPE}_t$ for each incoming sample and raises an alarm when either exceeds its calibrated threshold.}
+
+
+
+
+\begin{algorithm}[t]
+\caption{\algoname --- Pre-Change Calibration}
+\label{alg:calibration}
+\SetAlgoLined
+\DontPrintSemicolon
+\SetKwInOut{Input}{Input}
+\SetKwInOut{Output}{Output}
+
+\Input{Pre-change reference stream $\{\mu_t\}_{t=1}^{n_0}$, truncation level $K$, false-alarm rates $\alpha_{T^2}, \alpha_{\mathrm{SPE}}$.}
+
+\BlankLine
+\textbf{Phase 1: Reference Estimation}\;
+Compute Fr\'echet barycenter $\bar\mu$ of $\{\mu_t\}_{t=1}^{n_0}$ via \cref{eq:barycenter}\;
+% \quad\tcp*[h]{LP/fixed-point for $d\le 5$; Sinkhorn barycenter or CNF for $d>5$}\;
+
+\BlankLine
+\textbf{Phase 2: Tangent Space Construction}\;
+\For{$t=1,\dots,n_0$}{
+  Solve OT from $\bar\mu$ to $\mu_t$ to get optimal plan $\pi_t$\;
+  % \quad\tcp*[h]{Exact LP if $d\le 10$ and $N_t\le 500$; Sinkhorn with reg.\ $\varepsilon$ otherwise}\;
+  Compute displacement field: $v_t(x) = \int y\,\pi_t(dy\mid x) - x$\;
+}
+
+\BlankLine
+\textbf{Phase 3: Functional PCA}\;
+Compute reference mean $\bar v = \tfrac{1}{n_0}\sum_{t=1}^{n_0} v_t$\;
+Center fields: $\tilde v_t = v_t - \bar v$, for $t=1,\dots,n_0$\;
+Perform MFPCA on $\{\tilde{v}_t\}_{t=1}^{n_0}$ to obtain eigenpairs $\{(\widehat\phi_m, \widehat\lambda_m)\}_{m=1}^{n_0-1}$\;
+
+\BlankLine
+\textbf{Phase 4: Threshold Calibration}\;
+\For{$t=1,\dots,n_0$}{
+  $\Delta_t \leftarrow v_t - \bar v$\;
+  $\widehat\xi_{tm} \leftarrow \langle \Delta_t, \widehat\phi_m \rangle_H$, \; $m=1,\dots,K$\;
+  $T_{t,K}^2 \leftarrow \sum_{m=1}^K \widehat\xi_{tm}^2 / \widehat\lambda_m$ \quad [\cref{eq:T2-mf}]\;
+  $\mathrm{SPE}_t \leftarrow \|\Delta_t\|_H^2 - \sum_{m=1}^K \widehat\xi_{tm}^2$ \quad [\cref{eq:SPE}]\;
+}
+$h_{T^2} \leftarrow (1-\alpha_{T^2})$-quantile of $\{T_{t,K}^2\}_{t=1}^{n_0}$\;
+$h_{\mathrm{SPE}} \leftarrow (1-\alpha_{\mathrm{SPE}})$-quantile of $\{\mathrm{SPE}_t\}_{t=1}^{n_0}$\;
+
+\Output{$\bar\mu,\ \bar v,\ \{(\widehat\phi_m, \widehat\lambda_m)\}_{m=1}^K,\ h_{T^2},\ h_{\mathrm{SPE}}$.}
+\end{algorithm}
+
+\begin{algorithm}[t]
+\caption{\algoname --- Online Monitoring}
+\label{alg:monitoring}
+\SetAlgoLined
+\DontPrintSemicolon
+\SetKwInOut{Input}{Input}
+
+\Input{Calibration output $(\bar\mu,\ \bar v,\ \{(\widehat\phi_m, \widehat\lambda_m)\}_{m=1}^K,\ h_{T^2},\ h_{\mathrm{SPE}})$.}
+
+\BlankLine
+\For{$t = n_0+1,\ n_0+2,\ \dots$}{
+  Receive new sample $\mu_t$.\;
+  Solve OT from $\bar\mu$ to $\mu_t$ $\to$ displacement field $v_t$.\;
+  Compute centered deviation: $\Delta_t \leftarrow v_t - \bar v$.\;
+  Compute scores: $\widehat\xi_{tm} \leftarrow \langle \Delta_t, \widehat\phi_m \rangle_H$ for $m=1,\dots,K$.\;
+  $T_{t,K}^2 \leftarrow \sum_{m=1}^K \widehat\xi_{tm}^2 / \widehat\lambda_m$\;
+  $\mathrm{SPE}_t \leftarrow \|\Delta_t\|_H^2 - \sum_{m=1}^K \widehat\xi_{tm}^2$\;
+  \If{$T_{t,K}^2 > h_{T^2}$ \textbf{or} $\mathrm{SPE}_t > h_{\mathrm{SPE}}$}{
+     Flag $t$ as a change point; \textbf{stop} (or reset and continue)\;
+  }
+}
+\end{algorithm}
+
+
+\subsection{The $\varepsilon$-Isometry Guarantee.}\label{sec:theory_epsilon}
+The proposed online detector is efficient only if the sequence of tangent vectors can be accurately approximated. 
+Therefore, we provide the following $\varepsilon$-isometry as a theoretical guarantee for this approximation, showing that the regularity of the optimal transport maps ensures a rapid spectral decay of the covariance operator.
+We begin by establishing the regularity of the pre-change process.
+
+\begin{assumption}[Regularity of transport maps]
+\label{ass:norm_bounds}
+The pre-change process generates i.i.d. distributions $\{\mu_i\}$ on a convex, bounded domain $\mathcal{X}\subset\mathbb{R}^d$. 
+Each $\mu_i$ admits a density $\rho_i$ that is bounded and $\alpha$-Hölder continuous (for some $\alpha > 0$).
+Let $T_t: \bar\mu \to \mu_t$ denote the unique optimal transport map from the reference barycenter $\bar\mu$ to $\mu_t$, and define  the tangent vector field $v_t(x) := T_t(x)-x$.
+By standard regularity results for Monge-Amp\`ere equations \citep{brenier1991polar, caffarelli1992regularity, caffarelli2000monotonicity}, there exist deterministic constants $L, B < \infty$ such that almost surely:
+\begin{equation}\label{eq:lipschitz_bounds}
+\text{Lip}(v_t) \le L \quad \text{and} \quad \|v_t\|_{L^\infty(\mathcal{X})} \le B,\quad \text{for all }t.
+\end{equation}
+\end{assumption}
+
+
+This geometric regularity of the individual realizations implies the smoothness of the population covariance structure.
+
+\begin{proposition}[Lipschitz Continuity of the Covariance Kernel]\label{prop:kernel_lipschitz}
+Under Assumption~\ref{ass:norm_bounds}, let $V$ be the random tangent field representing the pre-change process. 
+The matrix-valued covariance kernel $\mathcal{K}(\bm{x}, \bm{y}) := \mathbb{E}[V(\bm{x})V(\bm{y})^\top]$ is Lipschitz continuous on $\mathcal{X} \times \mathcal{X}$. Specifically,
+$$\|\mathcal{K}(\bm{x}, \bm{y}) - \mathcal{K}(\bm{x}', \bm{y}')\|_F \le C_{\mathcal{K}} (\|\bm{x}-\bm{x}'\| + \|\bm{y}-\bm{y}'\|),$$
+where $C_{\mathcal{K}}$ depends on the Lipschitz constant $L$ and the second moment of the process.
+\end{proposition}
+
+\begin{proof}See Appendix~\ref{app:proofs_Iso}.
+\end{proof}
+
+Leveraging the spectral theory of integral operators, the Lipschitz continuity of the kernel guarantees a specific decay rate for the eigenvalues of the covariance operator, allowing us to bound the truncated detector's approximation error.
+\begin{theorem}[$\varepsilon$-Isometry]\label{thm:holder-tail}Let the domain $\mathcal{X} \subset \mathbb{R}^d$ and the covariance kernel $\mathcal{K}$ satisfy the conditions of Proposition~\ref{prop:kernel_lipschitz}. 
+Let $\{\lambda_m\}_{m\ge 1}$ be the eigenvalues of the covariance operator $\Gamma$ in non-increasing order.
+Then, there exists a constant $A_{\mathcal{X}}$ depending only on the domain dimension $d$ such that the tail sum of eigenvalues satisfies:
+\begin{align}\label{eq:tail_bound}
+\sum_{m > K} \lambda_m \le A_{\mathcal{X}} C_{\mathcal{K}} K^{-1/d} .
+\end{align}
+Consequently, to achieve an $\varepsilon$-isometry in mean square (\ie relative reconstruction error $\le \varepsilon^2$), the required number of principal components $K$ scales as:
+\begin{align}
+    K \ge \left( \frac{A_{\mathcal{X}} C_{\mathcal{K}}}{\varepsilon^2 \operatorname{tr}(\Gamma)} \right)^d
+\end{align}
+\end{theorem}
+
+\begin{proof}The proof extends the trace-bound arguments of \citet{reade1983eigen} to $d$-dimensional Lipschitz domains via a dyadic partition argument. 
+See Appendix~\ref{app:proofs_Iso} for the full derivation.
+\end{proof}
+
+\begin{remark}
+    Theorem~\ref{thm:holder-tail} provides the theoretical justification for our dimension reduction. It ensures that the Wasserstein tangent space can be accurately approximated by a low-dimensional Euclidean subspace with a truncation level $K$ that grows polynomially with the desired precision.
+\end{remark} 
+
+
+
+% \begin{assumption}[Regularity of transport maps]
+% \label{ass:norm_bounds}
+% The in-control process generates i.i.d. distributions $\{\mu_i\}$ on a convex domain $\mathcal{X}\subset\mathbb{R}^d$, each admitting a density $\rho_i$ that is $\alpha$–Hölder continuous and uniformly bounded away from zero and infinity. 
+% % That is, there exist constants $0<c<C<\infty$ such that
+% % \[
+% % c \;\le\; \rho_i(x) \;\le\; C, 
+% % \qquad \forall x\in\mathcal{X}, \quad \forall i.
+% % \]
+% Let $T_i:\bar\mu\mapsto\mu_i$ denote the Brenier optimal transport map from a reference measure $\bar\mu$ to $\mu_i$, and $v_i(x):=T_i(x)-x$ the corresponding tangent vector field. 
+% Then by regularity results for optimal transport \citep{brenier1991polar, caffarelli1992regularity, caffarelli2000monotonicity, ma2005regularity}, there exist constants $L,B<\infty$ such that almost surely
+% \[
+% \text{Lip}(v_i)\le L, 
+% \qquad 
+% \|v_i\|_{L^\infty(\mathcal{X})}\le B.
+% \]
+% \end{assumption}
+
+
+% Do not need Gaussian if we do not claim the analytic chi-square in asympototic
+
+
+% Experiment
+
+
+
+% \item{Time complexity}
+% We compare our proposed method with a diverse set of online and offline CPD algorithms, where we categorzie them into two groups: high-dimensional detectors adapted for distribution-valued data, and a functional baseline created by us to explicitly model the distributional density.
+% (1) \textbf{Scan-B} \citep{li2019scan}: A kernel-based scan statistic originally designed for vector data. We adapted it using the Maximum Mean Discrepancy (MMD) kernel to handle distribution-valued batches;
+% (2) \textbf{NEWMA} \citep{keriven2020newma}: A sketch-based Exponentially Weighted Moving Average algorithm. We utilized Random Fourier Features (RFF) with a Gaussian kernel to embed the distributions;
+% (3) \textbf{Fr\'echet CPD (F-CPD)} \citep{dubey2020frechet}: A graph-based change-point detector for metric spaces. Since F-CPD is designed for offline single change-point detection, we adapted it for the online setting by computing its graph-based statistics on consecutive sliding windows;
+% (4) \textbf{Shewhart-type Control Charts:} We applied the classical \textbf{Hotelling's $T^2$} control chart to the vector of simple summary statistics (mean and variance) extracted from each batch, serving as a naive Euclidean baseline.
+
+\section{Numerical Experiments}
+We evaluate the proposed \algoname\ against baselines on synthetic batch streams (continuous and discrete) and two real-world case studies: (i) Acute Myeloid Leukemia (AML) detection~\citep{aghaeepour2013critical}, and (ii) Vaccine sentiment monitoring~\citep{DVN/XJTBQM_2022}. 
+All implementation detail are provided in Appendix~\ref{app:sim_details_dist}, \ref{app:sim_details_dist}, \ref{app:aml_details} \ref{app:case:reddit}. 
+
+\paragraph{Baselines.}
+We compare \algoname\ against five representative baselines categorized by their underlying geometric representation.
+First, Euclidean summary baselines include Shewhart-type charts~\citep{xie2021sequential} (\eg Hotelling's $T^2$ or attribute charts), which reduce distributions to simple moments like means or variances.
+Second, distance-based metric baselines utilize kernel or sketch-based discrepancies, specifically Scan-B~\citep{li2019scan} (using Maximum Mean Discrepancy) and NEWMA~\citep{keriven2020newma} (using Random Fourier Features).
+Third, manifold-value baselines explicitly model the space of probability measures but use alternative geometries~\citep{ramsay2005functional}: Log-KDE monitors functional $L^2$ distances between log-density estimates, while F-CPD~\citep{dubey2020frechet} employs Fr\'echet variance on graph-based metrics.
+
+\paragraph{Metrics.} We evaluate performance via the standard false-alarm-delay trade-off.
+For a stopping time $\tau$ and change-point $\kappa$, we report the in-control average run length $\mathrm{ARL}_0=\mathbb E_{\infty}[\tau]$ (expected time to false alarm) and the detection delay $\mathrm{ARL}_1=\mathbb E_{\kappa}[\tau-\kappa\mid \tau>\kappa]$\rev{, where $\mathbb E_{\infty}[\cdot]$ denotes the 
+expectation under $H_0$}.
+All methods are calibrated to a fixed target $\mathrm{ARL}_0$ to compare $\mathrm{ARL}_1$ (smaller is better).
+\rev{The pre-change calibration length is $n_0=300$ for all synthetic and FlowCAP-II experiments and $n_0=50$ for the Reddit study (constrained by data availability). A sensitivity discussion is in Appendix~\ref{app:n0_sensitivity}.}
+
+\subsection{Synthetic Experiments}
+\label{sec:sim_design}
+We generate distribution-valued streams $\{\mu_t\}$ by pushing forward a reference measure $\bar\mu$ via convex potentials (continuous), where it is verified to yield optimal transport maps in Appendix~\ref{app:cyclic_monotone}, and by simulating count and categorical processes (discrete).
+
+\textbf{Continuous Streams.}
+We simulate $d$-dimensional streams ($d \in \{1, 5, 10, 50\}$) with batch sizes $N \in \{50, 100, 300\}$ under three shift scenarios:
+(1) Barycenter change: shifting the central mass;
+(2) Multimodal reweight: altering mixture weights of a multimodal distribution; and
+(3) Copula shift: altering variable dependencies while fixing marginals (see Appendix~\ref{app:sim_details_cont} for generation details).
+To ensure scalability in high-dimensional settings ($d \ge 10$), we accelerate computations using Sinkhorn iterations~\citep{cuturi2013sinkhorn} and estimate barycenters via Conditional Normalizing Flows~\citep{visentin2026computing} (see Appendix~\ref{app:computation}).
+
+\textbf{Results:} Results for Multimodal Reweight ($d=10$) and Copula Shift ($d=50$) are shown in Fig.~\ref{fig:syn:tradeoff1} and Fig.~\ref{fig:syn:tradeoff2}.
+\algoname\ (red curve) consistently achieves the lowest $\mathrm{ARL}_1$ at matched $\mathrm{ARL}_0$, demonstrating superior detection power.
+Notably, Log-KDE (orange square) remains robust and competitive across both dimensions.
+In contrast, F-CPD (blue circle) shows reduced sensitivity in the high-dimensional Copula shift ($d=50$), which might be due to the inefficiency of its graph-based metric in sparse spaces.
+The Euclidean Shewhart baseline (brown) exhibits inconsistent performance: it fails catastrophically in the Multimodal setting (Fig.~\ref{fig:syn:tradeoff1}) where means are preserved, but detects the covariance change in the Copula shift (Fig.~\ref{fig:syn:tradeoff2}) effectively.
+Overall, \algoname\ provides resilient performance across diverse scenarios, with full results in Appendix~\ref{app:synthetic_results}.
+
+\begin{figure}[t]
+  \centering
+  \begin{subfigure}[t]{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{figures/tradeoff_n50_phase_d10_K4_mm_reweight_mm_reweight_delay_vs_arl0.png}
+    \caption{Multimodal Reweight}
+    \label{fig:syn:tradeoff1}
+  \end{subfigure}\hfill
+  \begin{subfigure}[t]{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{figures/tradeoff_n100_phase_d50_K4_copula_shift_copula_shift_delay_vs_arl0.png}
+    \caption{Copula Shift}
+    \label{fig:syn:tradeoff2}
+  \end{subfigure}
+  % \vspace{-2mm}
+  \caption{\arlo vs.\ \arlz comparison on synthetic continuous streams. \algoname\ (red) shows superior detection speed.}
+  % \vspace{-3mm}
+\end{figure}
+
+
+\textbf{Discrete Streams.}
+We evaluate the framework on streams where observations lie on discrete supports.
+Details are provided in Appendix~\ref{app:sim_details_dist}.
+(1) Poisson Counts.
+For post-change, we introduce a Spike Injection shift, where a small fraction of counts are replaced by a fixed high-value outlier ($k^*$), simulating rare burst events.
+As shown in Fig.~\ref{fig:dis:tradeoff1}, \algoname\ significantly outperforms Log-KDE.
+This confirms that the kernel smoothing required by Log-KDE blurs distinct spikes on discrete grids, whereas  \algoname preserves signal fidelity by leveraging the intrinsic geometry of the full discrete distribution.
+(2) Ordered Categorical Drift.
+We simulate sequential survey-type data on an ordinal scale ($d=6$ classes).
+The shift involves a Gradual Drift, where probability mass slowly migrates to adjacent higher classes.
+It can be shown that \algoname\ outperforms Shewhart attribute charts (Fig.~\ref{fig:dis:tradeoff2}).
+Unlike attribute charts, which treat classes as nominal, our method exploits the underlying ordinal metric. 
+This allows it to detect the coherent flow of mass between adjacent ranks more efficiently than bin-wise monitoring.
+
+\begin{figure}[t]
+  \centering
+  \begin{subfigure}[t]{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{figures/tradeoff_n100_dust_poisson_1d_P2_spike_arl1_vs_arl0.png}
+    \caption{Poisson Spike}
+    \label{fig:dis:tradeoff1}
+  \end{subfigure}\hfill
+  \begin{subfigure}[t]{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{figures/tradeoff_n100_cat_m6_M3_drift_arl1_vs_arl0.png}
+    \caption{Ordered Categorical}
+    \label{fig:dis:tradeoff2}
+  \end{subfigure}
+  % \vspace{-2mm}
+  \caption{Trade-off curves for discrete streams ($N=100$). \algoname\ handles discrete geometry robustly.}
+  \label{fig:dis:tradeoff}
+  % \vspace{-3mm}
+\end{figure}
+
+\textbf{Gaussian Translation Analysis.}
+To rigorously quantify the geometric advantage, we compared \algoname\ against Log-KDE on a pure Gaussian mean-shift $\mathcal N(m,\Sigma) \to \mathcal N(m+\delta/\sqrt{n}, \Sigma)$.
+We formalize this in \textbf{Theorem~\ref{thm:OT-vs-log}} (Appendix~\ref{app:proof_gaussian}), which proves that KDE smoothing attenuates the signal in log-density space ($\|g_\Delta\|^2 \propto \delta^T(\Sigma+H)^{-1}\delta$), whereas the optimal transport signal remains invariant to smoothing.
+Empirical validation (Table~\ref{tab:gauss_small}, and Table~\ref{tab:gauss_full} in Appendix) confirms this theory: \algoname\ achieves up to a $95\%$ reduction in detection delay compared to the best-tuned Log-KDE in high-variance settings.
+
+\paragraph{Comprehensive comparison across scenarios.}
+\algoname\ is not uniformly superior. 
+For location shifts, Hotelling $T^2$ is more efficient. 
+Similarly, for count data with known parametric structure, specialized charts outperform \algoname. \algoname's strength lies in complex geometric shifts (\ie reweighting, dependency changes, shape deformations), where moment-based detectors lose power. A full per-scenario comparison is in Table~\ref{tab:scenario_summary} and Appendix~\ref{app:method_discussion}.
+
+% Empirical results (see Table~\ref{tab:gauss_full} in Appendix) confirm this theory: \algoname\ achieves up to a $95\%$ reduction in detection delay compared to the best-tuned Log-KDE in high-variance regimes, where significant smoothing is required.
+
+
+% \textbf{Gaussian Translation Analysis.}
+% To rigorously quantify the geometric advantage, we compared \algoname\ against Log-KDE on a pure Gaussian mean-shift $\mathcal N(m,\Sigma) \to \mathcal N(m+\delta/\sqrt{n}, \Sigma)$.
+% Theoretical derivations (Appendix~\ref{app:proof_gaussian}) demonstrate that KDE smoothing attenuates the signal in log-density space ($\|g_\Delta\|^2 \propto \delta^T(\Sigma+H)^{-1}\delta$), whereas the optimal transport signal remains invariant to smoothing.
+% Empirical results (see Table~\ref{tab:gauss_full} in Appendix) confirm this theory: \algoname\ achieves up to a $95\%$ reduction in detection delay compared to the best-tuned Log-KDE in high-variance regimes, where significant smoothing is required.
+% \yz{To decide whether to keep the table or not.}
+
+
+\begin{table}[t]
+\caption{Gaussian translation: \arlo (mean $\pm$ SE) at matched \arlz; smaller is better. Best log-KDE bandwidth is reported.}
+\label{tab:gauss_small}
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{ccc c G c c}
+\toprule
+$d$ & $\sigma$ & $\delta_1$ & Hotelling $T^2$ & \algoname (Ours) & Best log-KDE \\
+\midrule
+1 & 0.5 & 0.1 & \textbf{1.8 $\pm$ 0.2 ($\uparrow$28.0\%)} & \textbf{1.8 $\pm$ 0.2 ($\uparrow$28.0\%)} & 2.5 $\pm$ 0.6 \\
+1 & 0.5 & 0.5 & \textbf{1.0 $\pm$ 0.0 ($\uparrow$95.1\%)} & \textbf{1.0 $\pm$ 0.0 ($\uparrow$95.1\%)} & \textbf{1.0 $\pm$ 0.0 ($\uparrow$95.1\%)} \\
+1 & 1.0 & 0.1 & \textbf{4.2 $\pm$ 1.1 ($\uparrow$20.8\%)} & 5.3 $\pm$ 1.6 & 10.8 $\pm$ 2.5 \\
+1 & 1.0 & 0.5 & \textbf{1.0 $\pm$ 0.0 ($\uparrow$9.1\%)} & \textbf{1.0 $\pm$ 0.0 ($\uparrow$9.1\%)} & \textbf{1.0 $\pm$ 0.0 ($\uparrow$9.1\%)} \\
+1 & 2.0 & 0.1 & 16.7 $\pm$ 3.5 & 17.0 $\pm$ 3.4 & \textbf{16.4 $\pm$ 2.6} \\
+1 & 2.0 & 0.5 & 1.6 $\pm$ 0.3 & \textbf{1.5 $\pm$ 0.2 ($\uparrow$6.3\%)} & 3.8 $\pm$ 1.3 \\
+2 & 0.5 & 0.1 & 1.5 $\pm$ 0.2 & \textbf{1.3 $\pm$ 0.2 ($\uparrow$13.3\%)} & 2.3 $\pm$ 0.7 \\
+2 & 0.5 & 0.5 & \textbf{1.0 $\pm$ 0.0 ($\uparrow$96.4\%)} & \textbf{1.0 $\pm$ 0.0 ($\uparrow$96.4\%)} & \textbf{1.0 $\pm$ 0.0 ($\uparrow$96.4\%)} \\
+2 & 1.0 & 0.1 & 2.7 $\pm$ 0.7 & \textbf{2.4 $\pm$ 0.6 ($\uparrow$11.1\%)} & 5.7 $\pm$ 1.6 \\
+2 & 1.0 & 0.5 & \textbf{1.0 $\pm$ 0.0 ($\uparrow$9.1\%)} & \textbf{1.0 $\pm$ 0.0 ($\uparrow$9.1\%)} & \textbf{1.0 $\pm$ 0.0 ($\uparrow$9.1\%)} \\
+2 & 2.0 & 0.1 & 11.3 $\pm$ 5.4 & \textbf{10.2 $\pm$ 5.3 ($\uparrow$9.7\%)} & 15.4 $\pm$ 5.2 \\
+2 & 2.0 & 0.5 & 1.2 $\pm$ 0.1 & \textbf{1.0 $\pm$ 0.0 ($\uparrow$16.7\%)} & 2.6 $\pm$ 0.6 \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\subsection{Real-World Case Studies}
+
+\textbf{1. Abnormal Cell Detection }
+We apply our framework to the detection of Acute Myeloid Leukemia (AML) using the FlowCAP-II dataset~\citep{aghaeepour2013critical}.
+Flow cytometry data is naturally distribution-valued: each patient sample consists of thousands of single cells, where each cell is a vector of multidimensional fluorescence markers.
+We model these patient samples as a distribution-valued stream in $\mathcal{P}_2(\mathbb{R}^7)$.
+The objective is to detect AML-positive subjects.
+We calibrate the detector on a reference set of healthy samples and monitor a test stream containing injected AML-positive patients (see Appendix~\ref{app:aml_details}).
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{figures/tradeoff_F1_vs_ARL0_singlecol.png}
+  \caption{\rev{AML detection on FlowCAP-II. \textbf{Left:} F1-score versus $\mathrm{ARL}_0$. \textbf{Right:} detection delay $\mathrm{ARL}_1$ versus $\mathrm{ARL}_0$. \algoname\ (red diamond) attains the highest F1 ($\approx 0.75$) and the lowest $\mathrm{ARL}_1$ across the full $\mathrm{ARL}_0$ range.}}
+  \label{fig:real:tradeoff}
+\end{figure}
+
+% \textbf{Results:}
+% \rev{Figure~\ref{fig:real:tradeoff} reports both the F1-score (left) and the detection delay $\mathrm{ARL}_1$ (right) against $\mathrm{ARL}_0$. \algoname\ attains the highest F1 ($\approx 0.75$) with fast detection ($\mathrm{ARL}_1 \approx 1$), simultaneously dominating on both axes, which indicates that our geometric-aware statistic captures the intrinsic shape of the leukemic shift while preserving near-perfect precision ($\approx 0.99$).}
+% \rev{The two metrics evaluate complementary aspects of detection: $\mathrm{ARL}_1$ measures first-detection delay, whereas F1 measures batch-level labeling accuracy across the entire stream. NEWMA's kernel statistic raises a broader alarm pattern (precision $\approx 0.83$, higher recall), reaching an F1 close to \algoname\ at lenient $\mathrm{ARL}_0$ targets ($30\!-\!75$), but its first alarm arrives later, so \algoname\ remains the fastest detector across the full $\mathrm{ARL}_0$ range. At stricter targets ($\mathrm{ARL}_0>75$), the ranking on F1 and $\mathrm{ARL}_1$ can differ because the two metrics reward different operating points; the right panel shows \algoname\ maintains the smallest $\mathrm{ARL}_1$ throughout (see Appendix~\ref{app:aml_details} for a detailed precision/recall breakdown).}
+% In contrast, Hotelling's $T^2$ yields low precision ($<0.4$) because reducing distributions to simple moments discards critical sub-population structures.
+% Meanwhile, Log-KDE suffers severe detection latency, confirming its struggle with high-dimensional density estimation.
+%   % \vspace{-1em}
+
+\textbf{Results:}
+\rev{Figure~\ref{fig:real:tradeoff} reports F1 (left) and detection delay $\mathrm{ARL}_1$ (right) versus $\mathrm{ARL}_0$. \algoname\  attains the highest F1 ($\approx 0.75$) with near-immediate detection ($\mathrm{ARL}_1 \approx 1$) and near-perfect precision ($\approx 0.99$), indicating that our geometric-aware statistic captures the intrinsic shape of the leukemic shift.}
+\rev{NEWMA's kernel statistic produces broader alarms (precision $\approx 0.83$, higher recall) and matches \algoname\ on F1 at lenient $\mathrm{ARL}_0$ targets ($30\!-\!75$), but its first alarm arrives later, so \algoname\ remains the fastest detector across the full $\mathrm{ARL}_0$ range (see Appendix~\ref{app:aml_details}).}
+In contrast, Hotelling's $T^2$ yields low precision ($<0.4$) because reducing distributions to simple moments discards critical sub-population structures.
+Meanwhile, Log-KDE suffers severe detection latency, confirming its struggle with high-dimensional density estimation.
+
+\begin{figure}[!t]
+  \centering
+  \includegraphics[width=0.9\linewidth]{figures/approachB_embed_pca20_D_first50_phase1_phase2_monitoring_manuscript.pdf}
+  \caption{\rev{Phase II monitoring of Reddit vaccine comments (Jan 31 -- May 5, 2021), calibrated on Phase I ($n_0=50$ days). Red lines indicate thresholds at $\alpha=0.05$; filled circles mark alarmed days. Vertical markers denote documented vaccine-policy events. \algoname\ (SPE) raises 5 targeted alarms aligned with the J\&J EUA and pause-lifting; Hotelling $T^2$ raises 13 mostly event-unaligned alarms; F-CPD, NEWMA, and Scan-B raise zero alarms.}}
+  \label{fig:reddit_qualitative}
+\end{figure}
+
+\paragraph{2. Public Opinion Monitoring}
+We analyze the semantic evolution of public discourse using the Reddit Vaccine Sentiment dataset~\citep{DVN/XJTBQM_2022, brambilla2022covid}.
+The stream consists of daily batches of user comments from \rev{December 2020 to May 2021}, embedded into a 20-dimensional space via SBERT and PCA (see Appendix~\ref{app:case:reddit} for data processing details).
+We focus on the critical early rollout phase, dividing the timeline into two distinct periods.
+\rev{Phase I serves as the pre-change calibration set (December 2, 2020 to January 30, 2021, 50 days), preceding any major vaccine-policy disruption.}
+\rev{Phase II is the monitoring period (January 31 to May 5, 2021, 50 days), spanning the Johnson \& Johnson Emergency Use Authorization and subsequent rollout events.}
+This window contains high-impact shock events, most notably the J\&J vaccine pause due to safety concerns and subsequent policy shifts.
+% \vspace{-1em}
+\paragraph{Results:}
+Lacking ground truth labels for daily sentiment shifts, we evaluate performance qualitatively by correlating detection alarms with curated vaccine-policy events.
+\rev{As shown in Fig.~\ref{fig:reddit_qualitative}, \algoname\ (SPE statistic) raises five alarms over the 50-day Phase II window, two of which align with curated events (J\&J EUA issuance on Mar 2; post-J\&J-pause discourse reorganization on Apr 30), and one (May 3) precedes Biden's July-4th vaccination goal announced May 4.}
+\rev{Despite the shifted calibration window, \algoname's SPE threshold changes minimally, whereas the  baselines are fragile: F-CPD's and NEWMA's thresholds shift sharply and produce zero alarms; Hotelling $T^2$ alarms on $13/50$ days, mostly event-unaligned. This demonstrates the calibration robustness of the proposed geometric statistic on high-dimensional semantic streams. Further analysis (including a Google Trends proxy correlation) is in Appendix~\ref{app:case:reddit}.}
+
+
+% \section{Discussion and Conclusion}
+
+% We have proposed a geometry-aware framework that models streaming data as a process on the Wasserstein manifold. By employing a \textbf{reference-centered local linearization} of the distribution space, our method converts complex distributional shifts into multivariate signals within a tangent Hilbert space. This approach effectively bridges the gap between optimal transport theory and statistical process control, allowing for the rigorous monitoring of structural shifts that Euclidean summaries obscure. Our experiments confirm that this geometric perspective yields superior detection delay compared to moment-based and functional baselines, particularly for complex dependency or shape changes.
+
+% \textbf{Limitations.}
+% Our approach relies on two key approximations.
+% First, the \textbf{tangent space projection} provides only a local linearization; while effective for detecting the onset of changes, metric distortion increases if the stream drifts significantly far from the reference barycenter, potentially affecting the magnitude of the monitoring statistic during catastrophic shifts.
+% Second, despite acceleration via entropic regularization (Sinkhorn) and amortized inference (Conditional Normalizing Flows), the \textbf{computational cost} of Optimal Transport remains higher than simple Euclidean statistics. This poses challenges for extremely high-frequency streams where linear complexity is strictly required. Future work will explore dynamic reference updates to handle non-stationarity and lighter-weight linearized embeddings to further reduce latency.
+
+\section{Discussion and Conclusion}
+We propose a geometry-aware online CPD framework that treats streaming batch data as a stochastic process on 2-Wasserstein space. 
+By employing a reference-centered local linearization, our approach maps empirical measures into a tangent space. 
+We provide theoretical results establishing an $\varepsilon$-isometry guarantee for this approximation, which enables the rigorous monitoring of distributional change  that Euclidean summaries obscure.
+ Empirically, our experiments on synthetic and real-world case studies validate that \algoname\ achieves superior detection performance compared to moment-based and model-free baselines, particularly when monitoring complex distributional shifts.
+
+We also identify the main limitations of our work: Despite acceleration via entropic regularization  and Conditional Normalizing Flows, the computational cost of OT maps remains higher than simple Euclidean statistics.
+This poses challenges for extremely high-frequency streams.
+% \rev{Empirically, Phase II online cost remains under $50$~ms per batch for $d\le 10$ and $\sim$272~ms at $d=50,\,N_t=300$, which is practical for the minute-to-day arrival rates motivating our case studies (full timing in Appendix~\ref{app:timing}).}
+Future work will explore incremental barycenter updates, and investigate scalable OT approximations to  mitigate computational latency and estimation error in high dimensions.
+
+
+\section*{Acknowledgements}
+The authors would like to thank Dr. Ryan Brinkman for generously sharing the FlowCAP II dataset directly with us. We also extend our gratitude to Dr. Wenmeng Tian for her insightful discussions and valuable feedback on this work.
+This work was supported by the National Science Foundation [Awards CMMI-2543434, CMMI-2430998] and the American Heart Association Collaborative Science [Award 23CSA1052735].
+
+
+
+% \section{Discussion}
+% We introduced a geometry-aware online CPD framework that treats streaming batches as a stochastic process on $(\mathcal P_2,W_2)$ and detects departures from the \emph{pre-change law} by monitoring OT-induced tangent fields at a pre-change Fr\'echet barycenter. By linearizing distributions at a shared reference, the method inherits well-understood subspace monitoring tools (MFPCA with Hotelling-$T^2$ and SPE) while remaining sensitive to non-moment distributional changes (e.g., mass reallocation and dependence shifts), which are often attenuated by Euclidean summaries or kernel sketches.
+
+%  Future work will focus on (i) provably stable OT approximations for sequential testing, (ii) warm-started/streaming OT and incremental barycenter updates to reduce latency, and (iii) extensions beyond i.i.d.\ pre-change streams to weak dependence and repeated-change regimes with reset or multi-scale stopping rules.
+
+
+% \newpage
+\section*{Impact statement}
+This paper presents work whose goal is to advance the field of machine learning. There are many potential societal consequences of our work, none of which we feel must be specifically highlighted here.
+
+
+\bibliography{ref}
+\bibliographystyle{icml2026}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% APPENDIX
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\appendix
+\onecolumn
+
+\section{Assumptions}
+\begin{lemma}[Brenier map and unique $W_2$-geodesic]\label{lem:brenier_geodesic}
+Assume $\mu_0 \in \mathcal{P}_2(\mathbb{R}^d)$ is absolutely continuous and the transport cost is
+$c(x,y)=\|x-y\|^2$.
+Then for any $\mu_1 \in \mathcal{P}_2(\mathbb{R}^d)$ there exists an optimal transport map
+$T:\mathbb{R}^d\to\mathbb{R}^d$ pushing $\mu_0$ to $\mu_1$ (i.e., $T_{\#}\mu_0=\mu_1$), which is
+$\mu_0$-a.e.\ unique and of the form $T=\nabla\varphi$ for a convex potential $\varphi$.
+Moreover, the curve
+\[
+\mu_s := \big((1-s)\mathrm{Id}+sT\big)_{\#}\mu_0,\qquad s\in[0,1],
+\]
+is the (unique) constant-speed $W_2$-geodesic connecting $\mu_0$ and $\mu_1$ \citep{brenier1991polar,villani2008optimal}.
+\end{lemma}
+
+\section{Derivation of Radial Isometry and $\varepsilon$-isometry}\label{app:proofs_Iso}
+\subsection{Proof of Proposition~\ref{prop:radial_isometry}}
+\begin{proof}
+Under the quadratic cost, the squared 2-Wasserstein distance admits the Monge formulation
+\[
+W_2^2(\bar{\mu},\mu)
+\;=\;
+\inf_{T:\,T_{\#}\bar{\mu}=\mu}\ \int_{\mathbb{R}^d}\|x-T(x)\|^2\,d\bar{\mu}(x).
+\]
+Since $\bar{\mu}$ is absolutely continuous with respect to Lebesgue measure and $\mu\in\mathcal{P}_2(\mathbb{R}^d)$, Brenier's theorem guarantees the
+existence of an optimal transport map $T_{\bar{\mu}}^{\mu}$ that is $\bar{\mu}$-a.e.\ unique and satisfies
+$(T_{\bar{\mu}}^{\mu})_{\#}\bar{\mu}=\mu$.
+Evaluating the Monge objective at this optimizer, we have
+$$
+W_2^2(\bar{\mu},\mu)
+\;=\;
+\int_{\mathbb{R}^d}\|x-T_{\bar{\mu}}^{\mu}(x)\|^2\,d\bar{\mu}(x)
+\;=\;
+\int_{\mathbb{R}^d}\|T_{\bar{\mu}}^{\mu}(x)-x\|^2\,d\bar{\mu}(x).
+$$
+Defining $v(\mu):=T_{\bar{\mu}}^{\mu}-\mathrm{Id}$ gives
+$W_2^2(\bar{\mu},\mu)=\int\|v(\mu)(x)\|^2\,d\bar{\mu}(x)=\|v(\mu)\|_{L^2(\bar{\mu})}^2$, completing the proof.
+\end{proof}
+
+\subsection{Proof of Proposition~\ref{prop:baryproj_gap}}
+\begin{proof}
+Let $(X,Y)\sim\pi$ and define $T^{\pi}(X):=\mathbb E[Y\mid X]$. By the conditional-variance identity,
+\[
+\mathbb E\big[\|Y-T^{\pi}(X)\|^2\big]
+\;=\;
+\mathbb E\big[\|Y\|^2\big]-\mathbb E\big[\|T^{\pi}(X)\|^2\big].
+\]
+Expanding the squared cost and using $\mathbb E[Y^\top T^{\pi}(X)]=\mathbb E[\mathbb E[Y\mid X]^\top T^{\pi}(X)]=\mathbb E[\|T^{\pi}(X)\|^2]$, we obtain
+\begin{align*}
+\mathbb E\big[\|X-Y\|^2\big]
+&=\mathbb E[\|X\|^2]-2\mathbb E[X^\top Y]+\mathbb E[\|Y\|^2]\\
+&=\mathbb E[\|X\|^2]-2\mathbb E[X^\top T^{\pi}(X)]+\mathbb E[\|T^{\pi}(X)\|^2]
+ \;+\; \mathbb E\big[\|Y-T^{\pi}(X)\|^2\big]\\
+&=\mathbb E\big[\|X-T^{\pi}(X)\|^2\big]\;+\;\mathbb E\big[\|Y-T^{\pi}(X)\|^2\big],
+\end{align*}
+which is exactly \cref{eq:baryproj_decomp} after rewriting expectations as integrals with respect to $\mu$ and $\pi$.
+The inequality \cref{eq:baryproj_contraction} follows since the second term is nonnegative.
+Finally, for an optimal coupling $\pi^\star$, $\mathbb E[\|X-Y\|^2]=W_2^2(\mu,\nu)$ and equality in \cref{eq:baryproj_contraction} holds if and only if $\mathbb E[\|Y-T^{\pi^\star}(X)\|^2]=0$, i.e., $Y=T^{\pi^\star}(X)$ $\pi^\star$-a.s., equivalently $\mathrm{Var}_{\pi^\star}(Y\mid X)=0$ $\mu$-a.e.
+\end{proof}
+
+
+\subsection{Proof of Proposition~\ref{prop:kernel_lipschitz}}
+\begin{proof}
+We bound the Frobenius norm of the kernel difference. 
+By the triangle inequality:
+\begin{align}|\mathcal{K}(\bm{x}, \bm{y}) - \mathcal{K}(\bm{x}', \bm{y}')|_F&
+= |\mathbb{E}[V(\bm{x})V(\bm{y})^\top - V(\bm{x}')V(\bm{y}')^\top]|_F \nonumber \\
+&\le \mathbb{E} |V(\bm{x})V(\bm{y})^\top - V(\bm{x}')V(\bm{y})^\top|_F + \mathbb{E} |V(\bm{x}')V(\bm{y})^\top - V(\bm{x}')V(\bm{y}')^\top|_F.
+\end{align}
+Applying the Lipschitz property $\|V(\bm{x}) - V(\bm{x}')\| \le L\|\bm{x}-\bm{x}'\|$ (Assumption~\ref{ass:norm_bounds}) and the Cauchy-Schwarz inequality:
+$$\mathbb{E} \|(V(\bm{x}) - V(\bm{x}'))V(\bm{y})^\top\|_F \le \sqrt{\mathbb{E}\|V(\bm{x})-V(\bm{x}')\|^2} \sqrt{\mathbb{E}\|V(\bm{y})\|^2} \le L \|\bm{x}-\bm{x}'\| B_2,$$
+where $B_2 := \sup_{\bm{z}\in\mathcal{X}} (\mathbb{E}\|V(\bm{z})\|^2)^{1/2}$ is the maximum root-mean-square norm.
+Applying the same bound to the second term yields:
+$$\|\mathcal{K}(\bm{x}, \bm{y}) - \mathcal{K}(\bm{x}', \bm{y}')\|_F \le L B_2 \|\bm{x}-\bm{x}'\| + L B_2 \|\bm{y}-\bm{y}'\|.$$
+Thus, $\mathcal{K}$ is Lipschitz with constant $C_{\mathcal{K}} = L B_2$.
+\end{proof}
+
+\subsection{Proof of Theorem~\ref{thm:holder-tail}}
+\begin{proof}The proof proceeds in three steps, generalizing the 1D results of \citet{reade1983eigen}.
+% \textbf{Step 1: Partition and Projector.}
+First, fix $M \in \mathbb{N}$ and set $N = M^d$. 
+Partition the domain $\mathcal{X}$ into $N$ measurable sets $\{\mathcal{X}_j\}_{j=1}^N$ with diameter proportional to $M^{-1} \asymp N^{-1/d}$. 
+Let $R_N$ be the kernel of the orthogonal projector onto piecewise constant functions on this partition.
+Second, we derive the trace bound.
+Let $S_N$ be the rank-$N$ approximation of the kernel operator $\Gamma$ induced by this projection. Since $\Gamma$ is positive definite, the tail sum of eigenvalues is bounded by the trace of the residual operator:
+$$\sum_{m > N} \lambda_m \le \operatorname{tr}(\Gamma - S_N) = \int_{\mathcal{X}} (\mathcal{K}(\bm{x}, \bm{x}) - S_N(\bm{x}, \bm{x})) d\bm{x}.$$
+Third, we utilkize the Lipschitz condition for the estimation.
+Using the Lipschitz continuity of $\mathcal{K}$ (Proposition~\ref{prop:kernel_lipschitz}), the pointwise approximation error of the piecewise constant projector is bounded by the Lipschitz constant $C_{\mathcal{K}}$ times the diameter of the partition cells:
+$$|\mathcal{K}(\bm{x}, \bm{x}) - S_N(\bm{x}, \bm{x})| \lesssim C_{\mathcal{K}} \cdot \operatorname{diam}(\mathcal{X}_j) \asymp C_{\mathcal{K}} N^{-1/d}.$$
+Integrating this error over the bounded domain $\mathcal{X}$ yields the tail bound:
+$$\sum_{m > N} \lambda_m \le A_{\mathcal{X}} C_{\mathcal{K}} N^{-1/d}.$$
+Setting the truncation level $K = N$ completes the proof.
+\end{proof}
+
+\section{Derivation of Asymptotic Distributions}\label{app:proofs_Asy}
+\begin{proof}[Proof of Proposition~\ref{prop:asymptotic_null}.]
+Let $V$ denote the generic random field generating the pre-change process, with population covariance $\Gamma$ and eigenpairs $(\lambda_m, \phi_m)$.
+By the Karhunen-Lo`eve theorem, the random field $V$ admits the expansion $V = \sum_{m=1}^\infty \xi_m \phi_m$, where the scores $\xi_m = \langle V, \phi_m \rangle_H$ are independent Gaussian variables $\xi_m \sim \mathcal{N}(0, \lambda_m)$.Consider the empirical covariance $\widehat{\mathcal{C}}$ estimated from $n_0$ samples, with eigenpairs $(\widehat{\lambda}_m, \widehat{\phi}_m)$. For a new independent observation $V^\star$, the computed score on the $m$-th component is $\widehat{\xi}_m = \langle V^\star, \widehat{\phi}_m \rangle_H$.Under the conditions of \citet{hall2006properties}, as $n_0 \to \infty$, we have consistent estimation:$$\| \widehat{\phi}_m - \phi_m \|_H = O_p(n_0^{-1/2}) \quad \text{and} \quad |\widehat{\lambda}_m - \lambda_m| = O_p(n_0^{-1/2}).$$Consequently, $\widehat{\xi}_m^2 / \widehat{\lambda}_m \xrightarrow{p} \xi_m^2 / \lambda_m$.Since $\xi_m / \sqrt{\lambda_m} \sim \mathcal{N}(0,1)$, it follows that $\xi_m^2 / \lambda_m \sim \chi^2_1$.Summing over $m=1, \dots, K$ yields:$$T_{t,K}^2 = \sum_{m=1}^K \frac{\widehat{\xi}_m^2}{\widehat{\lambda}_m} \xrightarrow{d} \sum_{m=1}^K Z_m^2 \sim \chi^2_K,$$which concludes the proof.
+\end{proof}
+
+
+\section{Details on Threshold Calibration and ARL Control}
+\label{app:calibration}
+
+In this appendix, we provide the formal justification for the empirical quantile calibration strategy used in the main text. We show that controlling the marginal false alarm rates of the monitoring statistics via order statistics is sufficient to lower-bound the global $\mathrm{ARL}_0$.
+
+\begin{theorem}[Sequential false-alarm control under fixed thresholds]\label{thm:arl_control_full}
+Fix truncation $K$ and thresholds $h_{T^2},h_{\mathrm{SPE}}$.
+Under the no-change law $\mathbb P_{\infty}$, assume the monitoring-phase pairs $\{(T_{t,K}^2,\mathrm{SPE}_t)\}_{t\ge n_0+1}$ are i.i.d.\ and independent of the calibration phase segment used to construct $(h_{T^2},h_{\mathrm{SPE}})$.
+Let the stopping time
+\[
+\tau \;:=\; \inf\Big\{t\ge n_0+1:\ T_{t,K}^2>h_{T^2}\ \text{or}\ \mathrm{SPE}_t>h_{\mathrm{SPE}}\Big\}.
+\]
+Then $\tau-(n_0+1)$ has a geometric distribution with success probability \citep[e.g., the classical run-length calculation for Shewhart-type charts;][]{shewhart1931economic,montgomery2020introduction}
+\[
+p_{\infty} := \mathbb P_{\infty}\!\Big(T_{1,K}^2>h_{T^2}\ \text{or}\ \mathrm{SPE}_1>h_{\mathrm{SPE}}\Big),
+\]
+and hence $\mathrm{ARL}_0=\mathbb E_{\infty}[\tau]=n_0+1+1/p_{\infty}$.
+Moreover, if $\mathbb P_{\infty}(T_{1,K}^2>h_{T^2})\le \alpha_{T^2}$ and $\mathbb P_{\infty}(\mathrm{SPE}_1>h_{\mathrm{SPE}})\le \alpha_{\mathrm{SPE}}$, then by the union bound $p_{\infty}\le \alpha_{T^2}+\alpha_{\mathrm{SPE}}$ and therefore
+\[
+\mathrm{ARL}_0 \;\ge\; n_0+1+\frac{1}{\alpha_{T^2}+\alpha_{\mathrm{SPE}}}.
+\]
+\end{theorem}
+
+\begin{corollary}[Empirical-quantile calibration implies ARL control]\label{cor:arl_empquant2}
+Assume the setting of Theorem~\ref{thm:arl_control}.
+Suppose that under $\mathbb P_{\infty}$ the marginal distributions of $T_{t,K}^2$ and $\mathrm{SPE}_t$ are continuous, and let $\{T_{t,K}^2\}_{t=1}^{n_0}$ and $\{\mathrm{SPE}_t\}_{t=1}^{n_0}$ be the samples in the calibration phase.
+Define thresholds as order statistics
+\[
+h_{T^2}:=T_{(k_{T^2})}^2,
+\qquad
+h_{\mathrm{SPE}}:=\mathrm{SPE}_{(k_{\mathrm{SPE}})},
+\]
+where $T_{(1)}^2\le\cdots\le T_{(n_0)}^2$ and $\mathrm{SPE}_{(1)}\le\cdots\le \mathrm{SPE}_{(n_0)}$, with
+$k_{T^2}=\lceil (1-\alpha_{T^2})n_0\rceil$ and $k_{\mathrm{SPE}}=\lceil (1-\alpha_{\mathrm{SPE}})n_0\rceil$.
+Then, for an independent monitoring phase observation,
+\begin{align*}
+  \mathbb P_{\infty}(T_{1,K}^2>h_{T^2})&=\frac{n_0+1-k_{T^2}}{n_0+1}\le \alpha_{T^2}+\frac{1}{n_0+1},\\
+\mathbb P_{\infty}(\mathrm{SPE}_1>h_{\mathrm{SPE}})&=\frac{n_0+1-k_{\mathrm{SPE}}}{n_0+1}\le \alpha_{\mathrm{SPE}}+\frac{1}{n_0+1}.
+\end{align*}
+Consequently,
+\begin{align*}
+p_{\infty} &\le \alpha_{T^2}+\alpha_{\mathrm{SPE}}+\frac{2}{n_0+1},\\
+\mathrm{ARL}_0 \;&\ge\; n_0+1+\frac{1}{\alpha_{T^2}+\alpha_{\mathrm{SPE}}+2/(n_0+1)}.
+\end{align*}
+\end{corollary}
+
+
+% \yz{To change the name}
+\section{Construction of Tangent Space Detectors}
+\label{app:pseudo}
+
+\paragraph{Pre-change reference segment and covariance operator.}
+In online CPD, we assume access to a \emph{pre-change} reference segment of length $n_0$ (used only for
+calibration), which provides tangent fields $\{v_t\}_{t=1}^{n_0}$ in the common Hilbert space
+$H:=L^2(\bar\mu;\mathbb R^d)$ with inner product
+$\langle f,g\rangle_H := \int_{\mathcal X} f(x)^\top g(x)\,d\bar\mu(x)$.
+Define the sample mean and centered fields
+\[
+\bar v := \frac{1}{n_0}\sum_{t=1}^{n_0} v_t, 
+\qquad 
+\tilde v_t := v_t-\bar v.
+\]
+The empirical covariance operator $\widehat C:H\to H$ is
+\begin{equation}
+\label{eq:cov-op-app}
+(\widehat C f)(\cdot)
+\;=\;
+\frac{1}{n_0-1}\sum_{t=1}^{n_0}\langle f,\tilde v_t\rangle_H\,\tilde v_t(\cdot)
+\;=\;
+\frac{1}{n_0-1}\sum_{t=1}^{n_0}(\tilde v_t\otimes \tilde v_t)f,
+\end{equation}
+where $(a\otimes b)f := \langle f,b\rangle_H\,a$.
+Then $\widehat C$ is self-adjoint and positive semidefinite, and
+$\mathrm{rank}(\widehat C)\le n_0-1$.
+
+\paragraph{Hotelling-$T^2$ statistic via the Moore-Penrose pseudoinverse.}
+Because $\widehat C$ is finite-rank on the infinite-dimensional space $H$, it is not invertible.
+We therefore use the Moore--Penrose pseudoinverse $\widehat C^{\dagger}:H\to H$.
+Let $\mathrm{ran}(\widehat C)$ and $\ker(\widehat C)$ denote the range and kernel of $\widehat C$.
+Since $\widehat C$ is self-adjoint, $H$ decomposes as
+\[
+H \;=\; \mathrm{ran}(\widehat C)\ \oplus\ \ker(\widehat C),
+\qquad \ker(\widehat C)=\mathrm{ran}(\widehat C)^\perp.
+\]
+The pseudoinverse $\widehat C^{\dagger}$ is the unique self-adjoint operator satisfying
+\[
+\widehat C\,\widehat C^{\dagger}\,\widehat C=\widehat C,
+\qquad
+\widehat C^{\dagger}\,\widehat C\,\widehat C^{\dagger}=\widehat C^{\dagger},
+\qquad
+(\widehat C\,\widehat C^{\dagger})^*=\widehat C\,\widehat C^{\dagger},
+\qquad
+(\widehat C^{\dagger}\,\widehat C)^*=\widehat C^{\dagger}\,\widehat C.
+\]
+For an incoming (possibly post-change) tangent field $v_t\in H$, define the centered field
+\[
+\Delta_t := v_t-\bar v\in H.
+\]
+We define the functional Hotelling's $T^2$ statistic-based detector
+\begin{equation}
+\label{eq:T2-pinv-app}
+T_t^2
+\;:=\;
+\big\langle \widehat C^{\dagger}\Delta_t,\ \Delta_t \big\rangle_H
+\;=\;
+\big\|(\widehat C^{\dagger})^{1/2}\Delta_t\big\|_H^2,
+\end{equation}
+which measures deviation along the dominant pre-change variability directions encoded by $\widehat C$.
+
+\paragraph{Spectral form of the pseudoinverse and the computable $T^2$ statistic.}
+Let $\{(\widehat\lambda_m,\widehat\phi_m)\}_{m\ge1}$ be the eigenpairs of $\widehat C$, with
+$\widehat\lambda_1\ge\widehat\lambda_2\ge\cdots\ge0$ and $\{\widehat\phi_m\}$ orthonormal in $H$.
+Since $\widehat C$ has rank at most $n_0-1$, we have $\widehat\lambda_m=0$ for all $m\ge n_0$.
+On $\mathrm{ran}(\widehat C)$, the pseudoinverse acts by inverting the nonzero eigenvalues, hence
+\begin{equation}
+\label{eq:pseudo_spectral}
+\widehat C^{\dagger}
+\;=\;
+\sum_{m:\ \widehat\lambda_m>0}\ \widehat\lambda_m^{-1}\,(\widehat\phi_m\otimes \widehat\phi_m),
+\end{equation}
+with $\widehat C^{\dagger}f=0$ for $f\in\ker(\widehat C)$.
+Define the empirical scores for $\Delta_t$,
+\[
+\widehat\xi_{tm}:=\langle \Delta_t,\widehat\phi_m\rangle_H.
+\]
+Substituting \cref{eq:pseudo_spectral} into \cref{eq:T2-pinv-app} yields
+\[
+T_t^2
+=
+\sum_{m:\ \widehat\lambda_m>0}\frac{\widehat\xi_{tm}^2}{\widehat\lambda_m}.
+\]
+In practice we retain the leading $K$ components (regularization / truncation), obtaining
+\begin{equation}
+\label{eq:T2-mf-app}
+T_{t,K}^2
+\;:=\;
+\sum_{m=1}^{K}\frac{\widehat\xi_{tm}^2}{\widehat\lambda_m}.
+\end{equation}
+
+\paragraph{Sequential false-alarm control under i.i.d.\ monitoring statistics}
+\label{app:arl}
+\begin{proof}[Proof of Theorem~\ref{thm:arl_control}.]
+Let $A_t:=\{T_{t,K}^2>h_{T^2}\ \text{or}\ \mathrm{SPE}_t>h_{\mathrm{SPE}}\}$ for $t\ge n_0+1$.
+Under $\mathbb P_\infty$, by the assumed i.i.d.\ structure and the fact that thresholds are fixed in monitoring phase, the indicators $\{\mathbf 1(A_t)\}_{t\ge n_0+1}$ are i.i.d.\ Bernoulli with success probability $p_\infty=\mathbb P_\infty(A_{n_0+1})$.
+Therefore, $\tau-(n_0+1)$ is geometric with mean $1/p_\infty$, giving $\mathbb E_\infty[\tau]=n_0+1+1/p_\infty$.
+The union-bound inequality follows from
+$p_\infty=\mathbb P_\infty(A_{n_0+1})\le \mathbb P_\infty(T_{1,K}^2>h_{T^2})+\mathbb P_\infty(\mathrm{SPE}_1>h_{\mathrm{SPE}})\le \alpha_{T^2}+\alpha_{\mathrm{SPE}}$.
+\end{proof}
+
+\begin{proof}[Proof of Corollary~\ref{cor:arl_empquant}.]
+We prove the statement for $T_{t,K}^2$; the argument for $\mathrm{SPE}_t$ is identical.
+Let $Z_1,\dots,Z_{n_0}$ be the sample of calibration phase and let $Z^\star$ be an independent monitoring phase draw, all i.i.d.\ from a continuous distribution.
+Let $Z_{(1)}\le\cdots\le Z_{(n_0)}$ denote the order statistics and set $h:=Z_{(k)}$.
+By exchangeability of $(Z_1,\dots,Z_{n_0},Z^\star)$ and continuity (no ties a.s.), the rank of $Z^\star$ among these $n_0+1$ values is uniform on $\{1,\dots,n_0+1\}$.
+Therefore,
+\[
+\mathbb P(Z^\star>h)=\mathbb P(\mathrm{rank}(Z^\star)\ge k+1)=\frac{n_0+1-k}{n_0+1}.
+\]
+With $k=\lceil (1-\alpha)n_0\rceil$, we have $n_0-k\le \alpha n_0$, hence $(n_0+1-k)/(n_0+1)\le \alpha + 1/(n_0+1)$.
+Applying this bound to both charts and using the union bound gives $p_\infty\le \alpha_{T^2}+\alpha_{\mathrm{SPE}}+2/(n_0+1)$.
+The ARL bound follows from Theorem~\ref{thm:arl_control}.
+\end{proof}
+
+\paragraph{Residual-energy statistic (SPE/Q).}
+Let $\widehat P_K$ be the orthogonal projector onto
+$\mathrm{span}\{\widehat\phi_1,\dots,\widehat\phi_K\}$.
+The residual-energy detector is
+\begin{equation}
+\label{eq:SPE-app}
+\mathrm{SPE}_t
+\;:=\;
+\big\|(I-\widehat P_K)\Delta_t\big\|_H^2
+\;=\;
+\sum_{m>K}\widehat\xi_{tm}^2.
+\end{equation}
+The pair $\{T_{t,K}^2,\mathrm{SPE}_t\}$ forms a two-statistic online CPD rule: an alarm is raised when either
+statistic exceeds its pre-change calibrated threshold.
+
+
+\section{Theoretical Analysis of Gaussian Translation}
+\label{app:proof_gaussian}
+
+In this appendix, we analyze the theoretical signal-to-noise ratio (effect size) of the proposed geometric framework compared to the functional log-density baseline. We consider a controlled Gaussian mean-shift scenario to derive explicit expressions for the displacement signal in both the Optimal Transport tangent space and the $L^2$ log-density space.
+
+\begin{theorem}[Effect Size Comparison]\label{thm:OT-vs-log}
+Consider a reference distribution $\bar\mu = \mathcal N(m,\Sigma)$ and a perturbed distribution $\mu_{\Delta_n} = \mathcal N(m+\Delta_n,\Sigma)$ representing a local mean-shift with $\Delta_n = \delta/\sqrt{n}$.
+As $n\to\infty$, the squared norms of the shift in the OT tangent space ($H_{\mathrm{OT}}$) and the log-density space ($H_{\log}$) satisfy:
+\begin{align}
+\|u_{\Delta_n}\|_{H_{\mathrm{OT}}}^2 &= \frac{1}{n}\|\delta\|^2, \label{eq:OT-norm} \\
+\|g_{\Delta_n}-g_0\|_{H_{\log}}^2 &= \frac{1}{n}\delta^\top\Sigma^{-1}\delta + O\left(\frac{1}{n^2}\right). \label{eq:log-norm}
+\end{align}
+Consequently, the ratio of the effect sizes is determined by the covariance structure:
+\begin{equation}
+\frac{\|g_{\Delta_n}-g_0\|_{H_{\log}}^2} {\|u_{\Delta_n}\|_{H_{\mathrm{OT}}}^2} = \frac{\delta^\top\Sigma^{-1}\delta}{\|\delta\|^2} + O\left(\frac{1}{n}\right).
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+We first derive the norm in the Optimal Transport tangent space. For a pure Gaussian translation from $\mathcal{N}(m, \Sigma)$ to $\mathcal{N}(m+\Delta, \Sigma)$, the unique optimal transport map is the identity shift $T(x) = x + \Delta$. The corresponding tangent vector field is the constant map $u_{\Delta}(x) \equiv \Delta$.
+The norm in the tangent space $H_{\mathrm{OT}} = L^2(\bar\mu; \mathbb{R}^d)$ is calculated directly by integrating the squared Euclidean magnitude of the displacement against the reference measure:
+\[
+  \|u_{\Delta}\|_{H_{\mathrm{OT}}}^2
+  \;=\; \int_{\mathbb{R}^d} \|u_{\Delta}(x)\|^2 \, d\bar\mu(x)
+  \;=\; \|\Delta\|^2.
+\]
+Substituting the local alternative $\Delta_n = \delta/\sqrt n$, we obtain $\|u_{\Delta_n}\|_{H_{\mathrm{OT}}}^2 = \frac{1}{n}\|\delta\|^2$. Notably, this norm depends strictly on the Euclidean magnitude of the shift and is independent of the distribution's covariance $\Sigma$.
+
+Next, we analyze the norm in the log-density space $H_{\log} = L^2(\bar\mu; \mathbb{R})$. Let $g_0$ and $g_{\Delta}$ denote the log-densities of the reference $\bar\mu$ and the shifted measure $\mu_{\Delta}$, respectively.
+Defining the centered random variable $Y = X - m$, the difference in log-densities simplifies to:
+\[
+  g_\Delta(X) - g_0(X) \;=\; (\Sigma^{-1}\Delta)^\top Y \;-\; \frac{1}{2}\Delta^\top \Sigma^{-1}\Delta.
+\]
+The squared norm in $H_{\log}$ corresponds to the second moment of this difference under the reference measure $\bar\mu$. Letting $a = \Sigma^{-1}\Delta$ and $c = \frac{1}{2}\Delta^\top \Sigma^{-1}\Delta$, and noting that $Y \sim \mathcal{N}(0, \Sigma)$, we have $\mathbb{E}[a^\top Y] = 0$ and $\operatorname{Var}(a^\top Y) = a^\top \Sigma a$. Thus:
+\begin{align*}
+  \|g_\Delta - g_0\|_{H_{\log}}^2
+  &= \operatorname{Var}(a^\top Y) + (\mathbb{E}[a^\top Y - c])^2 \\
+  &= a^\top \Sigma a + c^2 \\
+  &= (\Delta^\top \Sigma^{-1}) \Sigma (\Sigma^{-1}\Delta) + \left(\frac{1}{2}\Delta^\top \Sigma^{-1}\Delta\right)^2 \\
+  &= \Delta^\top \Sigma^{-1} \Delta + O(\|\Delta\|^4).
+\end{align*}
+Substituting $\Delta_n = \delta/\sqrt{n}$, the leading term is $\frac{1}{n} \delta^\top \Sigma^{-1} \delta$, which yields Eq.~\eqref{eq:log-norm}.
+\end{proof}
+
+\begin{remark}[Effect of KDE Smoothing]
+The result above highlights a critical practical difference. The Log-KDE baseline typically estimates densities using a kernel bandwidth matrix $H$, which inflates the effective covariance to $\Sigma_{\text{eff}} \approx \Sigma + H$.
+Substituting $\Sigma_{\text{eff}}$ into Eq.~\eqref{eq:log-norm} shows that the signal strength in the log-density space is attenuated by smoothing:
+\[
+  \delta^\top (\Sigma+H)^{-1} \delta \quad < \quad \delta^\top \Sigma^{-1} \delta.
+\]
+In high-variance or high-dimensional regimes where large bandwidths are required for stability, this attenuation is significant. In contrast, the OT signal (Eq.~\eqref{eq:OT-norm}) remains $\|\delta\|^2/n$, invariant to both the intrinsic covariance $\Sigma$ and any smoothing parameters.
+\end{remark}
+
+
+
+% \subsection{Signal-to-Noise Ratio}
+
+% \begin{theorem}[Effect size comparison]\label{thm:OT-vs-log}
+
+% Under the Gaussian translation model, the squared norms of the mean shift in the two Hilbert spaces satisfy:
+
+% \begin{align}
+
+% & \|u_{\Delta_n}\|{H_{\mathrm{OT}}}^2= \frac{1}{n}, \label{eq:OT-norm}\\
+
+% & \|\delta\|^2, \|g_{\Delta_n}-g_0\|{H_{\log}}^2= \frac{1}{n}\delta^\top\Sigma^{-1}\delta + O\left(\frac{1}{n^2}\right), \label{eq:log-norm}
+
+% \end{align}
+
+% as $n\to\infty$.
+
+% Consequently, the ratio of the effect sizes is:
+
+% \begin{equation}
+
+% \frac{\|g_{\Delta_n}-g_0\|{H_{\log}}^2} {\|u_{\Delta_n}\|{H_{\mathrm{OT}}}^2}=\frac{\delta^\top\Sigma^{-1}\delta}{\|\delta\|^2} + O\left(\frac{1}{n}\right).
+
+% \end{equation}
+
+% \end{theorem}
+
+% We analyze the magnitude of the displacement signal under a local mean-shift $\Delta_n = \delta/\sqrt{n}$ in two Hilbert spaces: the Optimal Transport (OT) tangent space and the $L^2$ log-density space.
+
+% \paragraph{1. OT Tangent Space Norm.}
+% The unique optimal transport map pushing $\mathcal{N}(m, \Sigma)$ to $\mathcal{N}(m+\Delta, \Sigma)$ is the translation $T(x) = x + \Delta$.
+% The corresponding tangent vector field is $u_{\Delta}(x) \equiv \Delta$.
+% The norm in the OT tangent space $H_{\mathrm{OT}} = L^2(\bar\mu; \mathbb{R}^d)$ is:
+% \begin{equation}
+%   \|u_{\Delta}\|_{H_{\mathrm{OT}}}^2
+%   \;=\; \int_{\mathbb{R}^d} \|\Delta\|^2 \, d\bar\mu(x)
+%   \;=\; \|\Delta\|^2.
+%   \label{eq:OT-norm}
+% \end{equation}
+% Substituting the local alternative $\Delta_n = \delta/\sqrt n$, we get $\|u_{\Delta_n}\|^2 = \frac{1}{n}\|\delta\|^2$. Crucially, this norm is independent of the covariance $\Sigma$ and any smoothing parameters.
+
+% \paragraph{2. Log-Density Space Norm.}
+% Let $g_0$ and $g_\Delta$ be the log-densities of the reference $\bar\mu$ and shifted $\mu_\Delta$, respectively.
+% \[
+%   g_0(x) = C - \frac{1}{2}(x-m)^\top \Sigma^{-1} (x-m),
+% \]
+% \[
+%   g_\Delta(x) = C - \frac{1}{2}(x-m-\Delta)^\top \Sigma^{-1} (x-m-\Delta).
+% \]
+% Defining the centered variable $Y = X - m$, the log-likelihood ratio simplifies to:
+% \[
+%   g_\Delta(X) - g_0(X) \;=\; (\Sigma^{-1}\Delta)^\top Y \;-\; \frac{1}{2}\Delta^\top \Sigma^{-1}\Delta.
+% \]
+% The squared norm in $H_{\log} = L^2(\bar\mu; \mathbb{R})$ corresponds to the second moment of this ratio under the reference measure $\bar\mu$:
+% \[
+%   \|g_\Delta - g_0\|_{H_{\log}}^2 \;=\; \mathbb{E}_{\bar\mu}\left[ \left( (\Sigma^{-1}\Delta)^\top Y - \frac{1}{2}\Delta^\top \Sigma^{-1}\Delta \right)^2 \right].
+% \]
+% Let $a = \Sigma^{-1}\Delta$ and constant $c = \frac{1}{2}\Delta^\top \Sigma^{-1}\Delta$. Since $Y \sim \mathcal{N}(0, \Sigma)$, we have $\mathbb{E}[a^\top Y] = 0$ and $\mathbb{E}[(a^\top Y)^2] = a^\top \Sigma a$. Thus:
+% \begin{align}
+%   \|g_\Delta - g_0\|_{H_{\log}}^2
+%   &= \operatorname{Var}(a^\top Y) + c^2 \nonumber \\
+%   &= (\Delta^\top \Sigma^{-1}) \Sigma (\Sigma^{-1}\Delta) + \left(\frac{1}{2}\Delta^\top \Sigma^{-1}\Delta\right)^2 \nonumber \\
+%   &= \Delta^\top \Sigma^{-1} \Delta + \mathcal{O}(\|\Delta\|^4).
+%   \label{eq:log-norm}
+% \end{align}
+% Substituting $\Delta_n = \delta/\sqrt{n}$, the leading term is $\frac{1}{n} \delta^\top \Sigma^{-1} \delta$.
+
+% \paragraph{Conclusion (Effect of Smoothing).}
+% In practice, Log-KDE estimates densities using a kernel bandwidth matrix $H$, which inflates the effective covariance to $\Sigma_{\text{eff}} \approx \Sigma + H$.
+% Replacing $\Sigma$ with $\Sigma_{\text{eff}}$ in \eqref{eq:log-norm} shows that the signal strength in log-density space decreases as bandwidth increases ($\delta^\top (\Sigma+H)^{-1} \delta < \delta^\top \Sigma^{-1} \delta$).
+% In contrast, the OT signal \eqref{eq:OT-norm} depends only on the geometric shift $\|\delta\|^2$ and is invariant to variance inflation or smoothing.
+
+\subsection{Additional Empirical Results: Gaussian Translation}
+Table~\ref{tab:gauss_full} presents the detailed $\mathrm{ARL}_1$ comparison for Gaussian mean shifts across dimensions $d \in \{1, 2, 5\}$, variances $\sigma$, and shift magnitudes $\delta$. \algoname\ consistently outperforms Log-KDE, particularly in high-variance regimes ($\sigma=2.0$) where Log-KDE requires larger bandwidths to stabilize.
+
+\begin{table*}[t]
+\caption{Gaussian translation detection delay ($\mathrm{ARL}_1$) at matched $\mathrm{ARL}_0$. The Ours column is shaded; best (smallest) per row is bolded.}
+\label{tab:gauss_full}
+\centering
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1}
+\resizebox{0.9\textwidth}{!}{%
+\begin{tabular}{ccc c G c c c c c}
+\toprule
+$d$ & $\sigma$ & $\delta_1$ & Hotelling $T^2$ & Ours & log--KDE ($h{=}0.5$) & log--KDE ($h{=}1$) & log--KDE ($h{=}1.5$) & log--KDE ($h{=}\text{auto}$) \\
+\midrule
+1 & 0.5 & 0.1 & \textbf{1.8 $\pm$ 0.2 ($\uparrow$28.0\%)} & \textbf{1.8 $\pm$ 0.2 ($\uparrow$28.0\%)} & 4.7 $\pm$ 2.2 & 2.5 $\pm$ 0.6 & 2.6 $\pm$ 0.5 & 18.3 $\pm$ 6.8 \\
+1 & 0.5 & 0.5 & \textbf{1.0 $\pm$ 0.0 ($\uparrow$95.1\%)} & \textbf{1.0 $\pm$ 0.0 ($\uparrow$95.1\%)} & \textbf{1.0 $\pm$ 0.0 ($\uparrow$95.1\%)} & \textbf{1.0 $\pm$ 0.0 ($\uparrow$95.1\%)} & \textbf{1.0 $\pm$ 0.0 ($\uparrow$95.1\%)} & \textbf{1.0 $\pm$ 0.0 ($\uparrow$95.1\%)} \\
+1 & 1.0 & 0.1 & \textbf{4.2 $\pm$ 1.1 ($\uparrow$20.8\%)} & 5.3 $\pm$ 1.6 & 10.8 $\pm$ 2.5 & 19.0 $\pm$ 10.8 & 17.4 $\pm$ 9.7 & 21.5 $\pm$ 6.8 \\
+1 & 1.0 & 0.5 & \textbf{1.0 $\pm$ 0.0 ($\uparrow$9.1\%)} & \textbf{1.0 $\pm$ 0.0 ($\uparrow$9.1\%)} & \textbf{1.0 $\pm$ 0.0 ($\uparrow$9.1\%)} & 1.1 $\pm$ 0.1 & 1.1 $\pm$ 0.1 & 2.0 $\pm$ 0.7 \\
+1 & 2.0 & 0.1 & 16.7 $\pm$ 3.5 & 17.0 $\pm$ 3.4 & \textbf{16.4 $\pm$ 2.6} & 21.5 $\pm$ 6.9 & 19.9 $\pm$ 4.8 & 17.1 $\pm$ 2.4 \\
+1 & 2.0 & 0.5 & 1.6 $\pm$ 0.3 & \textbf{1.5 $\pm$ 0.2 ($\uparrow$6.3\%)} & 7.8 $\pm$ 3.4 & 6.6 $\pm$ 3.6 & 3.8 $\pm$ 1.3 & 12.9 $\pm$ 4.0 \\
+2 & 0.5 & 0.1 & 1.5 $\pm$ 0.2 & \textbf{1.3 $\pm$ 0.2 ($\uparrow$13.3\%)} & 2.3 $\pm$ 0.7 & 5.6 $\pm$ 3.5 & 9.4 $\pm$ 7.6 & 12.3 $\pm$ 3.0 \\
+2 & 0.5 & 0.5 & \textbf{1.0 $\pm$ 0.0 ($\uparrow$96.4\%)} & \textbf{1.0 $\pm$ 0.0 ($\uparrow$96.4\%)} & \textbf{1.0 $\pm$ 0.0 ($\uparrow$96.4\%)} & \textbf{1.0 $\pm$ 0.0 ($\uparrow$96.4\%)} & \textbf{1.0 $\pm$ 0.0 ($\uparrow$96.4\%)} & \textbf{1.0 $\pm$ 0.0 ($\uparrow$96.4\%)} \\
+2 & 1.0 & 0.1 & 2.7 $\pm$ 0.7 & \textbf{2.4 $\pm$ 0.6 ($\uparrow$11.1\%)} & 32.5 $\pm$ 19.3 & 5.7 $\pm$ 1.6 & 6.3 $\pm$ 1.6 & 16.1 $\pm$ 3.9 \\
+2 & 1.0 & 0.5 & \textbf{1.0 $\pm$ 0.0 ($\uparrow$9.1\%)} & \textbf{1.0 $\pm$ 0.0 ($\uparrow$9.1\%)} & 1.1 $\pm$ 0.1 & \textbf{1.0 $\pm$ 0.0 ($\uparrow$9.1\%)} & \textbf{1.0 $\pm$ 0.0 ($\uparrow$9.1\%)} & 1.5 $\pm$ 0.3 \\
+2 & 2.0 & 0.1 & 11.3 $\pm$ 5.4 & \textbf{10.2 $\pm$ 5.3 ($\uparrow$9.7\%)} & 16.9 $\pm$ 5.3 & 18.9 $\pm$ 7.9 & 23.4 $\pm$ 10.0 & 15.4 $\pm$ 5.2 \\
+2 & 2.0 & 0.5 & 1.2 $\pm$ 0.1 & \textbf{1.0 $\pm$ 0.0 ($\uparrow$16.7\%)} & 6.9 $\pm$ 1.5 & 3.3 $\pm$ 0.7 & 2.6 $\pm$ 0.6 & 7.2 $\pm$ 1.5 \\
+5 & 0.5 & 0.1 & \textbf{1.0 $\pm$ 0.0 ($\uparrow$16.7\%)} & 1.9 $\pm$ 0.5 & 6.0 $\pm$ 1.5 & 1.2 $\pm$ 0.2 & 1.7 $\pm$ 0.4 & 12.6 $\pm$ 3.5 \\
+5 & 0.5 & 0.5 & \textbf{1.0 $\pm$ 0.0 ($\uparrow$96.3\%)} & \textbf{1.0 $\pm$ 0.0 ($\uparrow$96.3\%)} & \textbf{1.0 $\pm$ 0.0 ($\uparrow$96.3\%)} & \textbf{1.0 $\pm$ 0.0 ($\uparrow$96.3\%)} & \textbf{1.0 $\pm$ 0.0 ($\uparrow$96.3\%)} & \textbf{1.0 $\pm$ 0.0 ($\uparrow$96.3\%)} \\
+5 & 1.0 & 0.1 & \textbf{2.8 $\pm$ 0.7 ($\uparrow$42.9\%)} & 4.9 $\pm$ 1.7 & 14.7 $\pm$ 4.3 & 11.9 $\pm$ 4.3 & 9.4 $\pm$ 2.3 & 11.1 $\pm$ 3.2 \\
+5 & 1.0 & 0.5 & \textbf{1.0 $\pm$ 0.0 ($\uparrow$93.2\%)} & \textbf{1.0 $\pm$ 0.0 ($\uparrow$93.2\%)} & \textbf{1.0 $\pm$ 0.0 ($\uparrow$93.2\%)} & \textbf{1.0 $\pm$ 0.0 ($\uparrow$93.2\%)} & \textbf{1.0 $\pm$ 0.0 ($\uparrow$93.2\%)} & \textbf{1.0 $\pm$ 0.0 ($\uparrow$93.2\%)} \\
+5 & 2.0 & 0.1 & \textbf{6.9 $\pm$ 1.9 ($\uparrow$37.3\%)} & 11.0 $\pm$ 3.2 & 26.5 $\pm$ 4.2 & 22.1 $\pm$ 4.7 & 19.6 $\pm$ 4.4 & 16.0 $\pm$ 4.0 \\
+5 & 2.0 & 0.5 & \textbf{1.0 $\pm$ 0.0 ($\uparrow$9.1\%)} & 1.1 $\pm$ 0.1 & 21.7 $\pm$ 5.8 & 4.4 $\pm$ 1.4 & 4.0 $\pm$ 0.8 & 8.8 $\pm$ 2.7 \\
+\bottomrule
+\end{tabular}}
+\end{table*}
+
+
+
+\section{Details on Synthetic Continuous Stream Generation}
+\label{app:sim_details_cont}
+
+This appendix provides the full specification of the synthetic distribution-valued streams used in Section~\ref{sec:sim_design}. We detail: (i) the pre-change reference distribution, (ii) the family of convex deformations used to generate stochastic variability within a stationary regime, (iii) the post-change scenarios, and (iv) a theoretical verification that the generated maps satisfy cyclic monotonicity, thereby coinciding with the quadratic-cost optimal transport (OT) maps.
+
+\subsection{Pre-change Reference Distribution}Let $\mathcal{X} \subset \mathbb{R}^d$ be a compact convex domain (in our experiments, $\mathcal{X}=[0,1]^d$). 
+We first sample a \emph{reference distribution} $\bar{\mu} \in \mathcal{P}_2(\mathcal{X})$ from a multimodal parametric family. From this distribution, we draw a fixed \emph{base sample} $X_{\mathrm{base}}^{(0)} = \{x_i\}_{i=1}^N \overset{\text{i.i.d.}}{\sim} \bar{\mu}$.
+We utilize a $K$-component mixture of product-Beta distributions, parameterized by mixture weights $\pi \in \Delta^{K-1}$ (where $\Delta^{K-1}$ denotes the simplex) and component parameters $\theta_k$. 
+For the experiments, we set $K=4$.
+
+\subsection{Stochastic Variability via Convex Deformations}\label{app:convex_deform}
+
+To model benign variability within a stationary regime, at each time step $t$, we generate a random deformation map $T_t: \mathcal{X} \to \mathbb{R}^d$. 
+The observed batch data is generated as the pushforward of the base sample: $X_t = T_t(X_{\mathrm{base}})$. 
+The resulting empirical measure is:$$  \mu_t \;=\; \frac1N\sum_{i=1}^N \delta_{(X_t)_i}.$$\paragraph{Convex Potential and Transport Map.}
+To ensure the deformation corresponds to an optimal transport map, we construct $T_t$ as the gradient of a strictly convex potential $\Phi_t$. 
+We define this potential as a perturbation of the identity potential $\frac{1}{2}\|x\|^2$.
+Fix integers $J \ge 1$ and a smoothness parameter $\beta > 0$. 
+At each time $t$, we draw random directions $a_{t,j} \in \mathbb{S}^{d-1}$, weights $w_{t,j} > 0$ (normalized such that $\sum_j w_{t,j} = 1$), and offsets $c_{t,j} \in \mathbb{R}$.Let $\zeta_\beta(z) = \beta^{-1}\log(1+e^{\beta z})$ be the softplus function and $\sigma_\beta(z) = (1+e^{-\beta z})^{-1}$ be the sigmoid function.
+We define a convex perturbation potential $\psi_t$ as:
+$$  \psi_t(x)
+\;:=\;
+\frac{\varepsilon_t}{2}\sum_{j=1}^J w_{t,j}
+\left( \zeta_\beta(\langle a_{t,j}, x\rangle - c_{t,j}) \right)^2.$$
+The full transport potential is $\Phi_t(x) := \frac{1}{2}\|x\|^2 + \psi_t(x)$. The resulting transport map is:
+\begin{equation}\label{eq:map_family}
+T_t(x) = \nabla \Phi_t(x) = x + \nabla \psi_t(x).
+\end{equation}Computing the gradient of $\psi_t$, the explicit form of the map is:
+$$  T_t(x) \;=\;
+x \;+\; \varepsilon_t\sum_{j=1}^J w_{t,j}\,
+h_\beta(\langle a_{t,j}, x\rangle - c_{t,j})\, a_{t,j},$$
+where $h_\beta(z) := \zeta_\beta(z)\,\sigma_\beta(z)$. 
+The parameter $\varepsilon_t > 0$ controls the magnitude of the deformation. 
+For the pre-change process, we set $\varepsilon_t = 0.3$.
+
+\subsection{Verification: Cyclic Monotonicity and OT Optimality}\label{app:cyclic_monotone}
+The construction in \eqref{eq:map_family} ensures that $T_t$ is the gradient of a convex function. T
+his property implies cyclic monotonicity, ensuring that if the reference law is absolutely continuous, $T_t$ coincides with the unique quadratic-cost OT map from $\bar{\mu}$ to its pushforward $\mu_t$.
+\begin{lemma}[Convexity of the Potential]\label{lem:phi_convex}
+For any $t$, the perturbation potential $\psi_t$ is convex on $\mathcal{X}$. 
+Consequently, the total potential $\Phi_t(x) = \frac{1}{2}\|x\|^2 + \psi_t(x)$ is strictly convex.
+\end{lemma}
+
+\begin{proof}
+The function $z \mapsto \zeta_\beta(z)$ is convex and non-decreasing. The function $y \mapsto y^2$ is convex and non-decreasing for $y \ge 0$. 
+Since $\zeta_\beta(z) > 0$, the composition $z \mapsto (\zeta_\beta(z))^2$ is convex. 
+The term $x \mapsto \langle a_{t,j}, x\rangle - c_{t,j}$ is affine. Since the composition of a convex function with an affine map preserves convexity, and a non-negative weighted sum of convex functions is convex, $\psi_t$ is convex. 
+Adding the strictly convex term $\frac{1}{2}\|x\|^2$ ensures $\Phi_t$ is strictly convex.
+\end{proof}
+
+\begin{lemma}[Cyclic Monotonicity]
+\label{lem:cyclic_mono}
+Let $\Phi: \mathcal{X} \to \mathbb{R}$ be convex and differentiable, and let $T = \nabla \Phi$. 
+Then $T$ is cyclically monotone: for any finite sequence $x_1, \dots, x_m \in \mathcal{X}$ with $x_{m+1} = x_1$,$$  \sum_{i=1}^m \langle x_i, T(x_i) \rangle
+\;\ge\;
+\sum_{i=1}^m \langle x_i, T(x_{i+1}) \rangle.$$
+\end{lemma}
+
+\begin{proof}
+By the first-order convexity condition, for any $x, y$, we have $\Phi(y) \ge \Phi(x) + \langle \nabla \Phi(x), y-x \rangle$. 
+Rearranging terms yields $\langle \nabla \Phi(x), x \rangle - \langle \nabla \Phi(x), y \rangle \ge \Phi(x) - \Phi(y)$. 
+Applying this inequality to pairs $(x_i, x_{i+1})$ and summing over $i=1, \dots, m$, the right-hand side telescopes to 0, yielding the result.
+\end{proof}
+
+\begin{proposition}[Optimality of the Constructed Map]\label{prop:constructed_is_ot}
+Assume $\bar{\mu}$ is absolutely continuous with respect to the Lebesgue measure on $\mathcal{X}$. Consider the quadratic cost $c(x,y) = \|x-y\|^2$. 
+Let $\mu_t := (T_t)_{\#} \bar{\mu}$, where $T_t = \nabla \Phi_t$ with $\Phi_t$ convex. 
+Then, $T_t$ is the $\bar{\mu}$-almost everywhere unique optimal transport map from $\bar{\mu}$ to $\mu_t$.
+\end{proposition}
+
+\begin{proof}
+By Lemma~\ref{lem:phi_convex}, $T_t$ is the gradient of a convex function. 
+By Brenier's Theorem, the unique quadratic-cost optimal transport map from an absolutely continuous measure $\bar{\mu}$ to any target measure $\mu_t$ is characterized as the gradient of a convex function. 
+Since $T_t$ satisfies this characterization and pushes $\bar{\mu}$ to $\mu_t$ by construction, it is the optimal map.
+\end{proof}
+
+\subsection{Post-Change Scenarios}\label{app:post_change_scenarios}
+We simulate a single change-point at time $\kappa$.
+For $t \le \kappa$ (pre-change), batches are generated using the reference base sample $X_{\mathrm{base}}^{(0)}$ and random deformations $T_t$ as described above. 
+For $t > \kappa$ (post-change), we modify the \emph{base generator} to induce a distributional shift, while maintaining the same deformation mechanism.
+
+\paragraph{(S1) Barycenter Change.}We generate a perturbed reference distribution $\bar{\mu}^{(1)}$ by perturbing the component parameters of the original family with strength $\delta_{\mathrm{loc}}$. 
+We draw a new base sample $X_{\mathrm{base}}^{(1)} \overset{\text{i.i.d.}}{\sim} \bar{\mu}^{(1)}$ once. For all $t > \kappa$, observations are generated as $X_t = T_t(X_{\mathrm{base}}^{(1)})$. 
+This scenario simulates a shift in the central tendency (mean/mode) of the stream.
+
+\paragraph{(S2) Multimodal Reweighting.}Let the reference $\bar{\mu}$ be a mixture with weights $\pi \in \Delta^{K-1}$.
+We perturb these weights to obtain $\pi^{(1)}$, where $\pi^{(1)}_k \propto \pi_k \eta_k$, with $\eta_k$ drawn from a distribution controlled by perturbation strength $\delta_{\mathrm{mm}}$. 
+We keep the component parameters fixed and sample $X_{\mathrm{base}}^{(1)} \sim \bar{\mu}^{(1)}$ using the new weights. Post-change batches are generated as $X_t = T_t(X_{\mathrm{base}}^{(1)})$. 
+This scenario isolates changes in mass allocation across modes, which are often difficult to detect using low-order summary statistics.
+
+\paragraph{(S3) Copula Shift.}We modify the cross-dimensional dependence structure while approximately preserving the marginal distributions. 
+Starting from the initial base sample $X_{\mathrm{base}}^{(0)}$, we apply an Iman-Conover rank-preserving reordering to induce a target correlation $\rho$, resulting in a modified base sample $X_{\mathrm{base}}^{(1)}$. 
+Post-change batches are generated as $X_t = T_t(X_{\mathrm{base}}^{(1)})$. 
+This scenario targets dependence shifts that may be invisible to methods that monitor marginals independently.
+
+
+\section{Details on Synthetic Discrete Streams}
+\label{app:sim_details_dist}
+
+This appendix details the generation processes for discrete distribution-valued streams and the specific formulations of the baseline detectors used for comparison.
+
+\subsection{Data Generation Processes}
+
+\paragraph{Stream of Poisson Counts.}
+We simulate monitoring scenarios involving count data, where at each time step $t$, we observe a batch of $N$ count-valued samples denoted as $X_{t} = \{x_{t,i}\}_{i=1}^{N}$ with $x_{t,i} \in \mathbb{Z}_{\ge 0}$. In the pre-change regime, samples are drawn independently from a standard Poisson distribution with rate $\lambda_0$. To simulate the emergence of rare, extreme events in the post-change phase, we model the distribution as a mixture of the background process and a Dirac mass centered at a high value $k^*$. Specifically, for a mixing proportion $\alpha \in (0,1)$, the post-change samples follow the mixture law $(1-\alpha)\,\mathrm{Pois}(\lambda_0) + \alpha\,\delta_{k^*}$. We also considered a heavy-tail mixture scenario, discussed in the additional results, where samples are drawn from a mixture of two Poisson sources with distinct rates, optionally calibrated such that the global mean remains matched to the pre-change baseline.
+
+\paragraph{Ordered Categorical Drift.}
+For data defined on a finite ordinal support $\mathcal{X} = \{1, \dots, M\}$ (with $M=6$), we model gradual drifts that respect the underlying ordinal structure. Let the pre-change probability mass function be denoted by $p_0 \in \Delta^{M-1}$. We define a target "right-shifted" distribution $p_{\text{shift}}$ wherein probability mass moves to adjacent higher categories. Formally, the shifted probability for category $j$ is zero for the first category, equal $p_{0, j-1}$ for intermediate categories, and accumulates the mass of the top two original categories at the upper boundary $j=M$. The stream evolves via a linear interpolation $p_t = (1-\gamma_t)p_0 + \gamma_t p_{\text{shift}}$, where the drift parameter $\gamma_t$ ramps linearly from $0$ to $1$ following the change point.
+
+\subsection{Discrete Baseline Detectors}
+\label{app:discrete_baselines}
+
+To establish comparative performance benchmarks for discrete data, we implemented two standard sequential change-point detectors adapted for count and categorical streams, respectively.
+
+The first baseline is the \textbf{Poisson Cumulative Sum Detector} (adapted from the $c$-Chart), designed for monitoring shifts in total counts. This method relies on the property that the sum of independent Poisson variables is itself Poisson distributed. For a batch at time $t$, we calculate the sufficient statistic $S_t = \sum_{i=1}^{N} x_{t,i}$. Using the pre-change samples, we estimate the expected mean count $\bar{c} = \mathbb{E}[S_t]$. A detection threshold is established at three standard deviations from the mean, defining an acceptance region $[\max(0, \bar{c} - 3\sqrt{\bar{c}}), \bar{c} + 3\sqrt{\bar{c}}]$. An alarm is raised at time $t$ if the aggregate count $S_t$ falls outside this interval, signaling a significant deviation in the rate parameter.
+
+The second baseline is the \textbf{Multinomial Max-Deviation Detector}, used for monitoring categorical data. This approach tracks the maximum deviation of any single class proportion from its expected baseline, effectively monitoring the $L_\infty$ norm of the proportion shift. Let $\hat{p}_{t,j}$ be the empirical proportion of class $j$ in the batch at time $t$, and let $p_{0,j}$ be the expected proportion estimated from reference data. We compute the standardized deviation score $z_{t,j}$ for each class by normalizing the difference $\hat{p}_{t,j} - p_{0,j}$ by the standard error $\sqrt{p_{0,j}(1-p_{0,j})/N}$. The monitoring statistic is defined as the maximum absolute deviation across all categories, $Z_t = \max_{j} |z_{t,j}|$. A change is declared if $Z_t$ exceeds a threshold $h$, which is empirically calibrated to satisfy the target in-control average run length ($\mathrm{ARL}_0$).
+
+\section{Computational Acceleration Details}
+\label{app:computation}
+
+The geometric framework proposed in this work relies on the computation of Wasserstein barycenters and optimal transport maps, which can be computationally intensive in high-dimensional or large-sample regimes. To ensure the scalability of our online change-point detector, we adopt the following acceleration strategies.
+
+\subsection{Efficient Barycenter Estimation via Normalizing Flows}
+Estimating the reference Wasserstein barycenter $\bar{\mu}$ typically requires solving a large-scale optimization problem over the space of probability measures. To accelerate this in high-dimensional settings ($d \ge 10$) and with large sample sizes, we leverage the \emph{Conditional Normalizing Flow} (CNF) framework proposed by \citet{visentin2026computing}.
+Instead of discretizing the support, this method parameterizes the barycenter and the associated transport maps using invertible neural networks (normalizing flows). 
+
+\subsection{Entropic Regularization for OT}
+For the computation of pairwise transport costs and maps in the monitoring phase, exact linear programming solvers (with cubic complexity $O(N^3)$) become a bottleneck for streaming applications.
+We therefore adopt the Sinkhorn algorithm~\citep{cuturi2013sinkhorn}, which solves the entropically regularized optimal transport problem:
+\[
+\mathcal{L}_{\varepsilon}(\mu, \nu) = \inf_{\gamma \in \Pi(\mu, \nu)} \int c(x,y) d\gamma(x,y) + \varepsilon H(\gamma),
+\]
+where $H(\gamma)$ is the entropic regularization term.
+This formulation allows the optimal coupling to be computed via efficient iterative matrix scaling (Sinkhorn-Knopp algorithm), reducing the complexity to approximately $O(N^2)$. 
+
+\section{Detection-Delay Analysis}\label{app:arl1}
+We complement the false-alarm analysis in Section~\ref{sec:theory_calibration} with a detection-delay ($\mathrm{ARL}_1$) guarantee. 
+Under sustained post-change batches from $\mathbb{P}_2$, the
+statistics $(T^2_{t,K}, \mathrm{SPE}_t)$ are conditionally i.i.d.,
+so the run length after $\kappa$ is geometric with parameter
+$p_1 := \mathbb{P}_{\mathbb{P}_2}(T^2_{t,K} > h_{T^2}
+\text{ or } \mathrm{SPE}_t > h_{\mathrm{SPE}})$
+and $\mathrm{ARL}_1 = 1/p_1$.
+
+Assume that for $t \ge \kappa$ the tangent fields are Gaussian
+with mean $m \in H$ and the pre-change covariance $\Gamma$.
+Let $m_k = \langle m, \phi_k \rangle$ denote the projection
+of the mean shift onto the $k$-th eigenfunction.
+The retained scores $\xi_{t,k} = \langle v_t, \phi_k \rangle
+/ \sqrt{\lambda_k}$ have mean $m_k / \sqrt{\lambda_k}$,
+so $T^2_{t,K} \sim \chi^2_K(\delta_T^2)$ with
+$\delta_T^2 = \sum_{k=1}^K m_k^2 / \lambda_k$.
+This gives $p_T = 1 - F_{\chi^2_K(\delta_T^2)}(h_{T^2})$.
+The residual $\mathrm{SPE}_t = \sum_{k>K} \xi_{t,k}^2$ is a
+generalized noncentral chi-square with
+$p_S = \mathbb{P}(\mathrm{SPE}_t > h_{\mathrm{SPE}})$.
+Since the retained and residual scores are projections
+onto orthogonal subspaces of a Gaussian field,
+$T^2$ and $\mathrm{SPE}$ are independent, giving
+\[
+  \mathrm{ARL}_1
+  = \frac{1}{1 - (1-p_T)(1-p_S)}.
+\]
+Without Gaussianity, a union bound yields
+\[
+  \frac{1}{p_T + p_S}
+  \;\le\; \mathrm{ARL}_1
+  \;\le\; \frac{1}{\max(p_T, p_S)}.
+\]
+% \section{Detection-Delay Analysis under Sustained Post-Change}\label{app:arl1}
+% Under sustained post-change batches drawn from $\mathbb{P}_2$, the monitoring statistics $(T_{t,K}^2,\mathrm{SPE}_t)$ are conditionally i.i.d., so the run length after $\kappa$ is geometric with success probability $p_1 := \mathbb P_{\mathbb{P}_2}\!\big(T_{t,K}^2>h_{T^2}\ \text{or}\ \mathrm{SPE}_t>h_{\mathrm{SPE}}\big)$. Hence $\mathrm{ARL}_1 = 1/p_1$. Under Assumption~\ref{ass:gaussian_process} (Pre-change Gaussian Structure), the post-change tangent fields shift by a deterministic mean $m\in H$, so $T^2 \sim \chi^2_K(\delta_T^2)$ with non-centrality $\delta_T^2 = m^\top \Lambda_K^{-1} m$, yielding $p_T = \mathbb P(T^2 > h_{T^2})$. The residual $\mathrm{SPE}$ follows a generalized non-central chi-square with detection probability $p_S$. Under Gaussianity, $T^2$ and SPE depend on orthogonal projections and are independent, so
+% \[
+% \mathrm{ARL}_1 = \frac{1}{1-(1-p_T)(1-p_S)}.
+% \]
+% Without Gaussianity, a union bound gives
+% \[
+% \frac{1}{p_T + p_S} \;\le\; \mathrm{ARL}_1 \;\le\; \frac{1}{\max(p_T, p_S)}.
+% \]
+This characterizes how the non-centrality of the post-change shift translates into expected detection delay.
+
+\section{Sensitivity to Pre-Change Calibration Length $n_0$}\label{app:n0_sensitivity}
+
+\paragraph{Experimental settings.}
+We use $n_0 = 300$ for all synthetic experiments and the FlowCAP-II case study, and $n_0 = 50$ for the Reddit case study, where a longer pre-change window is unavailable due to data availability constraints.
+
+\paragraph{Role of $n_0$.}
+The calibration length $n_0$ governs three estimation tasks: (i) the Fr\'echet barycenter $\bar{\mu}$; (ii) the eigendecomposition of the empirical covariance operator $\widehat{\mathcal{C}}$ (MFPCA); and (iii) the empirical quantile thresholds. Corollary~\ref{cor:arl_empquant} quantifies the finite-sample effect on (iii) directly: the lower bound on $\mathrm{ARL}_0$ contains an additive correction of $2/(n_0+1)$, which equals $0.007$ for $n_0=300$ (negligible) but $0.039$ for $n_0=50$ (non-trivial at aggressive false-alarm rates). This finite-sample inflation partially explains our choice of a qualitative evaluation for the Reddit case study.
+Functional eigenpair consistency requires $n_0 \to \infty$ with estimation error $O(n_0^{-1/2})$ for fixed truncation $K$ \citep{hall2006properties}, which provides sufficient accuracy at $n_0 = 300$ for the truncation levels used here ($K \le 10$). Empirical barycenters enjoy finite-sample concentration in metric spaces with curvature bounds, so the barycenter approximation error in our setting is dominated by within-batch sampling error rather than $n_0$ when $n_0$ is moderately large.
+
+\paragraph{Limitation and practitioner guidance.}
+A small $n_0$ simultaneously inflates all three estimation errors, making the detector less calibrated and less powerful. Based on the above analysis, we recommend the following minimum calibration lengths as practical guidance:
+\begin{itemize}
+  \item \textbf{Threshold calibration (task iii):} $n_0 \ge 100$ to keep the $\mathrm{ARL}_0$ correction $2/(n_0+1) \le 0.02$, i.e., below $2\%$ additive inflation at any false-alarm rate.
+  \item \textbf{MFPCA eigendecomposition (task ii):} $n_0 \ge 5K$ is a conservative rule of thumb to ensure the leading $K$ eigenpairs are estimated with $O(n_0^{-1/2})$ error well below the signal level. For $K \le 10$, this requires $n_0 \ge 50$.
+  \item \textbf{Barycenter estimation (task i):} Since barycenter error is dominated by within-batch sampling noise when $N_t$ is moderate, $n_0$ plays a secondary role here; $n_0 \ge 30$ suffices in practice.
+\end{itemize}
+When data availability forces a small $n_0$ (as in Reddit), we recommend interpreting results qualitatively, increasing the nominal $\mathrm{ARL}_0$ target to absorb the $2/(n_0+1)$ inflation, or using permutation-based thresholds that are exact for any $n_0$.
+
+\section{Comprehensive Per-Scenario Method Comparison}\label{app:method_discussion}
+We provide a per-scenario discussion of all baselines, including settings where \algoname\ is matched or outperformed.
+
+\begin{table}[t]
+\centering
+\caption{Summary of \algoname\ performance across all experiments, including settings where competitors match or outperform \algoname.}
+\label{tab:scenario_summary}
+\resizebox{0.8\linewidth}{!}{%
+\begin{tabular}{lll}
+\toprule
+\textbf{Scenario} & \textbf{\algoname\ advantage} & \textbf{Methods that match/beat \algoname} \\
+\midrule
+Barycenter change         & Ties with best                      & Hotelling $T^2$, Shewhart, NEWMA \\
+Multimodal reweight       & Strong ($d\ge 5$)                   & Log-KDE competitive in $d{=}1$ \\
+Copula shift              & Strong (small $N$)                  & Log-KDE competitive at large $N$ \\
+Gaussian translation      & Disadvantage (small $\delta$)       & Hotelling $T^2$ better for pure mean shifts \\
+Poisson spike (Fig.~\ref{fig:dis:tradeoff1})  & Moderate disadvantage & $C$-CHART better (specialized detector) \\
+Ordered categorical       & Advantage                            & --- \\
+AML FlowCAP (Fig.~\ref{fig:real:tradeoff})    & Best overall         & NEWMA comparable at low $\mathrm{ARL}_0$ \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\paragraph{Barycenter change.} The shift is essentially a location change, so moment-based methods recover their classical efficiency. Across $d\in\{1,5,10,50\}$ and $N\ge 100$, Hotelling $T^2$, Shewhart, Log-KDE, NEWMA and \algoname\ all attain $\mathrm{ARL}_1\approx 1.0$. Log-KDE degrades at $d{=}50,\,N{=}300$ due to bandwidth instability. \algoname\ matches the best but offers no advantage in this regime.
+
+\paragraph{Multimodal reweight.} Mixture weights change while the global mean is preserved, so Shewhart fails ($\mathrm{ARL}_1 \in [36,190]$). \algoname\ dominates for $d\ge 5$. In $d{=}1$, Log-KDE is competitive (and beats \algoname\ at $N{=}100$) because univariate KDE is highly accurate; NEWMA is the most consistent runner-up.
+
+\paragraph{Copula shift.} Marginals are preserved while dependencies change. \algoname\ and Log-KDE both attain $\mathrm{ARL}_1=1.0$ for $N\ge 100$. \algoname\ has a clearer edge at small $N$. Shewhart fails when marginals are preserved.
+
+\paragraph{Gaussian translation (Tables~\ref{tab:gauss_small},\ref{tab:gauss_full}).} For pure mean shifts at small magnitude ($\delta=0.1$), Hotelling $T^2$ directly monitors the sufficient statistic and frequently outperforms \algoname\ (e.g., $d{=}5,\,\sigma{=}0.5$: Hotelling $1.0$ vs.\ \algoname\ $1.9\pm 0.5$). This is consistent with Theorem~\ref{thm:OT-vs-log}: \algoname's OT-map estimation introduces variance that an optimally specified mean chart avoids. For larger shifts ($\delta=0.5$) all methods converge to $\mathrm{ARL}_1=1.0$.
+
+\paragraph{Poisson spike injection.} The $C$-CHART is a specialized count detector monitoring the sufficient statistic $S_t = \sum_i x_{t,i}$; spike injection inflates exactly this quantity, so $C$-CHART achieves shorter delays than \algoname\ by design. \algoname\ still outperforms Log-KDE since OT geometry preserves discrete spike structure better than kernel smoothing.
+
+\paragraph{Ordered categorical drift.} \algoname\ exploits the ordinal metric and detects coherent mass flow more efficiently than attribute charts, which treat classes as nominal.
+
+\paragraph{FlowCAP-II AML.} \algoname\ achieves the highest F1 ($\approx 0.75$) with $\mathrm{ARL}_1\approx 1$ and near-perfect precision ($\approx 0.99$). NEWMA is comparable in F1 at lenient $\mathrm{ARL}_0$ thresholds (30--75) due to its higher recall (precision $\approx 0.83$, recall $\approx 0.52$) but later first detection. At stricter thresholds ($\mathrm{ARL}_0>75$) NEWMA's F1 advantage at a single $\mathrm{ARL}_0$ cross-section coexists with a larger $\mathrm{ARL}_1$, reflecting the difference between batch-level labeling accuracy and first-detection speed.
+
+\paragraph{Reddit sentiment.} Qualitative evaluation only; \algoname\ produces sharp alarms aligned with the J\&J pause and subsequent policy shifts, whereas NEWMA exhibits monotonic drift and F-CPD high variance unrelated to events.
+
+\section{Computational Cost: Phase I and Phase II Timing}\label{app:timing}
+Tables~\ref{tab:phaseI_timing}--\ref{tab:phaseII_timing} report per-sample timing (ms) for all methods across our synthetic configurations. Phase I (offline calibration) ranges from $\sim$0.2~ms ($d{=}1,\,N{=}50$) to $\sim$867~ms ($d{=}50,\,N{=}300$); this is a one-time cost. Phase II (online monitoring) is substantially cheaper: under $50$~ms for $d\le 10$ and $\sim$272~ms at $d{=}50,\,N{=}300$. Competitors KDE-Marginal scale similarly ($\sim$172~ms), F-CPD incurs $12$--$20$~ms but with weaker detection power, while Shewhart/Hotelling $T^2$ is fastest ($<1.5$~ms) but fails to detect higher-order distributional changes. For the real case studies, FlowCAP-II ($d{=}7,\,N_t{=}500$) has Phase II cost $\sim$2.9~s, practical given minute-to-hour batch arrivals; Reddit ($d{=}20,\,N_t\in[20,412]$) has Phase II cost $\sim$0.19~s, well below daily monitoring frequency.
+\input{tables/PhaseI_timing.tex}
+\input{tables/PhaseII_timing.tex}
+
+\section{Implementation Details and Hyperparameters}\label{app:impl_details}
+Table~\ref{tab:implementation_details} summarizes our solver choices and hyperparameters across all experiments. We use exact OT (POT \texttt{ot.emd()}) for $d\le 10$ and $N_t\le 500$, and Sinkhorn (\texttt{ot.sinkhorn()}) otherwise. Barycenter computation uses a closed-form quantile average in $d{=}1$, fixed-support Sinkhorn barycenters with a fixed-point LP scheme for $d\le 5$, and Conditional Normalizing Flows (Appendix~\ref{app:computation}) for $d>5$. MFPCA truncation $K$ is chosen by cumulative variance explained (CVE) $\ge 0.95$, which yields $K$ between $3$ and $10$ across our experiments.
+\input{tables/Implementation_Details.tex}
+
+\section{Additional Experimental Results}
+\label{app:synthetic_results}
+
+In this section, we provide the complete set of experimental results for the synthetic continuous streams. We evaluate the performance across a wide range of configurations by varying the batch size $N \in \{50, 100, 300\}$ and the dimension $d \in \{1, 5, 10, 50\}$. 
+The results presented below include the full trade-off curves comparing \arlo against the \arlz for the Barycenter Change, Multimodal Reweight and Copula Shift scenarios. 
+Additionally, we report the Detection Rate versus False Alarm Rate to assess the sensitivity of the detectors at varying thresholds. 
+Finally, we provide detailed tabular results for all the scenarios, reporting the mean detection delay with standard errors over 10 replications at a fixed calibration target.
+
+
+\paragraph{Marginal monitoring vs.\ full distribution.} To verify that the proposed framework solves a strictly harder problem than monitoring concatenated marginal streams, we implement a KDE-Marginal baseline that estimates per-coordinate marginal densities by KDE and monitors functional $L^2$ distances. Table~\ref{tab:kde_marginal} compares KDE-Marginal against \algoname\ under the copula-shift scenario at $\alpha=0.05$. For $d\ge 5$, \algoname\ detects immediately ($\mathrm{ARL}_1=1.0$) across all batch sizes, whereas KDE-Marginal detects slowly ($\mathrm{ARL}_1$ between $7$ and $18$), confirming that marginal monitoring is fundamentally less powerful when the change lies in dependence structure.
+\input{tables/KDE_marginal.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{appendix_figures.tex}
+\input{tables/Syn_con1}
+\input{tables/Syn_con2}
+\input{tables/Syn_con3}
+\input{tables/Syn_con4}
+\input{tables/Syn_con5}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Summary of Findings}
+The comprehensive results reinforce the robustness of the proposed framework across diverse shift types and dimensions. In the Barycenter scenario, where the shift is primarily in the mean, \algoname\ achieves near-instantaneous detection ($\mathrm{ARL}_1 \approx 1.0$), matching the performance of the specialized Shewhart chart. 
+However, the advantage of our geometric approach becomes evident in complex distributional shifts such as Multimodal Reweighting.
+The Shewhart chart fails as the global mean remains unchanged, while \algoname\ consistently maintains the lowest detection delay. 
+Furthermore, regarding scalability, while density-based baselines like Log-KDE are competitive in lower dimensions, their performance degrades in high-dimensional settings ($d=50$), particularly in the Copula Shift scenario. In contrast, \algoname\ remains unaffected by the curse of dimensionality, outperforming most baselines in these challenging regimes.
+
+
+
+
+\section{Details on Flow Cytometry Case Study}
+\label{app:aml_details}
+
+\subsection{Dataset and Preprocessing}
+The dataset is derived from the FlowCAP-II challenge~\citep{aghaeepour2013critical}, comprising 2,874 peripheral blood or bone marrow measurements collected from 359 subjects (316 healthy donors and 43 AML patients). Note that multiple measurements are available for each subject.
+We treat each flow cytometry measurement as a distinct distribution-valued observation. From each measurement, we extract a random subsample of $N=2,000$ cells to form the empirical measure $\mu_t$.
+Each cell is represented in $d=7$ dimensions, consisting of forward scatter (FSC), side scatter (SSC), CD45 expression, and 4 other lineage markers.
+
+
+\subsection{Change Point Detection Experiment Setup}
+We structure the experiment as a sequential change-point detection task with two phases:
+(1) Pre-change Calibration Phase: We utilize a sequence of 300 healthy samples to estimate the reference distribution $\bar{\mu}$ and calibrate the detection threshold to satisfy a target $\mathrm{ARL}_0$.
+(2) Monitoring Phase: We monitor a test stream of 300 samples. This stream is constructed by injecting 80\% AML-positive samples (randomly sampled from the AML patient pool) interspersed with healthy samples.
+Since ground truth diagnosis labels are available for every sample, we evaluate performance using both detection delay ($\mathrm{ARL}_1$) and classification metrics (F1-score, Precision/Recall) at the batch level.
+
+\paragraph{Precision/recall breakdown.}
+Figure~\ref{fig:real:tradeoff} in the main text reports both the F1-score (left panel) and the detection delay $\mathrm{ARL}_1$ (right panel) versus $\mathrm{ARL}_0$. The two metrics evaluate distinct quantities: $\mathrm{ARL}_1$ measures first-detection delay (lower is faster), whereas F1 measures batch-level labeling accuracy across the full stream. \algoname\ achieves near-perfect precision ($\approx 0.99$) by raising fewer but highly reliable alarms, yielding the fastest first detection ($\mathrm{ARL}_1$ between $\sim$2 and $\sim$3) and the highest F1. NEWMA fires more liberally (precision $\approx 0.83$, recall $\approx 0.52$), boosting F1 at lenient $\mathrm{ARL}_0$ targets but at the cost of a later first alarm ($\mathrm{ARL}_1\approx 3.6$--$3.8$). Hence the two methods reflect different trade-offs between first-detection speed and overall labeling coverage. \algoname\ is consistently faster in first detection across the entire $\mathrm{ARL}_0$ range.
+
+
+\section{Details on Reddit Vaccine Sentiment Study}
+\label{app:case:reddit}
+
+\subsection{Preprocessing and Embedding Pipeline}
+To transform the unstructured text stream into a sequence of distribution-valued observations suitable for our geometric CPD framework, we applied the following preprocessing steps:
+Firstly, we aggregated user comments into daily batches ($t=1, \dots, T$). To ensure statistical stability of the empirical measures, we filtered out days containing fewer than 30 comments.
+Secondly, we mapped each raw comment to a dense semantic vector using the pre-trained Sentence-BERT model (\texttt{all-MiniLM-L6-v2}~\citep{reimers2019sentence}), producing 384-dimensional embeddings. This places semantically similar comments (e.g., expressing anxiety or support) close to each other in vector space.
+Finally, to reduce computational cost while preserving the primary modes of variation, we projected the embeddings to $d=20$ dimensions using Principal Component Analysis (PCA).
+\rev{Phase I (calibration) consists of the earliest 50-day block (Dec 2, 2020 -- Jan 30, 2021); Phase II (monitoring) covers the next 50 days (Jan 31 -- May 5, 2021), spanning the J\&J EUA and subsequent rollout events.}
+
+
+\subsection{Timeline of Interest}
+Table~\ref{tab:reddit_events} details the key external events overlapping with our monitoring window. \rev{For the camera-ready version we re-curate reference events \emph{before} examining detection results, requiring (i) official FDA/CDC/White House documentation, (ii) being directly vaccine-specific, and (iii) tied to a dateable decision.} The qualitative evaluation in the main text assesses whether detection alarms coincide with the onset of public reaction (polarization or anxiety) triggered by these events.
+
+\begin{table}[t]
+\centering
+\caption{\rev{Curated COVID-19 vaccine-policy events during the Phase II monitoring window (Jan 31 -- May 5, 2021).}}
+\label{tab:reddit_events}
+\resizebox{0.8\textwidth}{!}{%
+\begin{tabular}{llp{9cm}}
+\toprule
+\textbf{Date} & \textbf{Event} & \textbf{Description} \\
+\midrule
+\textit{Feb 27} & \textbf{J\&J EUA recommended} & FDA advisory committee recommends Emergency Use Authorization for the Johnson \& Johnson vaccine. \\
+\textit{Mar 02} & \textbf{J\&J EUA issued} & FDA issues Emergency Use Authorization for the J\&J vaccine. \\
+\textit{Mar 11} & All-adults-by-May-1 & President Biden directs states to make all adults eligible for vaccination by May 1. \\
+\textit{Apr 13} & \textbf{J\&J Pause} & FDA/CDC recommend pausing J\&J administration due to rare clotting reports. \\
+\textit{Apr 23} & \textbf{J\&J Pause Lifted} & CDC safety panel recommends resuming J\&J vaccinations; pause lifted. \\
+\textit{Apr 27} & Mask Relaxation & CDC relaxes outdoor mask guidelines for vaccinated people. \\
+\textit{May 04} & 70\% by July 4 goal & President Biden announces a 70\% adult-vaccination goal by July 4. \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\paragraph{Calibration robustness and Google Trends proxy.}
+Compared with the original calibration window (Jan 1 -- Feb 26), the revised Phase I (Dec 2 -- Jan 30) avoids days immediately preceding vaccine-policy disruptions and utilizes the full dataset. Despite the shifted calibration window, \algoname's SPE threshold changes minimally, with similar alarm behavior (5 alarms on 50 Phase II days vs.\ 4 previously). By contrast, the baselines are sensitive to window choice: F-CPD's threshold shifts from $\approx 0.49$ to $\approx 5.0$, NEWMA's from $\approx 0.019$ to $\approx 0.05$, causing both to produce zero alarms; Hotelling $T^2$ alarms on $13/50$ days (26\%), mostly event-unaligned; Scan-B also produces zero alarms. Among the five \algoname\ (SPE) alarms, two align with curated events (Mar 2 J\&J EUA issuance; Apr 30 post-J\&J-pause discourse reorganization, where the pause Apr 13 and lifting Apr 23 fall within a sparse-data gap Apr 3 -- 28, so the first post-gap observation reflects the accumulated shift); May 3 alarms one day before Biden's 70\%-by-July-4 goal. The remaining two alarms (Feb 16, Mar 27) do not match curated events; F-CPD and Hotelling $T^2$ also exhibit elevated statistics on these dates, suggesting potential lower-profile distributional activity. \algoname's alarm rate (10\%) remains far sparser than Hotelling $T^2$'s 26\%.
+
+\smallskip
+\noindent As a proxy ground-truth, we correlate each method's statistic with $|\Delta GT_t|$, the absolute daily change in Google Trends search volume for vaccine-related queries (``vaccine,'' ``covid vaccine,'' ``j\&j vaccine,'' ``Pfizer vaccine,'' ``Moderna vaccine''). This forward-differenced proxy captures moments of sudden public attention shift. \algoname\ (SPE) achieves the highest positive Spearman $\rho = 0.17$, while NEWMA ($\rho = -0.20$) and F-CPD ($\rho = -0.19$) show negative correlations (see \cref{fig:google_trend_diff}). Individual correlations do not reach significance at $n=48$; however, the consistent sign pattern (\algoname\ positive, accumulator-type methods negative) provides directional evidence that \algoname's alarms better track external attention shifts.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{figures_app/Google_Trend_Diff_Comparison.png}
+\caption{Comparison of detection statistics with the Google Trends proxy $|\Delta GT_t|$ over the Phase II monitoring window. \algoname\ (SPE) tracks daily shifts in vaccine-related search volume more closely than accumulator-type baselines (NEWMA, F-CPD), which show negative Spearman correlations with the proxy.}
+\label{fig:google_trend_diff}
+\end{figure}
+
+% \section{Case Study: Monitoring public comments on COVID-19 vaccine}
+% \label{app:case:reddit}
+% \subsection{Preprocessing and Embedding Pipeline}
+% To transform the unstructured text stream into a sequence of distribution-valued observations suitable for our geometric CPD framework, we applied the following preprocessing steps:
+% \begin{enumerate}
+% \item \textbf{Daily Aggregation and Filtering:} We aggregated comments into daily batches ($t=1, \dots, T$). 
+% To ensure the empirical distributions were statistically stable and representative, we filtered out any days containing fewer than 30 comments.
+% \item \textbf{Semantic Embedding (SBERT):} We mapped each raw comment to a dense semantic vector using the pre-trained \textbf{Sentence-BERT} model (\texttt{all-MiniLM-L6-v2}~\citep{reimers2019sentence, wang2020minilm}), producing 384-dimensional embeddings.
+% \item \textbf{Dimensionality Reduction:} To reduce the computational cost of the Optimal Transport calculations while preserving the primary semantic variance, we projected the embeddings down to $d=20$ dimensions using Principal Component Analysis (PCA).
+% \end{enumerate}
+
+% \subsection{Timeline of Interest}
+% Table~\ref{tab:reddit_events} lists the key external events during the monitoring period. The objective of the qualitative analysis is to determine if the detector's alarm times align with the onset of polarization or public anxiety triggered by these events.
+% \begin{table}[h]
+% \centering
+% \caption{Timeline of Key COVID-19 Vaccine Events during the Monitoring Phase.}
+% \label{tab:reddit_events}
+% \begin{tabular}{llp{10cm}}
+% \toprule
+% \textbf{Date} & \textbf{Event Label} & \textbf{Description}\\
+% \midrule
+% \textit{2021-02-27} & \textbf{J\&J EUA} & FDA issues Emergency Use Authorization for the Johnson \& Johnson single-dose vaccine. (Start of monitoring). \\
+% \textit{2021-03-08} & CDC Guidance & CDC releases first guidance for fully vaccinated individuals. \\
+% \textit{2021-04-13} & \textbf{J\&J Pause} & FDA and CDC recommend pausing J\&J administration due to reports of rare blood clotting conditions. \\
+% \textit{2021-04-19} & Eligibility & All U.S. adults become eligible for vaccination. \\
+% \textit{2021-04-23} & \textbf{Pause Lifted} & CDC safety panel recommends resuming J\&J vaccinations; pause is lifted the same day. \\
+% \textit{2021-04-27} & Mask Relaxation & CDC relaxes guidelines for wearing masks outdoors for vaccinated people. \\
+% \textit{2021-05-04} & July 4th Goal & President Biden announces goal to have 70\% of adults vaccinated by July 4th.\\
+% \bottomrule
+% \end{tabular}
+% \end{table}
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}

@@ -11,6 +11,7 @@
 - GitHub repository: https://github.com/MachineLearning-Nerd/icml26-repro-aU2sxdnRuL-distribution-valued-cpd @ 372314edc6fec88f51673a7b4cea3f012914e5b4
 - Current phase: claim_1_attempt_3_toy_complete
 - Claim 1 state: Three distinct toy routes are complete; full claim remains unverified. Attempt 3 independently verifies the 1-D empirical quantile radial identity for translation, scale, and non-affine deformation (all absolute errors `0.0`) and rejects identity-map, wrong-reference, and uncentered-map controls. The full released R/funcharts mFPCA/paper-scale path remains absent. See `outputs/claim1_attempt3_quantile_audit.md`.
-- Claim 2–6 states: unverified
+- Claim 2 state: falsified as literally written. Theorem 3.10 supplies the displayed fixed-threshold bound, while the source empirical-quantile corollary has the finite-sample `+ 2/(n0+1)` denominator correction. See `outputs/claim2_attempt1_audit.md`.
+- Claim 3–6 states: unverified
 - Next action: Claim 1 falsification attempt — test the literal source convention/protocol scope; do not relabel toy results as full verification.
 - Publication status: not started
