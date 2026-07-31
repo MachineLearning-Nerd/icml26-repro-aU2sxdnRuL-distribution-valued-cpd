@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "openreview_id": "aU2sxdnRuL",
-  "phase": "publication_queued_hf_space_creation_quota",
-  "next_action": "after_2026-07-31T08:25:00Z_or_confirmed_quota_reset_check_remote_resources_then_publish_once_and_read_back",
+  "phase": "published_public_readback_complete",
+  "next_action": "monitor_official_judge_and_leaderboard_without_claiming_points",
   "active_run_ids": [],
   "completed_milestones": [
     "live_duplicate_gate",
@@ -94,9 +94,9 @@
     "5": 3,
     "6": 1
   },
-  "last_checkpoint": "2026-07-30T08:25:00Z",
-  "last_known_git_commit": "17901127d3dcce706f3482bc726fd87d349b5cc2",
-  "publication_allowed": true,
+  "last_checkpoint": "2026-07-31T08:31:43Z",
+  "last_known_git_commit": "4e337be9eabf9f30d535201b7f29b5a7c8ad2813",
+  "publication_allowed": false,
   "last_queue_check": {
     "checked_at_utc": "2026-07-30T08:30:38Z",
     "result": "waiting_for_hf_quota_reset",
@@ -105,17 +105,17 @@
     "public_git_head": "9d5e031ad794132d3835ab2dfbb68cd69f57b846"
   },
   "publication_queue": {
-    "status": "queued",
-    "reason": "HF HTTP 429 Space-creation daily quota",
-    "retry_not_before_utc": "2026-07-31T08:25:00Z",
+    "status": "resolved_published",
     "space_id": "DineshAI/repro-aU2sxdnRuL-distribution-valued-cpd",
+    "space_url": "https://huggingface.co/spaces/DineshAI/repro-aU2sxdnRuL-distribution-valued-cpd",
+    "static_url": "https://dineshai-repro-au2sxdnrul-distribution-valued-cpd.static.hf.space/",
+    "space_revision": "881cb4f9cda9250f4bb1394b7cee539825ac6ac7",
+    "logbook_revision": "d2924a6f1fdda2eb9338",
+    "published_at_utc": "2026-07-31T08:31:43Z",
+    "public_readback": "outputs/public_readback_20260731T0830Z",
     "trace_dataset": "DineshAI/repro-aU2sxdnRuL-distribution-valued-cpd-traces",
-    "artifact_bucket": "DineshAI/repro-aU2sxdnRuL-distribution-valued-cpd-artifacts",
-    "uploaded_artifacts_uncertain": true,
-    "anonymous_remote_check": "2026-07-30T08:25:00Z: Space, trace dataset, and artifact dataset endpoints each returned HTTP 401; treat existence/readability as unresolved until quota-reset retry/readback.",
-    "validator_evidence": "outputs/official_validator_publish_target.log",
-    "publish_error_evidence": "outputs/trackio_publish_short_target.log",
-    "canonical_backlog": "../../icml-2026-reproduction-challenge/scripts/backlog.json"
+    "trace_dataset_authenticated_sha": "25681740ba2c4d353f265bcf9a54de065f9d3e5e",
+    "artifact_bucket": "DineshAI/repro-aU2sxdnRuL-distribution-valued-cpd-artifacts"
   },
   "github_repository": "https://github.com/MachineLearning-Nerd/icml26-repro-aU2sxdnRuL-distribution-valued-cpd",
   "setup_content_commit": "70f84e135f0d0921dcecd15cbbb3a0f057209679",
