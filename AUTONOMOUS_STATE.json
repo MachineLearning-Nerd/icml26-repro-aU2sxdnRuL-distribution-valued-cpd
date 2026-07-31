@@ -95,7 +95,7 @@
     "6": 1
   },
   "last_checkpoint": "2026-07-31T08:31:43Z",
-  "last_known_git_commit": "4e337be9eabf9f30d535201b7f29b5a7c8ad2813",
+  "last_known_git_commit": "7157e77e479e4455abb009e6014851e1db510310",
   "publication_allowed": false,
   "last_queue_check": {
     "checked_at_utc": "2026-07-30T08:30:38Z",
@@ -115,7 +115,8 @@
     "public_readback": "outputs/public_readback_20260731T0830Z",
     "trace_dataset": "DineshAI/repro-aU2sxdnRuL-distribution-valued-cpd-traces",
     "trace_dataset_authenticated_sha": "25681740ba2c4d353f265bcf9a54de065f9d3e5e",
-    "artifact_bucket": "DineshAI/repro-aU2sxdnRuL-distribution-valued-cpd-artifacts"
+    "artifact_bucket": "DineshAI/repro-aU2sxdnRuL-distribution-valued-cpd-artifacts",
+    "publication_record_commit": "7157e77e479e4455abb009e6014851e1db510310"
   },
   "github_repository": "https://github.com/MachineLearning-Nerd/icml26-repro-aU2sxdnRuL-distribution-valued-cpd",
   "setup_content_commit": "70f84e135f0d0921dcecd15cbbb3a0f057209679",
