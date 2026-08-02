@@ -14,6 +14,7 @@ from pathlib import Path
 
 import numpy as np
 from PIL import Image
+from scipy import ndimage
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -82,6 +83,27 @@ def filled_diamond_centers(mask: np.ndarray, bounds: tuple[int, int, int, int]) 
     return centers
 
 
+def dense_filled_diamond_centers(mask: np.ndarray, bounds: tuple[int, int, int, int]) -> list[tuple[float, float]]:
+    """Locate nearby filled diamonds without merging them along their connecting line."""
+    x0, x1, y0, y1 = bounds
+    crop = mask[y0:y1, x0:x1]
+    density = ndimage.convolve(crop.astype(np.int16), np.ones((9, 9), dtype=np.int16), mode="constant")
+    labels, count = ndimage.label(density >= 58)
+    centers = []
+    for label_id in range(1, count + 1):
+        ys, xs = np.where(labels == label_id)
+        if len(xs) < 3:
+            continue
+        values = density[ys, xs]
+        peak = int(np.argmax(values))
+        cx, cy = int(xs[peak]), int(ys[peak])
+        patch = crop[max(0, cy - 7):cy + 8, max(0, cx - 7):cx + 8]
+        if patch.sum() < 100:
+            continue
+        centers.append((float(x0 + cx), float(y0 + cy)))
+    return sorted(centers)
+
+
 def outline_square_centers(mask: np.ndarray, bounds: tuple[int, int, int, int]) -> list[tuple[float, float]]:
     x0, x1, y0, y1 = bounds
     crop = mask[y0:y1, x0:x1]
@@ -133,8 +155,9 @@ def main() -> int:
 
     red = color_mask(image, (214, 39, 40))
     orange = color_mask(image, (255, 127, 14))
-    ours_f1_pixels = filled_diamond_centers(red, f1_bounds)
-    ours_arl1_pixels = filled_diamond_centers(red, arl1_bounds)
+    ours_f1_pixels = dense_filled_diamond_centers(red, f1_bounds)
+    ours_arl1_pixels = dense_filled_diamond_centers(red, arl1_bounds)
+    independent_arl1_pixels = filled_diamond_centers(red, arl1_bounds)
     hotelling_f1_pixels = outline_square_centers(orange, f1_bounds)
 
     def f1_value(y: float) -> float:
@@ -146,6 +169,7 @@ def main() -> int:
 
     ours_f1 = [f1_value(y) for _, y in ours_f1_pixels]
     ours_arl1 = [arl1_value(y) for _, y in ours_arl1_pixels]
+    independent_arl1 = [arl1_value(y) for _, y in independent_arl1_pixels]
     hotelling_f1 = [f1_value(y) for _, y in hotelling_f1_pixels]
 
     # Negative control: a linear reading of a log-labelled axis is invalid here.
@@ -196,6 +220,9 @@ def main() -> int:
             "idd_arl1_marker_count": len(ours_arl1_pixels),
             "all_idd_arl1_above_2": all(value > 2.0 for value in ours_arl1),
             "red_fill_patch_pixels": [int(red[max(0, int(y) - 7):int(y) + 8, max(0, int(x) - 7):int(x) + 8].sum()) for x, y in ours_arl1_pixels],
+            "column_method_marker_count": len(independent_arl1_pixels),
+            "column_method_values": independent_arl1,
+            "column_method_all_above_2": all(value > 2.0 for value in independent_arl1),
         },
         "negative_control": {
             "wrong_linear_axis_values": linear_control,

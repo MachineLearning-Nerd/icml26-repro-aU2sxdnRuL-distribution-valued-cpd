@@ -33,6 +33,10 @@ def main() -> int:
         failures.append("independent checker found an IDD delay at or below 2")
     if min(result["independent_checker"]["red_fill_patch_pixels"]) < 40:
         failures.append("filled-diamond identity check failed")
+    if result["independent_checker"]["column_method_marker_count"] < 4:
+        failures.append("independent column method found too few markers")
+    if not result["independent_checker"]["column_method_all_above_2"]:
+        failures.append("independent column method found an IDD delay at or below 2")
     if not result["negative_control"]["rejected"]:
         failures.append("wrong linear-axis negative control was not rejected")
     if len(rows) < 15:
