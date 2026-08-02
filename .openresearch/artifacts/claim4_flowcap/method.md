@@ -6,6 +6,8 @@ This descendant mirrors the official FlowRepositoryR implementation more closely
 
 The full-file descendant removes the HTTP Range header and downloads the complete first FCS record exactly as FlowRepositoryR does. Acceptance requires its byte count and MD5 to match the API values (`1,467,197` bytes and `73fbac83f89d49fcc742bb596e1760bc`).
 
+The legacy-host descendant independently tries the HTTPS API URL, its official HTTP form still indexed by the NIAID Data Discovery Portal, and the official CMU FlowRepository host. It accepts only an FCS header plus the API MD5; redirects and HTML cannot pass.
+
 Fixed command: `uv sync --frozen && uv run --frozen python scripts/run_campaign.py`
 
 Estimated compute: 2 cores. Selected flavor: Hugging Face `cpu-upgrade`; no GPU. Actual allocation and runtime are emitted in `raw/probe.json` and the run log.

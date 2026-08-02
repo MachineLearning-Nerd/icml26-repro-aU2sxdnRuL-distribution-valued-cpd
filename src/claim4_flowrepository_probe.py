@@ -79,12 +79,50 @@ def main() -> int:
     if not files:
         raise RuntimeError("official API returned no FCS file records")
 
-    file_request = urllib.request.Request(
-        files[0]["url"],
-        headers={"User-Agent": USER_AGENT},
-    )
     declared_size = int(files[0]["file-size"])
-    file_status, file_url, file_headers, prefix = fetch(opener, file_request, declared_size + 1)
+    candidate_urls = [
+        files[0]["url"],
+        files[0]["url"].replace("https://", "http://", 1),
+        files[0]["url"].replace(
+            "https://flowrepository.org/",
+            "https://flowrepository.compbio.cs.cmu.edu/",
+            1,
+        ),
+    ]
+    candidate_results = []
+    selected = None
+    for candidate_url in candidate_urls:
+        candidate_opener, _ = make_opener()
+        try:
+            file_status, file_url, file_headers, prefix = fetch(
+                candidate_opener,
+                urllib.request.Request(candidate_url, headers={"User-Agent": USER_AGENT}),
+                declared_size + 1,
+            )
+            attempt = {
+                "url": candidate_url,
+                "status": file_status,
+                "final_url": file_url,
+                "content_type": file_headers.get("Content-Type"),
+                "content_length": file_headers.get("Content-Length"),
+                "bytes": len(prefix),
+                "md5": hashlib.md5(prefix).hexdigest(),
+                "fcs_header": prefix[:6].decode("ascii", errors="replace"),
+            }
+            if attempt["fcs_header"].startswith("FCS") and attempt["md5"] == files[0]["md5sum"]:
+                selected = (file_status, file_url, file_headers, prefix, candidate_url)
+        except (urllib.error.HTTPError, urllib.error.URLError) as error:
+            attempt = {"url": candidate_url, "error_type": type(error).__name__, "error": str(error)}
+        candidate_results.append(attempt)
+    if selected is None:
+        last = candidate_results[-1]
+        file_status = int(last.get("status", 0))
+        file_url = str(last.get("final_url", last["url"]))
+        file_headers = {}
+        prefix = b""
+        selected_url = last["url"]
+    else:
+        file_status, file_url, file_headers, prefix, selected_url = selected
 
     negative_status = None
     try:
@@ -129,7 +167,7 @@ def main() -> int:
             "session_cookie_count": len(cookies),
         },
         "file_probe": {
-            "url": files[0]["url"],
+            "url": selected_url,
             "status": file_status,
             "final_url": file_url,
             "content_type": file_headers.get("Content-Type"),
@@ -142,6 +180,7 @@ def main() -> int:
             "declared_md5": files[0]["md5sum"],
             "declared_bytes": declared_size,
             "fcs_header": prefix[:6].decode("ascii", errors="replace"),
+            "candidate_results": candidate_results,
         },
         "negative_control": {
             "nonexistent_experiment_http_status": negative_status,
