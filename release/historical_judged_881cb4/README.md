@@ -16,4 +16,3 @@ tags:
 # Reproduction: Beyond Euclidean Summaries: Online Change Point Detection for Distribution-Valued Data
 
 An open experiment logbook, published with [Trackio](https://github.com/gradio-app/trackio).
-
