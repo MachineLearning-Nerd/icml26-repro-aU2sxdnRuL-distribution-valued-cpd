@@ -22,7 +22,7 @@
   "acceptance": [
     "Six independently solved empirical OT problems match the known Brenier maps and radial norms to 1e-9.",
     "An independent Gram-matrix eigendecomposition reproduces eigenvalues, T2, and SPE within declared tolerances.",
-    "Identity-map, wrong-reference/nonoptimal-plan, and uncentered-MFPCA controls are all rejected.",
+    "Identity-map, wrong-reference/nonoptimal-plan, and unscaled-Hotelling controls are all rejected.",
     "The two-chart monitor alarms on at least 90 percent of the predeclared changed half."
   ]
 }

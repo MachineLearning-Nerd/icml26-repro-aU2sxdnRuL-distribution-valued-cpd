@@ -140,10 +140,11 @@ def controls(reference: np.ndarray, tangents: np.ndarray, fitted: dict[str, np.n
     components = np.asarray(fitted["components"])
     eigenvalues = np.asarray(fitted["eigenvalues"])
     k = int(fitted["k"])
-    uncentered_scores = features @ components[:k].T
-    uncentered_t2 = np.sum(uncentered_scores**2 / eigenvalues[:k], axis=1)
-    centered_t2 = np.asarray(fitted["t2"])
-    uncentered_gap = float(np.max(np.abs(uncentered_t2 - centered_t2)))
+    centered = features - features[:N0].mean(axis=0)
+    scores = centered @ components[:k].T
+    unscaled_score_energy = np.sum(scores**2, axis=1)
+    hotelling_t2 = np.asarray(fitted["t2"])
+    scaling_gap = float(np.max(np.abs(unscaled_score_energy - hotelling_t2)))
 
     return {
         "identity_map": {
@@ -158,9 +159,9 @@ def controls(reference: np.ndarray, tangents: np.ndarray, fitted: dict[str, np.n
             "suboptimality_gap": indexed_wrong - optimal_wrong,
             "rejected": indexed_wrong - optimal_wrong > 1e-3,
         },
-        "uncentered_mfpca": {
-            "t2_max_difference": uncentered_gap,
-            "rejected": uncentered_gap > 1e-3,
+        "unscaled_hotelling": {
+            "t2_max_difference": scaling_gap,
+            "rejected": scaling_gap > 1e-3,
         },
     }
 
