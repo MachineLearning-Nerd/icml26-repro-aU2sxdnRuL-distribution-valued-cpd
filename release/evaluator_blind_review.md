@@ -46,6 +46,13 @@ Files opened from canonical navigation, in order:
 
 No visibility cell was missing. The only scientific conclusion the reviewer could not establish was Claim 5's exact event-alignment claim; the current page correctly exposes that as `BLOCKED`, shows all required routes, and states the external data/configuration needed to unblock it.
 
-## Mandatory repeat after review changes
+## Pass 2 — repeat after review changes
 
-This record and its canonical links are the only review-driven additions. Publication remains blocked unless the child experiment reruns the same fixed command on HF `cpu-upgrade`, again emits `RELEASE_CANDIDATE_AUDIT` with verdict `PASS`, preserves the judged subset, and exits zero. The final publication candidate will record that second run before upload.
+- Git SHA: `9c6a7b7e28d1eb71f9604a8716baa7c81960b4fb`
+- HF CPU run: `cbd2b56e-466b-40a8-82e8-cc0d3b00e3a0`
+- Fixed command: `uv sync --frozen && uv run --frozen python scripts/run_campaign.py`
+- Result: `24 passed`; campaign runtime `866.714 s`; `RELEASE_CANDIDATE_AUDIT` verdict `PASS`
+- Candidate: 162 files, 143 text upload paths, all 21 judged files preserved as a subset, secret scan PASS
+- Candidate tree SHA-256: `52786756316286d4d9ce94ddb8d7307ac3f0061ddf1dc3ab7cd3aa7a37866da8`
+
+Pass 2 repeated the same 17-file canonical traversal after this review record and its links were added. It found no missing visibility cell and no new unverifiable conclusion. Claim 5 remained correctly `BLOCKED`; all other current verdicts remained unchanged. Publication is still gated on the final child rerunning the same full command and artifact audit with zero exit.

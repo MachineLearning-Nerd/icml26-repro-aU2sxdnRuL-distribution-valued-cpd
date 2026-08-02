@@ -40,11 +40,11 @@ Exact command on every node: `uv sync --frozen && uv run --frozen python scripts
 
 Environment: Python 3.12, one repository `.venv`, `pyproject.toml`, `uv.lock`, author commit `c5b1db4060e5081e5c487f91792dc18c17603fd0`. Selected hardware: Hugging Face `cpu-upgrade`, provider specification 8 vCPU/32 GB; the process affinity diagnostic reported 64 logical CPUs. No GPU was requested or used.
 
-Through the accepted cumulative candidate, 30 HF runs used 12,210 seconds (3 h 23 m 30 s) of listed wall time. At the official `cpu-upgrade` price of `$0.0005/min` (`$0.03/h`), the duration-based estimate is `$0.1018`; the blind-review child will be added before publication. Billing is provider-metered by minute, so this is an evidence-based estimate rather than an invoice.
+Through the completed second blind review, 31 HF runs used 13,163 seconds (3 h 39 m 23 s) of listed wall time. At the official `cpu-upgrade` price of `$0.0005/min` (`$0.03/h`), the duration-based estimate is `$0.1097`; the final publication-validation run is reported separately after it completes. Billing is provider-metered by minute, so this is an evidence-based estimate rather than an invoice.
 
 ## Evaluator-blind review
 
-The first review started only from the fresh candidate's `README.md` and `logbook.json`, then opened the 17 navigation files listed in the [downloadable review record](https://huggingface.co/spaces/DineshAI/repro-aU2sxdnRuL-distribution-valued-cpd/resolve/main/release/evaluator_blind_review.md). It found the current verifier, exact contract, code, inline numbers, raw evidence, checker, control, and limitation for every claim. No visibility cell was missing. Claim 5's exact scientific conclusion remained unverifiable and is therefore exposed as `BLOCKED`, not PASS. Publication is gated on a second clean HF traversal after these review additions.
+The first review started only from the fresh candidate's `README.md` and `logbook.json`, then opened the 17 navigation files listed in the [downloadable review record](https://huggingface.co/spaces/DineshAI/repro-aU2sxdnRuL-distribution-valued-cpd/resolve/main/release/evaluator_blind_review.md). It found the current verifier, exact contract, code, inline numbers, raw evidence, checker, control, and limitation for every claim. No visibility cell was missing. Claim 5's exact scientific conclusion remained unverifiable and is therefore exposed as `BLOCKED`, not PASS. A second clean HF traversal after the review additions also passed: run `cbd2b56e-466b-40a8-82e8-cc0d3b00e3a0`, 24 checks, 162 candidate files, 143 upload paths, and all 21 judged files preserved.
 
 ## Evidence paths
 
