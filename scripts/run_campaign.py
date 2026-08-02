@@ -67,7 +67,7 @@ def main() -> int:
         "upstream_git_sha": upstream_sha,
     }
     print("CAMPAIGN_COMPUTE " + json.dumps(metadata, sort_keys=True), flush=True)
-    result = subprocess.run([sys.executable, "-m", "pytest", "-q"], check=False)
+    result = subprocess.run([sys.executable, "-m", "pytest", "-q", "-s"], check=False)
     print(
         "CAMPAIGN_RESULT "
         + json.dumps(
