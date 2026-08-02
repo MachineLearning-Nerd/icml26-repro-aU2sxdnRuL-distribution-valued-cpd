@@ -11,6 +11,7 @@ import ssl
 import time
 import urllib.error
 import urllib.request
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 
@@ -18,6 +19,8 @@ ROOT = Path(__file__).resolve().parents[1]
 RAW = ROOT / ".openresearch" / "artifacts" / "claim4_flowcap" / "raw"
 RECORD_URL = "https://flowrepository.org/id/FR-FCM-ZZYA"
 DOWNLOAD_URL = "https://flowrepository.org/experiments/42/download_ziped_files"
+CLIENT_ID = "FlowRepositoryRyzJl74CNkUp1Kpb"
+API_URL = f"https://flowrepository.org/list/FR-FCM-ZZYA?client={CLIENT_ID}"
 USER_AGENT = "OpenResearch-IDD-reproduction/1.0 (paper 2602.07252)"
 
 
@@ -46,17 +49,35 @@ def main() -> int:
     aml_match = re.search(r"<th>[^<]*aml</th>\s*<td>(.*?)</td>", html, flags=re.I | re.S)
     aml_fcs = sorted(set(re.findall(r"\b\d{4}\.FCS\b", aml_match.group(1), flags=re.I))) if aml_match else []
 
-    range_request = urllib.request.Request(
-        DOWNLOAD_URL,
-        headers={"User-Agent": USER_AGENT, "Range": "bytes=0-65535"},
+    api_status, api_final_url, _, xml_bytes = fetch(
+        urllib.request.Request(API_URL, headers={"User-Agent": USER_AGENT}),
+        20_000_000,
     )
-    archive_status, archive_url, archive_headers, prefix = fetch(range_request, 65536)
+    root = ET.fromstring(xml_bytes)
+    files = []
+    for node in root.iter():
+        if node.tag.rsplit("}", 1)[-1] != "fcs-file":
+            continue
+        fields = {
+            child.tag.rsplit("}", 1)[-1]: (child.text or "").strip()
+            for child in node
+        }
+        if fields.get("file-name") and fields.get("url"):
+            files.append(fields)
+    if not files:
+        raise RuntimeError("official API returned no FCS file records")
+
+    range_request = urllib.request.Request(
+        files[0]["url"],
+        headers={"User-Agent": USER_AGENT, "Range": "bytes=0-1023"},
+    )
+    file_status, file_url, file_headers, prefix = fetch(range_request, 1024)
 
     negative_status = None
     try:
         fetch(
             urllib.request.Request(
-                "https://flowrepository.org/experiments/999999999/download_ziped_files",
+                files[0]["url"] + ".openresearch-missing-control",
                 headers={"User-Agent": USER_AGENT, "Range": "bytes=0-15"},
             ),
             16,
@@ -82,17 +103,27 @@ def main() -> int:
             "first_aml_file": aml_fcs[0] if aml_fcs else None,
             "last_aml_file": aml_fcs[-1] if aml_fcs else None,
         },
-        "archive_probe": {
-            "url": DOWNLOAD_URL,
-            "status": archive_status,
-            "final_url": archive_url,
-            "content_type": archive_headers.get("Content-Type"),
-            "content_length": archive_headers.get("Content-Length"),
-            "content_range": archive_headers.get("Content-Range"),
-            "accept_ranges": archive_headers.get("Accept-Ranges"),
+        "official_api": {
+            "url": API_URL,
+            "status": api_status,
+            "final_url": api_final_url,
+            "sha256": hashlib.sha256(xml_bytes).hexdigest(),
+            "fcs_records": len(files),
+            "total_declared_bytes": sum(int(item.get("file-size", 0)) for item in files),
+            "records_with_md5": sum(bool(item.get("md5sum")) for item in files),
+            "first_record": files[0],
+        },
+        "file_probe": {
+            "url": files[0]["url"],
+            "status": file_status,
+            "final_url": file_url,
+            "content_type": file_headers.get("Content-Type"),
+            "content_length": file_headers.get("Content-Length"),
+            "content_range": file_headers.get("Content-Range"),
+            "accept_ranges": file_headers.get("Accept-Ranges"),
             "prefix_bytes": len(prefix),
             "prefix_sha256": hashlib.sha256(prefix).hexdigest(),
-            "zip_signature": prefix[:4].hex(),
+            "fcs_header": prefix[:6].decode("ascii", errors="replace"),
         },
         "negative_control": {
             "nonexistent_experiment_http_status": negative_status,
@@ -108,7 +139,7 @@ def main() -> int:
         "limitations": [
             "This bounded route establishes primary data availability and labels; it does not test Claim 4 performance.",
             "TLS verification is disabled because the primary server currently presents a certificate chain rejected by the job image; SHA-256 and exact URLs are recorded.",
-            "Only the first 65,536 archive bytes are requested before the full acquisition route is chosen.",
+            "Only the first 1,024 bytes of one directly addressed FCS file are requested before the full acquisition route is chosen.",
         ],
     }
     path = RAW / "probe.json"

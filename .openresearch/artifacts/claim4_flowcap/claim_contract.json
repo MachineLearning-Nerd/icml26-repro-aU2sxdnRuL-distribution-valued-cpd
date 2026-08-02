@@ -3,6 +3,6 @@
   "final_claim": "On the seven-dimensional FlowCAP-II dataset, IDD attains F1 approximately 0.75 and ARL1 approximately 1, while Hotelling T2 has F1 below 0.4.",
   "source_anchors": ["main0.tex:978-1000", "main0.tex:1751-1758", "main0.tex:1798-1812"],
   "paper_protocol": {"subjects": 359, "healthy_subjects": 316, "aml_subjects": 43, "dimension": 7, "cells_per_measurement": 2000, "phase_i_healthy": 300, "phase_ii_measurements": 300, "phase_ii_aml_fraction": 0.8},
-  "route_1_contract": "The primary repository must expose exactly 2,872 FCS files, including 344 AML-labelled panel files, and a downloadable ZIP payload.",
+  "route_1_contract": "The primary repository must expose exactly 2,872 FCS files, including 344 AML-labelled panel files, and its public API must provide a directly downloadable, MD5-addressed record for every file.",
   "route_1_verdict_scope": "Data availability only; never sufficient to mark the performance claim VERIFIED or FALSIFIED."
 }

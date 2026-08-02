@@ -19,10 +19,14 @@ def main() -> int:
         failures.append("official manifest does not match 359 subjects and 43 AML subjects with eight panels")
     if result["record"]["retrieval_status"] != 200:
         failures.append("official record unavailable")
-    if result["archive_probe"]["zip_signature"] not in {"504b0304", "504b0506", "504b0708"}:
-        failures.append("download endpoint did not return a ZIP archive")
+    if result["official_api"]["fcs_records"] != 2872:
+        failures.append("official API did not return all FCS records")
+    if result["official_api"]["records_with_md5"] != 2872:
+        failures.append("official API omitted per-file integrity hashes")
+    if not result["file_probe"]["fcs_header"].startswith("FCS"):
+        failures.append("direct file endpoint did not return an FCS payload")
     if not result["negative_control"]["rejected"]:
-        failures.append("nonexistent accession control was not rejected")
+        failures.append("nonexistent direct-file control was not rejected")
     print(json.dumps({"claim": 4, "probe_verifier": "PASS" if not failures else "FAIL", "failures": failures}, sort_keys=True))
     return int(bool(failures))
 
