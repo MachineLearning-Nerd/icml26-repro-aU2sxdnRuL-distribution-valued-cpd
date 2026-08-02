@@ -18,7 +18,7 @@ ICML 2026 paper #30280 (`aU2sxdnRuL`). This is a CPU-upgrade-first audit of the 
 
 ```bash
 ./scripts/bootstrap_reproduction.sh
-.venv-repro/bin/python -m pytest -q
+uv run --frozen python scripts/run_campaign.py
 ```
 
 The bootstrap script clones the official upstream repository and verifies the exact commit before installing pinned Python dependencies. It intentionally does not claim to recreate unavailable R/funcharts, FlowCAP-II, or paper-era Reddit embedding artifacts.
