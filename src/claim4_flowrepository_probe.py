@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import hashlib
+import http.cookiejar
 import json
 import os
 import re
@@ -24,9 +25,17 @@ API_URL = f"https://flowrepository.org/list/FR-FCM-ZZYA?client={CLIENT_ID}"
 USER_AGENT = "OpenResearch-IDD-reproduction/1.0 (paper 2602.07252)"
 
 
-def fetch(request: urllib.request.Request, limit: int) -> tuple[int, str, dict[str, str], bytes]:
-    context = ssl._create_unverified_context()
-    with urllib.request.urlopen(request, timeout=120, context=context) as response:
+def make_opener() -> tuple[urllib.request.OpenerDirector, http.cookiejar.CookieJar]:
+    cookies = http.cookiejar.CookieJar()
+    opener = urllib.request.build_opener(
+        urllib.request.HTTPCookieProcessor(cookies),
+        urllib.request.HTTPSHandler(context=ssl._create_unverified_context()),
+    )
+    return opener, cookies
+
+
+def fetch(opener: urllib.request.OpenerDirector, request: urllib.request.Request, limit: int) -> tuple[int, str, dict[str, str], bytes]:
+    with opener.open(request, timeout=120) as response:
         body = response.read(limit)
         return response.status, response.geturl(), dict(response.headers.items()), body
 
@@ -40,7 +49,9 @@ def available_cpus() -> int:
 def main() -> int:
     started = time.monotonic()
     RAW.mkdir(parents=True, exist_ok=True)
+    opener, cookies = make_opener()
     status, final_url, headers, html_bytes = fetch(
+        opener,
         urllib.request.Request(RECORD_URL, headers={"User-Agent": USER_AGENT}),
         2_000_000,
     )
@@ -50,6 +61,7 @@ def main() -> int:
     aml_fcs = sorted(set(re.findall(r"\b\d{4}\.FCS\b", aml_match.group(1), flags=re.I))) if aml_match else []
 
     api_status, api_final_url, _, xml_bytes = fetch(
+        opener,
         urllib.request.Request(API_URL, headers={"User-Agent": USER_AGENT}),
         20_000_000,
     )
@@ -71,11 +83,12 @@ def main() -> int:
         files[0]["url"],
         headers={"User-Agent": USER_AGENT, "Range": "bytes=0-1023"},
     )
-    file_status, file_url, file_headers, prefix = fetch(range_request, 1024)
+    file_status, file_url, file_headers, prefix = fetch(opener, range_request, 1024)
 
     negative_status = None
     try:
         fetch(
+            opener,
             urllib.request.Request(
                 files[0]["url"] + ".openresearch-missing-control",
                 headers={"User-Agent": USER_AGENT, "Range": "bytes=0-15"},
@@ -112,6 +125,7 @@ def main() -> int:
             "total_declared_bytes": sum(int(item.get("file-size", 0)) for item in files),
             "records_with_md5": sum(bool(item.get("md5sum")) for item in files),
             "first_record": files[0],
+            "session_cookie_count": len(cookies),
         },
         "file_probe": {
             "url": files[0]["url"],
