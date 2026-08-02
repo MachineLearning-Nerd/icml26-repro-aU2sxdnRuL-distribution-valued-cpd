@@ -2,6 +2,6 @@
   "claim_id": 5,
   "claim": "On Reddit vaccine-comment daily embeddings (d=20), IDD alarms align with policy shocks while Euclidean-summary and moment baselines drift or alarm mostly away from events.",
   "paper_outputs": {"idd_spe_alarm_count": 5, "hotelling_alarm_count": 13, "idd_dates": ["2021-02-16", "2021-03-02", "2021-03-27", "2021-04-30", "2021-05-03"]},
-  "protocol": {"comments_only": true, "minimum_comments_per_day": 30, "embedding": "all-MiniLM-L6-v2@1110a243fdf4706b3f48f1d95db1a4f5529b4d41", "embedding_dimension": 384, "pca_dimension": 20, "phase1_days": 50, "phase2_days": 50, "alpha": 0.05},
+  "protocol": {"record_interpretation": "all textual records including root posts", "minimum_comments_per_day": 30, "embedding": "all-MiniLM-L6-v2@1110a243fdf4706b3f48f1d95db1a4f5529b4d41", "embedding_dimension": 384, "pca_dimension": 20, "phase1_days": 50, "phase2_days": 50, "alpha": 0.05},
   "verification_rule": "VERIFIED only if the exact five IDD dates and Hotelling count 13 are independently reproduced; otherwise BLOCKED pending parity with the missing author core."
 }

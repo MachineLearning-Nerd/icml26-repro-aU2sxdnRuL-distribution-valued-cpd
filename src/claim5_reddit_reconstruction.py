@@ -45,7 +45,8 @@ def load_windows() -> tuple[list[pd.Timestamp], list[list[str]], list[int]]:
     frame = pd.read_csv(DATA)
     frame["created_utc"] = pd.to_datetime(frame["created_utc"], utc=True, errors="coerce")
     frame = frame[frame["created_utc"].notna()].copy()
-    frame = frame[~frame["Parent"].astype(str).eq("1")].copy()
+    # Route 2 interprets "user comments" as every textual record in the cited corpus,
+    # including root discussion posts. Route 1 tested replies only and yielded 38+48 days.
     frame["text"] = frame["text"].astype(str)
     frame = frame[~frame["text"].str.lower().isin(["[deleted]", "[removed]", "nan"])]
     frame = frame[frame["text"].str.len() > 0]
@@ -218,6 +219,7 @@ def main() -> int:
             "barycenter_support": 64,
             "ot_solver": "exact EMD with barycentric projection",
             "threshold_quantile": 0.95,
+            "record_interpretation": "all textual records, including root posts",
             **representation,
         },
         "limits": {"spe": spe_limit, "t2": t2_limit, "hotelling_t2": hotelling_limit},
@@ -238,6 +240,7 @@ def main() -> int:
             "The 64-support free Wasserstein barycenter is deterministic but its support size is not specified in the paper.",
             "PCA is fit only on Phase I to prevent monitoring leakage; the paper does not state the PCA fitting scope.",
             "This route implements IDD and the Hotelling moment baseline, not unreleased F-CPD, NEWMA, or Scan-B configurations.",
+            "This route includes root posts; the paper says user comments but does not state how the dataset's Parent field was used.",
         ],
     }
     RAW.mkdir(parents=True, exist_ok=True)
