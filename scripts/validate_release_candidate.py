@@ -44,7 +44,7 @@ def committed_bytes(relative: str) -> bytes:
 
 
 def copy_candidate(judged: Path, candidate: Path, entries: list[dict]) -> None:
-    shutil.copytree(judged, candidate, ignore=shutil.ignore_patterns(".cache"))
+    shutil.copytree(judged, candidate, dirs_exist_ok=True, ignore=shutil.ignore_patterns(".cache"))
     for entry in entries:
         content = committed_bytes(entry["source"])
         content.decode("utf-8")
