@@ -32,14 +32,14 @@ def _(plt):
     paper = 1.0
     generous_bound = 1.5
     observed = [2.6314, 2.8383, 2.8383, 3.3742, 3.3742, 3.3742]
-    fig, ax = plt.subplots(figsize=(9, 3.3))
-    ax.scatter(observed, [1] * len(observed), s=85, color="#0891b2", label="digitized IDD markers")
-    ax.axvline(paper, color="#e11d48", linestyle="--", label="paper: ≈1")
-    ax.axvline(generous_bound, color="#d97706", linestyle=":", label="predeclared upper tolerance")
-    ax.set(xlabel="ARL₁ (paper's logarithmic-axis calibration)", yticks=[], xlim=(0.7, 3.7), title="Claim 4 — literal ARL₁ statement")
-    ax.legend(loc="upper left")
-    fig.tight_layout()
-    fig
+    _fig_claim4, _ax_claim4 = plt.subplots(figsize=(9, 3.3))
+    _ax_claim4.scatter(observed, [1] * len(observed), s=85, color="#0891b2", label="digitized IDD markers")
+    _ax_claim4.axvline(paper, color="#e11d48", linestyle="--", label="paper: ≈1")
+    _ax_claim4.axvline(generous_bound, color="#d97706", linestyle=":", label="predeclared upper tolerance")
+    _ax_claim4.set(xlabel="ARL₁ (paper's logarithmic-axis calibration)", yticks=[], xlim=(0.7, 3.7), title="Claim 4 — literal ARL₁ statement")
+    _ax_claim4.legend(loc="upper left")
+    _fig_claim4.tight_layout()
+    _fig_claim4
     return generous_bound, observed, paper
 
 
@@ -80,15 +80,15 @@ def _(mo, plt):
     labels = ["corrected bound", "observed", "literal claim"]
     values = [234.3887, 241.4, 251.0]
     colors = ["#16a34a", "#0891b2", "#e11d48"]
-    fig, ax = plt.subplots(figsize=(8.5, 3.5))
-    ax.barh(labels, values, color=colors)
-    ax.set_xlim(225, 255)
-    ax.set_xlabel("global ARL proxy")
-    ax.set_title("Claim 2 — the observed value contradicts the literal bound")
+    _fig_claim2, _ax_claim2 = plt.subplots(figsize=(8.5, 3.5))
+    _ax_claim2.barh(labels, values, color=colors)
+    _ax_claim2.set_xlim(225, 255)
+    _ax_claim2.set_xlabel("global ARL proxy")
+    _ax_claim2.set_title("Claim 2 — the observed value contradicts the literal bound")
     for index, value in enumerate(values):
-        ax.text(value + 0.35, index, f"{value:.2f}", va="center")
-    fig.tight_layout()
-    mo.vstack([fig, mo.md("4,000 seeded null streams; the half-threshold control falls to **207.56**.")])
+        _ax_claim2.text(value + 0.35, index, f"{value:.2f}", va="center")
+    _fig_claim2.tight_layout()
+    mo.vstack([_fig_claim2, mo.md("4,000 seeded null streams; the half-threshold control falls to **207.56**.")])
     return
 
 
