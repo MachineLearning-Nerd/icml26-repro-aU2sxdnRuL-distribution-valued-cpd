@@ -1,0 +1,13 @@
+{
+  "claim_id": 4,
+  "claim": "On FlowCAP-II (d=7), IDD has F1 approximately 0.75 and ARL1 approximately 1, versus Hotelling T2 F1 below 0.4.",
+  "domain": "The camera-ready FlowCAP-II experiment and the original figure shipped in arXiv source 2602.07252.",
+  "assumptions": [
+    "The original PNG is the numerical display supporting the prose claim.",
+    "The right ARL1 axis is logarithmic, exactly as labelled.",
+    "A value called approximately 1 must be no greater than 1.5, a deliberately generous 50% tolerance."
+  ],
+  "quantifier": "Every displayed IDD operating point is described as near-immediate, and the caption claims lowest ARL1 across the full ARL0 range.",
+  "falsification_rule": "FALSIFIED if every displayed IDD ARL1 marker exceeds 1.5 after calibrated log-axis digitization.",
+  "scope_limit": "This can falsify the paper's reported numerical clause but cannot verify the unreleased raw-data pipeline."
+}
