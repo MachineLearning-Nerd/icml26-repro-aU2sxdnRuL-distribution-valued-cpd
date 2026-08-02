@@ -173,6 +173,7 @@ def fit_barycenter(phase1: list[np.ndarray]) -> tuple[np.ndarray, np.ndarray, di
     initial_loss = None
     final_loss = None
     model.train()
+    training_started = time.monotonic()
     for epoch, temperature in enumerate(temperatures):
         labels = torch.randint(0, len(phase1), (2048,))
         samples = torch.empty((2048, dimension), dtype=torch.float32)
@@ -206,7 +207,7 @@ def fit_barycenter(phase1: list[np.ndarray]) -> tuple[np.ndarray, np.ndarray, di
         if initial_loss is None:
             initial_loss = loss_value
         final_loss = loss_value
-        if epoch % 50 == 0 or epoch == 499:
+        if epoch % 10 == 0 or epoch == 499:
             print(
                 "CLAIM5_CNF_TRAIN "
                 + json.dumps(
@@ -216,6 +217,7 @@ def fit_barycenter(phase1: list[np.ndarray]) -> tuple[np.ndarray, np.ndarray, di
                         "l2": epoch_l2,
                         "loss": loss_value,
                         "temperature": float(temperature),
+                        "elapsed_seconds": round(time.monotonic() - training_started, 3),
                     },
                     sort_keys=True,
                 ),
@@ -344,7 +346,8 @@ def main() -> int:
     started = time.monotonic()
     np.random.seed(SEED)
     torch.manual_seed(SEED)
-    torch.set_num_threads(min(32, available_cpus()))
+    torch.set_num_threads(min(4, available_cpus()))
+    torch.set_num_interop_threads(1)
     if md5(DATA) != EXPECTED_DATA_MD5:
         raise RuntimeError("Dataverse input MD5 changed")
     dates, text_windows, sizes = load_windows()
