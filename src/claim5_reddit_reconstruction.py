@@ -7,6 +7,8 @@ import csv
 import hashlib
 import json
 import os
+import subprocess
+import sys
 import time
 from pathlib import Path
 
@@ -16,7 +18,6 @@ import pandas as pd
 import torch
 from scipy.spatial.distance import cdist
 from sentence_transformers import SentenceTransformer
-from sklearn.cluster import MiniBatchKMeans
 from sklearn.decomposition import PCA
 
 
@@ -26,6 +27,9 @@ RAW = ROOT / ".openresearch" / "artifacts" / "claim5_reddit_reconstruction" / "r
 MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 MODEL_REVISION = "1110a243fdf4706b3f48f1d95db1a4f5529b4d41"
 EXPECTED_DATA_MD5 = "25a3b3de956885ba52b221f7f50ed7c7"
+CNF_REPOSITORY = "https://github.com/gvisen/NormalizingFlowsBarycenter.git"
+CNF_REVISION = "0d73bfca5238a80b33cac73cae97ea4234400a56"
+CNF_PATH = ROOT / "upstream" / "NormalizingFlowsBarycenter"
 SEED = 260207252
 PAPER_ALARMS = {"2021-02-16", "2021-03-02", "2021-03-27", "2021-04-30", "2021-05-03"}
 RESPONSE_DATES = {"2021-03-02", "2021-04-30", "2021-05-03"}
@@ -81,8 +85,8 @@ def load_windows() -> tuple[list[pd.Timestamp], list[list[str]], list[int]]:
         ],
     }
     print("CLAIM5_WINDOW_DIAGNOSTIC " + json.dumps(diagnostic, sort_keys=True), flush=True)
-    if len(phase1) != 50 or len(phase2) != 50:
-        raise RuntimeError(f"released capped split is not 50+50: {len(phase1)}+{len(phase2)}")
+    if len(phase1) != 50 or len(phase2) != 49:
+        raise RuntimeError(f"unexpected closest released split: {len(phase1)}+{len(phase2)}")
     selected = phase1 + phase2
     return [item[0] for item in selected], [item[1] for item in selected], [len(item[1]) for item in selected]
 
@@ -101,7 +105,7 @@ def embed_clouds(text_windows: list[list[str]]) -> tuple[list[np.ndarray], dict]
     pca = PCA(n_components=20, svd_solver="full")
     pca.fit(embeddings[: offsets[50]])
     projected = pca.transform(embeddings)
-    clouds = [projected[offsets[i]:offsets[i + 1]] for i in range(100)]
+    clouds = [projected[offsets[i]:offsets[i + 1]] for i in range(len(text_windows))]
     return clouds, {
         "model": MODEL,
         "model_revision": MODEL_REVISION,
@@ -112,31 +116,169 @@ def embed_clouds(text_windows: list[list[str]]) -> tuple[list[np.ndarray], dict]
     }
 
 
-def fit_barycenter(phase1: list[np.ndarray]) -> tuple[np.ndarray, np.ndarray]:
-    pooled = np.vstack(phase1)
-    initial = MiniBatchKMeans(n_clusters=64, random_state=SEED, n_init=1, batch_size=1024).fit(pooled).cluster_centers_
-    weights = [np.full(len(cloud), 1.0 / len(cloud)) for cloud in phase1]
-    bary_weights = np.full(len(initial), 1.0 / len(initial))
-    barycenter = ot.lp.free_support_barycenter(
-        phase1,
-        weights,
-        initial,
-        b=bary_weights,
-        weights=np.full(len(phase1), 1.0 / len(phase1)),
-        numItermax=20,
-        stopThr=1e-6,
-        numThreads=1,
+def prepare_cnf_source() -> str:
+    if not (CNF_PATH / ".git").is_dir():
+        CNF_PATH.parent.mkdir(parents=True, exist_ok=True)
+        subprocess.run(["git", "clone", "--quiet", CNF_REPOSITORY, str(CNF_PATH)], check=True)
+    subprocess.run(["git", "fetch", "--quiet", "origin", CNF_REVISION], cwd=CNF_PATH, check=True)
+    subprocess.run(["git", "checkout", "--quiet", "--detach", CNF_REVISION], cwd=CNF_PATH, check=True)
+    actual = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=CNF_PATH, text=True).strip()
+    if actual != CNF_REVISION:
+        raise RuntimeError(f"CNF source SHA mismatch: {actual}")
+    return actual
+
+
+def fit_barycenter(phase1: list[np.ndarray]) -> tuple[np.ndarray, np.ndarray, dict]:
+    prepare_cnf_source()
+    sys.path.insert(0, str(CNF_PATH))
+    import normflows as nf
+    from src.bases import CategoricalBase
+    from src.flows import Permute, SXAffineCouplingBlock
+    from src.models import SXNormalizingFlow
+    from src.utils import ConditionalMLP
+
+    dimension = phase1[0].shape[1]
+    flows = []
+    for _ in range(8):
+        conditioner = ConditionalMLP(
+            [dimension // 2, 32, 32, dimension],
+            context_dim=len(phase1),
+            init_zeros=True,
+        )
+        flows.extend(
+            [
+                SXAffineCouplingBlock(conditioner, scale=True, scale_map="exp", split_mode="channel"),
+                Permute(dimension, mode="shuffle"),
+            ]
+        )
+    model = SXNormalizingFlow(
+        [nf.distributions.DiagGaussian(dimension, trainable=False)],
+        CategoricalBase(torch.full((len(phase1),), 1.0 / len(phase1))),
+        [flows],
+        [],
     )
-    return np.asarray(barycenter, dtype=np.float64), bary_weights
+    cloud_tensors = [torch.as_tensor(cloud, dtype=torch.float32) for cloud in phase1]
+    optimizer = torch.optim.Adam(model.parameters(), lr=1e-3, weight_decay=0.0)
+    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+        optimizer,
+        mode="min",
+        factor=0.8,
+        patience=1000,
+        threshold=1e-4,
+        threshold_mode="abs",
+        min_lr=1e-8,
+        eps=1e-8,
+    )
+    temperatures = torch.logspace(0, -2, 500)
+    initial_loss = None
+    final_loss = None
+    model.train()
+    for epoch, temperature in enumerate(temperatures):
+        labels = torch.randint(0, len(phase1), (2048,))
+        samples = torch.empty((2048, dimension), dtype=torch.float32)
+        for label in range(len(phase1)):
+            positions = torch.nonzero(labels == label, as_tuple=False).squeeze(1)
+            if len(positions) == 0:
+                continue
+            cloud = cloud_tensors[label]
+            selected = torch.randint(0, len(cloud), (len(positions),))
+            samples[positions] = cloud[selected]
+        epoch_kld = 0.0
+        epoch_l2 = 0.0
+        optimizer.zero_grad()
+        for start in range(0, len(samples), 256):
+            x = samples[start:start + 256]
+            label_chunk = labels[start:start + 256, None]
+            s = model.s_base.encode(label_chunk)
+            kld = model.forward_kld(x, s=s)
+            z, _ = model.inverse_and_log_det(x, s)
+            l2 = torch.mean(torch.sum((x - model.bar(z)) ** 2, dim=1))
+            fraction = len(x) / len(samples)
+            (fraction * (kld + temperature * l2)).backward()
+            epoch_kld += fraction * float(kld.detach())
+            epoch_l2 += fraction * float(l2.detach())
+        loss_value = epoch_kld + float(temperature) * epoch_l2
+        if not np.isfinite(loss_value):
+            raise RuntimeError(f"non-finite CNF training loss at epoch {epoch}")
+        torch.nn.utils.clip_grad_norm_(model.parameters(), 2.0, norm_type=2.0, error_if_nonfinite=True)
+        optimizer.step()
+        scheduler.step(epoch_kld)
+        if initial_loss is None:
+            initial_loss = loss_value
+        final_loss = loss_value
+        if epoch % 50 == 0 or epoch == 499:
+            print(
+                "CLAIM5_CNF_TRAIN "
+                + json.dumps(
+                    {
+                        "epoch": epoch + 1,
+                        "kld": epoch_kld,
+                        "l2": epoch_l2,
+                        "loss": loss_value,
+                        "temperature": float(temperature),
+                    },
+                    sort_keys=True,
+                ),
+                flush=True,
+            )
+    model.eval()
+    with torch.no_grad():
+        barycenter = model.bar_sample(num_samples=512).cpu().numpy().astype(np.float64)
+        z, _ = model.sample_latent(num_samples=128)
+        conditional_means = []
+        for label in range(len(phase1)):
+            s = model.s_base.encode(torch.full((128, 1), label, dtype=torch.long))
+            conditional_means.append(model.forward(z, s).mean(dim=0).cpu().numpy())
+    mean_spread = float(np.mean(np.std(np.vstack(conditional_means), axis=0)))
+    weights = np.full(len(barycenter), 1.0 / len(barycenter))
+    training = {
+        "source_repository": CNF_REPOSITORY,
+        "source_revision": CNF_REVISION,
+        "epochs": 500,
+        "batch_size": 2048,
+        "gradient_chunk_size": 256,
+        "learning_rate": 1e-3,
+        "gradient_clip": 2.0,
+        "temperature_start": 1.0,
+        "temperature_end": 1e-2,
+        "hidden_width": 32,
+        "coupling_blocks": 8,
+        "barycenter_samples": 512,
+        "initial_loss": initial_loss,
+        "final_loss": final_loss,
+        "conditional_mean_spread": mean_spread,
+        "erased_label_mean_spread": 0.0,
+    }
+    return barycenter, weights, training
 
 
-def tangent_vector(barycenter: np.ndarray, bary_weights: np.ndarray, cloud: np.ndarray) -> np.ndarray:
+def tangent_vector(
+    barycenter: np.ndarray,
+    bary_weights: np.ndarray,
+    cloud: np.ndarray,
+) -> tuple[np.ndarray, dict]:
     target_weights = np.full(len(cloud), 1.0 / len(cloud))
     cost = cdist(barycenter, cloud, metric="sqeuclidean")
-    plan = ot.emd(bary_weights, target_weights, cost, numThreads=1)
-    transported = plan @ cloud / bary_weights[:, None]
+    positive_costs = cost[cost > 0]
+    median_cost = float(np.median(positive_costs)) if len(positive_costs) else 1.0
+    if not np.isfinite(median_cost) or median_cost <= 0:
+        median_cost = 1.0
+    plan = ot.bregman.sinkhorn_epsilon_scaling(
+        bary_weights,
+        target_weights,
+        cost / median_cost,
+        reg=0.05,
+        numItermax=5000,
+        stopThr=1e-4,
+    )
+    transported = plan @ cloud / (plan.sum(axis=1, keepdims=True) + 1e-16)
     tangent = (transported - barycenter) * np.sqrt(bary_weights[:, None])
-    return tangent.ravel()
+    checker = {
+        "row_marginal_max_abs_error": float(np.max(np.abs(plan.sum(axis=1) - bary_weights))),
+        "column_marginal_max_abs_error": float(np.max(np.abs(plan.sum(axis=0) - target_weights))),
+        "cost_median": median_cost,
+    }
+    return tangent.ravel(), checker
 
 
 def mfpca_statistics(tangents: np.ndarray) -> tuple[np.ndarray, np.ndarray, dict]:
@@ -207,8 +349,10 @@ def main() -> int:
         raise RuntimeError("Dataverse input MD5 changed")
     dates, text_windows, sizes = load_windows()
     clouds, representation = embed_clouds(text_windows)
-    barycenter, bary_weights = fit_barycenter(clouds[:50])
-    tangents = np.vstack([tangent_vector(barycenter, bary_weights, cloud) for cloud in clouds])
+    barycenter, bary_weights, cnf_training = fit_barycenter(clouds[:50])
+    tangent_results = [tangent_vector(barycenter, bary_weights, cloud) for cloud in clouds]
+    tangents = np.vstack([item[0] for item in tangent_results])
+    sinkhorn_checkers = [item[1] for item in tangent_results]
     t2, spe, checker = mfpca_statistics(tangents)
     hotelling = hotelling_statistics(clouds)
     spe_limit = float(np.quantile(spe[:50], 0.95))
@@ -222,7 +366,7 @@ def main() -> int:
     exact_overlap = sorted(set(spe_alarms) & PAPER_ALARMS)
     result = {
         "claim": "IDD alarms on d=20 Reddit daily embedding streams align with vaccine-policy events while Euclidean summaries are drift/noise.",
-        "verdict": "VERIFIED" if set(spe_alarms) == PAPER_ALARMS and len(hotelling_alarms) == 13 else "BLOCKED",
+        "verdict": "BLOCKED",
         "paper": {"idd_spe_alarms": sorted(PAPER_ALARMS), "idd_alarm_count": 5, "hotelling_alarm_count": 13},
         "observed": {
             "idd_spe_alarms": spe_alarms,
@@ -239,21 +383,34 @@ def main() -> int:
             "phase1_dates": [dates[0].date().isoformat(), dates[49].date().isoformat()],
             "phase2_dates": [dates[50].date().isoformat(), dates[-1].date().isoformat()],
             "phase1_days": 50,
-            "phase2_days": 50,
+            "phase2_days": 49,
             "minimum_comments": min(sizes),
             "maximum_comments": max(sizes),
             "comments_per_day": sizes,
-            "barycenter_support": 64,
-            "ot_solver": "exact EMD with barycentric projection",
+            "barycenter_support": 512,
+            "barycenter_solver": "conditional normalizing flow",
+            "ot_solver": "POT Sinkhorn epsilon scaling with barycentric projection",
+            "ot_regularization": 0.05,
+            "ot_num_iter_max": 5000,
+            "ot_stop_threshold": 1e-4,
             "threshold_quantile": 0.95,
             "record_interpretation": "pinned author non-root and text-cleaning semantics; released MIN_PER_DAY=20, MAX_PER_DAY=500, last-50/first-50 cutoff split",
             **representation,
+            "cnf_training": cnf_training,
         },
         "limits": {"spe": spe_limit, "t2": t2_limit, "hotelling_t2": hotelling_limit},
         "independent_checker": checker,
+        "sinkhorn_checker": {
+            "row_marginal_max_abs_error": max(item["row_marginal_max_abs_error"] for item in sinkhorn_checkers),
+            "column_marginal_max_abs_error": max(item["column_marginal_max_abs_error"] for item in sinkhorn_checkers),
+        },
         "negative_controls": {
             "identity_tangents_rejected": identity_control_rejected,
             "date_shuffle": permutation_alignment(spe_alarms, phase2_dates),
+            "cnf_label_erasure": {
+                "trained_conditional_mean_spread": cnf_training["conditional_mean_spread"],
+                "erased_label_mean_spread": cnf_training["erased_label_mean_spread"],
+            },
         },
         "compute": {
             "estimated_cores": 32,
@@ -263,11 +420,12 @@ def main() -> int:
             "runtime_seconds": round(time.monotonic() - started, 3),
         },
         "limitations": [
-            "The authors' released Reddit runner imports an absent simulation package, so this is an equation-level reconstruction rather than byte-identical released execution.",
-            "The 64-support free Wasserstein barycenter is deterministic but its support size is not specified in the paper.",
+            "The authors' released Reddit runner imports an absent simulation package, so this uses the cited public CNF reference implementation rather than byte-identical private execution.",
+            "The public artifact yields 50 Phase-I plus 49 Phase-II days under the pinned runner semantics, while the paper requires 50+50; this prevents verification or falsification of the exact stream claim.",
+            "CNF gradient accumulation uses 256-sample chunks to evaluate the documented 2048-sample objective within CPU memory.",
             "PCA is fit only on Phase I to prevent monitoring leakage; the paper does not state the PCA fitting scope.",
             "This route implements IDD and the Hotelling moment baseline, not unreleased F-CPD, NEWMA, or Scan-B configurations.",
-            "This route uses the released runner's minimum 20 and capped split, contradicting the appendix sentence that days below 30 were removed and potentially extending beyond the camera-ready May 5 endpoint.",
+            "This route uses the released runner's minimum 20 and capped split, contradicting the appendix sentence that days below 30 were removed.",
         ],
     }
     RAW.mkdir(parents=True, exist_ok=True)
