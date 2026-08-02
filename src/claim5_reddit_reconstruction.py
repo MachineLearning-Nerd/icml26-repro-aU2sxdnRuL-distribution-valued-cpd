@@ -45,10 +45,10 @@ def load_windows() -> tuple[list[pd.Timestamp], list[list[str]], list[int]]:
     frame = pd.read_csv(DATA)
     frame["created_utc"] = pd.to_datetime(frame["created_utc"], utc=True, errors="coerce")
     frame = frame[frame["created_utc"].notna()].copy()
-    # Route 4 follows the released runner's reply filter and capped split.
+    # Route 5 matches the released runner's text cleaning and capped split.
     frame = frame[~frame["Parent"].astype(str).eq("1")].copy()
     frame["text"] = frame["text"].astype(str)
-    frame = frame[~frame["text"].str.lower().isin(["[deleted]", "[removed]", "nan"])]
+    frame = frame[~frame["text"].str.lower().isin(["[deleted]", "[removed]"])]
     frame = frame[frame["text"].str.len() > 0]
     frame["day"] = frame["created_utc"].dt.floor("D")
     rng = np.random.default_rng(0)
@@ -65,6 +65,22 @@ def load_windows() -> tuple[list[pd.Timestamp], list[list[str]], list[int]]:
     cutoff = pd.Timestamp("2021-01-31", tz="UTC")
     phase1 = [(d, texts) for d, texts in groups if d < cutoff][-50:]
     phase2 = [(d, texts) for d, texts in groups if d >= cutoff][:50]
+    camera_start = pd.Timestamp("2020-12-02", tz="UTC")
+    camera_end = pd.Timestamp("2021-05-05", tz="UTC")
+    retained_dates = {day for day, _ in groups}
+    diagnostic = {
+        "record_interpretation": "pinned author non-root and text-cleaning semantics",
+        "phase1_count": len(phase1),
+        "phase2_count": len(phase2),
+        "phase1_range": [phase1[0][0].date().isoformat(), phase1[-1][0].date().isoformat()] if phase1 else [],
+        "phase2_range": [phase2[0][0].date().isoformat(), phase2[-1][0].date().isoformat()] if phase2 else [],
+        "missing_camera_ready_dates": [
+            day.date().isoformat()
+            for day in pd.date_range(camera_start, camera_end, freq="D")
+            if day not in retained_dates
+        ],
+    }
+    print("CLAIM5_WINDOW_DIAGNOSTIC " + json.dumps(diagnostic, sort_keys=True), flush=True)
     if len(phase1) != 50 or len(phase2) != 50:
         raise RuntimeError(f"released capped split is not 50+50: {len(phase1)}+{len(phase2)}")
     selected = phase1 + phase2
@@ -230,7 +246,7 @@ def main() -> int:
             "barycenter_support": 64,
             "ot_solver": "exact EMD with barycentric projection",
             "threshold_quantile": 0.95,
-            "record_interpretation": "non-root replies; released MIN_PER_DAY=20, MAX_PER_DAY=500, last-50/first-50 cutoff split",
+            "record_interpretation": "pinned author non-root and text-cleaning semantics; released MIN_PER_DAY=20, MAX_PER_DAY=500, last-50/first-50 cutoff split",
             **representation,
         },
         "limits": {"spe": spe_limit, "t2": t2_limit, "hotelling_t2": hotelling_limit},
