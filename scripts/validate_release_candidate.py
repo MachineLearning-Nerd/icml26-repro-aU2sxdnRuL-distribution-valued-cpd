@@ -7,6 +7,7 @@ import hashlib
 import json
 import re
 import shutil
+import subprocess
 import tempfile
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -33,11 +34,19 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def committed_bytes(relative: str) -> bytes:
+    return subprocess.run(
+        ["git", "show", f"HEAD:{relative}"],
+        cwd=ROOT,
+        check=True,
+        stdout=subprocess.PIPE,
+    ).stdout
+
+
 def copy_candidate(judged: Path, candidate: Path, entries: list[dict]) -> None:
     shutil.copytree(judged, candidate, ignore=shutil.ignore_patterns(".cache"))
     for entry in entries:
-        source = ROOT / entry["source"]
-        content = source.read_bytes()
+        content = committed_bytes(entry["source"])
         content.decode("utf-8")
         target = candidate / entry["target"]
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -90,7 +99,7 @@ def verify_no_secrets(entries: list[dict]) -> None:
         re.compile(r"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----"),
     ]
     for entry in entries:
-        text = (ROOT / entry["source"]).read_text()
+        text = committed_bytes(entry["source"]).decode("utf-8")
         for pattern in patterns:
             if pattern.search(text):
                 raise AssertionError(f"secret-like content in {entry['source']}")
@@ -108,7 +117,7 @@ def main() -> int:
     if set(recorded) != expected_sources:
         raise AssertionError("static upload manifest does not match allowlist sources")
     for relative, expected in recorded.items():
-        if sha256(ROOT / relative) != expected:
+        if hashlib.sha256(committed_bytes(relative)).hexdigest() != expected:
             raise AssertionError(f"static upload hash mismatch: {relative}")
     verify_no_secrets(entries)
 
@@ -170,7 +179,7 @@ def main() -> int:
             "navigation_files_opened": opened,
             "secret_scan": "PASS",
             "text_upload_files": len(entries),
-            "upload_manifest": {entry["target"]: sha256(ROOT / entry["source"]) for entry in entries},
+            "upload_manifest": {entry["target"]: sha256(candidate / entry["target"]) for entry in entries},
             "candidate_tree_sha256": hashlib.sha256(json.dumps(manifest, sort_keys=True).encode()).hexdigest(),
             "verdict": "PASS",
         }
