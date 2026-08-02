@@ -8,6 +8,7 @@ Key numbers: Claim 1's maximum checked OT identity error is `6.94e-18`; Claim 4'
 
 - [Illustrated technical report](reports/campaign/report.md)
 - [Self-contained marimo notebook](notebooks/reproduction.py)
+- [Evaluator-blind review record](release/evaluator_blind_review.md)
 - [Open in molab](https://molab.marimo.io/github/MachineLearning-Nerd/icml26-repro-aU2sxdnRuL-distribution-valued-cpd/blob/main/notebooks/reproduction.py)
 - [Canonical evaluator index](.trackio/logbook/pages/current-index/page.md)
 
@@ -38,7 +39,8 @@ uv sync --frozen && uv run --frozen python scripts/run_campaign.py
 | [`orx/claim-4-filled-diamond-morphology-verifier`](https://github.com/MachineLearning-Nerd/icml26-repro-aU2sxdnRuL-distribution-valued-cpd/tree/orx/claim-4-filled-diamond-morphology-verifier) | Independent figure-marker falsification | `uv sync --frozen && uv run --frozen python scripts/run_campaign.py` | FALSIFIED; 21 passing checks | HF cpu-upgrade (8 vCPU; affinity 64), 69 s |
 | [`orx/claim-5-official-artifact-schema-reconstruction`](https://github.com/MachineLearning-Nerd/icml26-repro-aU2sxdnRuL-distribution-valued-cpd/tree/orx/claim-5-official-artifact-schema-reconstruction) | Audit official TSV/CSV representations | `uv sync --frozen && uv run --frozen python scripts/run_campaign.py` | BLOCKED; official minimum-30 stream is 38+48 | HF cpu-upgrade (8 vCPU; affinity 64), 112 s |
 | [`orx/claim-5-cnf-sinkhorn-50-49-reconstruction`](https://github.com/MachineLearning-Nerd/icml26-repro-aU2sxdnRuL-distribution-valued-cpd/tree/orx/claim-5-cnf-sinkhorn-50-49-reconstruction) | Full closest-stream CNF/Sinkhorn/MFPCA route | `uv sync --frozen && uv run --frozen python scripts/run_campaign.py` | BLOCKED; 49/49 SPE alarms, 22 passing checks | HF cpu-upgrade (8 vCPU; affinity 64), 18m09s |
-| [`orx/cumulative-release-candidate`](https://github.com/MachineLearning-Nerd/icml26-repro-aU2sxdnRuL-distribution-valued-cpd/tree/orx/cumulative-release-candidate) | Cumulative science and publication gates | `uv sync --frozen && uv run --frozen python scripts/run_campaign.py` | Pending final gated run | HF cpu-upgrade, no GPU |
+| [`orx/cumulative-release-candidate`](https://github.com/MachineLearning-Nerd/icml26-repro-aU2sxdnRuL-distribution-valued-cpd/tree/orx/cumulative-release-candidate) | Cumulative science and publication gates | `uv sync --frozen && uv run --frozen python scripts/run_campaign.py` | PASS; 24 checks, protected subset and traversal complete | HF cpu-upgrade, no GPU, 18m28s |
+| [`orx/evaluator-blind-release-red-team`](https://github.com/MachineLearning-Nerd/icml26-repro-aU2sxdnRuL-distribution-valued-cpd/tree/orx/evaluator-blind-release-red-team) | Repeat canonical-entrypoint review after recorded red team | `uv sync --frozen && uv run --frozen python scripts/run_campaign.py` | Pending required clean rerun | HF cpu-upgrade, no GPU |
 
 ## Reproduce
 

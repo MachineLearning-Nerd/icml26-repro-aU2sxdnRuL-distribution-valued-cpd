@@ -13,7 +13,7 @@ Previous live judged score: **7/12**. Conservative forecast: **7–10/12**. Best
 | 5 | BLOCKED | [Reddit event alignment](#/current-claim-5) |
 | 6 | VERIFIED | [epsilon-isometry scaling](#/current-claim-6) |
 
-[Read the full release report](#/current-release-report).
+[Read the full release report](#/current-release-report), including the evaluator-blind review. The downloadable [blind-review record](https://huggingface.co/spaces/DineshAI/repro-aU2sxdnRuL-distribution-valued-cpd/resolve/main/release/evaluator_blind_review.md) lists every file opened and every conclusion that remained unverifiable.
 
 ## Evaluator-visible visibility matrix
 

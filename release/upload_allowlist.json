@@ -352,6 +352,10 @@
       "target": "release/protected_judged_manifest.json"
     },
     {
+      "source": "release/evaluator_blind_review.md",
+      "target": "release/evaluator_blind_review.md"
+    },
+    {
       "source": "release/upload_allowlist.json",
       "target": "release/upload_allowlist.json"
     },
