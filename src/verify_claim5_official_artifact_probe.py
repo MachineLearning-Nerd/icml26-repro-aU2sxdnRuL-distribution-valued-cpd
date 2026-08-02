@@ -19,8 +19,11 @@ def main() -> int:
     if set(result["representations"]) != expected:
         failures.append("not all official representations were audited")
     for name, item in result["representations"].items():
+        status = item["headers"]["http_status"]
         if len(item["sha256"]) != 64 or item["bytes"] <= 0:
             failures.append(f"{name} lacks a complete content record")
+        if status != 200 and not (400 <= status < 600 and item["headers"].get("error_reason")):
+            failures.append(f"{name} has an unrecorded HTTP outcome")
         if set(item["parses"]) != {"comma", "tab"}:
             failures.append(f"{name} lacks both delimiter controls")
     checker = result["independent_checker"]

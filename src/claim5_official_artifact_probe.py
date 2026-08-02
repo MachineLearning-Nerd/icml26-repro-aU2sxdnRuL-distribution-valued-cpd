@@ -8,6 +8,7 @@ import hashlib
 import io
 import json
 import os
+import urllib.error
 import urllib.request
 from pathlib import Path
 
@@ -27,10 +28,19 @@ USER_AGENT = "OpenResearch-Reproduction/1.0 (paper 2602.07252)"
 
 def download(url: str) -> tuple[bytes, dict[str, str]]:
     request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-    with urllib.request.urlopen(request, timeout=180) as response:
-        return response.read(), {
-            "content_type": response.headers.get("Content-Type", ""),
-            "content_disposition": response.headers.get("Content-Disposition", ""),
+    try:
+        with urllib.request.urlopen(request, timeout=180) as response:
+            return response.read(), {
+                "http_status": response.status,
+                "content_type": response.headers.get("Content-Type", ""),
+                "content_disposition": response.headers.get("Content-Disposition", ""),
+            }
+    except urllib.error.HTTPError as error:
+        return error.read(), {
+            "http_status": error.code,
+            "content_type": error.headers.get("Content-Type", ""),
+            "content_disposition": error.headers.get("Content-Disposition", ""),
+            "error_reason": str(error.reason),
         }
 
 
@@ -120,6 +130,19 @@ def main() -> int:
             "best_parse": best_name,
             "window_audit": audit,
         }
+        print(
+            "CLAIM5_OFFICIAL_FETCH "
+            + json.dumps(
+                {
+                    "representation": name,
+                    "http_status": headers["http_status"],
+                    "bytes": len(content),
+                    "sha256": representations[name]["sha256"],
+                },
+                sort_keys=True,
+            ),
+            flush=True,
+        )
 
     result = {
         "claim": 5,
