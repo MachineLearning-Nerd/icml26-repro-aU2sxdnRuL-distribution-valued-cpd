@@ -1,0 +1,31 @@
+{
+  "assignment_audits": [
+    {"absolute_error": 0.0, "hungarian_w2_squared": 0.07594290754394428, "identity_assignments": 300, "stream_index": 0, "tangent_l2_squared": 0.07594290754394428},
+    {"absolute_error": 6.938893903907228e-18, "hungarian_w2_squared": 0.04711222525414727, "identity_assignments": 300, "stream_index": 99, "tangent_l2_squared": 0.047112225254147266},
+    {"absolute_error": 0.0, "hungarian_w2_squared": 0.05861978544404727, "identity_assignments": 300, "stream_index": 299, "tangent_l2_squared": 0.05861978544404727},
+    {"absolute_error": 0.0, "hungarian_w2_squared": 0.04761040160378034, "identity_assignments": 300, "stream_index": 300, "tangent_l2_squared": 0.04761040160378034},
+    {"absolute_error": 0.0, "hungarian_w2_squared": 0.0371193861352781, "identity_assignments": 300, "stream_index": 449, "tangent_l2_squared": 0.0371193861352781},
+    {"absolute_error": 0.0, "hungarian_w2_squared": 0.23590921490571892, "identity_assignments": 300, "stream_index": 599, "tangent_l2_squared": 0.23590921490571892}
+  ],
+  "changed_half_alarm_rates": {"either": 0.9933333333333333, "spe": 0.3, "t2": 0.9733333333333334},
+  "compute": {"actual_available_cpus": 64, "estimated_cores": 8, "gpu_requested": false, "runtime_seconds": 27.92, "selected_flavor": "cpu-upgrade"},
+  "dimensions": 5,
+  "independent_checker": {"eigenvalue_max_abs_error": 1.0408340855860843e-17, "retained_components": 9, "spe_max_abs_error": 2.463307335887066e-16, "t2_max_abs_error": 1.3500311979441904e-13},
+  "limitations": ["This verifies the complete mechanism and exact equations, not the paper performance tables.", "The source distributions are controlled Gaussian affine pushforwards, not FlowCAP or Reddit data.", "This route reconstructs MFPCA from the paper equations; released R/funcharts parity is a separate route."],
+  "limits": {"alpha_each": 0.01, "spe": 0.008900127327655532, "t2": 20.544765708022126},
+  "map_family": "positive diagonal affine gradients of convex quadratics",
+  "negative_controls": {
+    "identity_map": {"identity_l2_squared": 0.0, "radial_identity_absolute_error": 0.0371193861352781, "rejected": true, "true_w2_squared": 0.0371193861352781},
+    "unscaled_hotelling": {"rejected": true, "t2_max_difference": 80.76046265300752},
+    "wrong_reference_indexed_plan": {"indexed_plan_cost": 7.090926859021368, "optimal_w2_squared": 1.1052986399431608, "rejected": true, "suboptimality_gap": 5.985628219078207}
+  },
+  "phase_i_distributions": 300,
+  "phase_ii_distributions": 300,
+  "points_per_distribution": 300,
+  "reference_continuum": "N(0, I_5), absolutely continuous with finite second moment",
+  "retained_components": 9,
+  "scope": "paper-scale multivariate mechanism audit",
+  "seed": 260207252,
+  "variance_explained": 0.9620243823934314,
+  "verdict": "VERIFIED"
+}
