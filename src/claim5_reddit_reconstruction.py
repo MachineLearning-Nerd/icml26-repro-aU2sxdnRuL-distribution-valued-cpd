@@ -27,7 +27,8 @@ DATA = RAW / "inputs" / "SummaryResults_Covid_Comments.tab"
 DATA_URL = "https://dataverse.harvard.edu/api/access/datafile/6430672"
 MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 MODEL_REVISION = "1110a243fdf4706b3f48f1d95db1a4f5529b4d41"
-EXPECTED_DATA_MD5 = "a87e5821d516f5195e45a2bd911495a5"
+EXPECTED_DATA_MD5 = "cc7b3dd51780192bc7eada321c76d95b"
+DATAVERSE_TABULAR_MD5 = "a87e5821d516f5195e45a2bd911495a5"
 SEED = 260207252
 PAPER_ALARMS = {"2021-02-16", "2021-03-02", "2021-03-27", "2021-04-30", "2021-05-03"}
 RESPONSE_DATES = {"2021-03-02", "2021-04-30", "2021-05-03"}
@@ -255,6 +256,7 @@ def main() -> int:
         },
         "protocol": {
             "input_md5": EXPECTED_DATA_MD5,
+            "dataverse_tabular_derivative_md5": DATAVERSE_TABULAR_MD5,
             "seed": SEED,
             "phase1_dates": [dates[0].date().isoformat(), dates[49].date().isoformat()],
             "phase2_dates": [dates[50].date().isoformat(), dates[-1].date().isoformat()],
