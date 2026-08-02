@@ -8,6 +8,7 @@ import hashlib
 import json
 import os
 import time
+import urllib.request
 from pathlib import Path
 
 import numpy as np
@@ -21,11 +22,12 @@ from sklearn.decomposition import PCA
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DATA = ROOT / "evidence" / "claim5_attempt1" / "SummaryResults_Covid_All.tab"
 RAW = ROOT / ".openresearch" / "artifacts" / "claim5_reddit_reconstruction" / "raw"
+DATA = RAW / "inputs" / "SummaryResults_Covid_Comments.tab"
+DATA_URL = "https://dataverse.harvard.edu/api/access/datafile/6430672"
 MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 MODEL_REVISION = "1110a243fdf4706b3f48f1d95db1a4f5529b4d41"
-EXPECTED_DATA_MD5 = "25a3b3de956885ba52b221f7f50ed7c7"
+EXPECTED_DATA_MD5 = "a87e5821d516f5195e45a2bd911495a5"
 SEED = 260207252
 PAPER_ALARMS = {"2021-02-16", "2021-03-02", "2021-03-27", "2021-04-30", "2021-05-03"}
 RESPONSE_DATES = {"2021-03-02", "2021-04-30", "2021-05-03"}
@@ -41,12 +43,29 @@ def md5(path: Path) -> str:
     return hashlib.md5(path.read_bytes()).hexdigest()
 
 
+def ensure_data() -> None:
+    if DATA.exists() and md5(DATA) == EXPECTED_DATA_MD5:
+        return
+    request = urllib.request.Request(
+        DATA_URL,
+        headers={"User-Agent": "OpenResearch-Reproduction/1.0 (paper 2602.07252)"},
+    )
+    with urllib.request.urlopen(request, timeout=120) as response:
+        content = response.read()
+    actual = hashlib.md5(content).hexdigest()
+    if actual != EXPECTED_DATA_MD5:
+        raise RuntimeError(f"official comments input MD5 mismatch: {actual}")
+    DATA.parent.mkdir(parents=True, exist_ok=True)
+    DATA.write_bytes(content)
+
+
 def load_windows() -> tuple[list[pd.Timestamp], list[list[str]], list[int]]:
     frame = pd.read_csv(DATA)
     frame["created_utc"] = pd.to_datetime(frame["created_utc"], utc=True, errors="coerce")
     frame = frame[frame["created_utc"].notna()].copy()
-    # Route 5 matches the released runner's text cleaning and capped split.
-    frame = frame[~frame["Parent"].astype(str).eq("1")].copy()
+    # Route 6 uses the official comments-only file and camera-ready filtering.
+    if "Parent" in frame:
+        frame = frame[~frame["Parent"].astype(str).eq("1")].copy()
     frame["text"] = frame["text"].astype(str)
     frame = frame[~frame["text"].str.lower().isin(["[deleted]", "[removed]"])]
     frame = frame[frame["text"].str.len() > 0]
@@ -54,7 +73,7 @@ def load_windows() -> tuple[list[pd.Timestamp], list[list[str]], list[int]]:
     rng = np.random.default_rng(0)
     groups = []
     for day, group in frame.groupby("day"):
-        if len(group) < 20:
+        if len(group) < 30:
             continue
         texts = group["text"].tolist()
         if len(texts) > 500:
@@ -62,14 +81,14 @@ def load_windows() -> tuple[list[pd.Timestamp], list[list[str]], list[int]]:
             texts = [texts[index] for index in selected]
         groups.append((day, texts))
     groups.sort(key=lambda item: item[0])
-    cutoff = pd.Timestamp("2021-01-31", tz="UTC")
-    phase1 = [(d, texts) for d, texts in groups if d < cutoff][-50:]
-    phase2 = [(d, texts) for d, texts in groups if d >= cutoff][:50]
     camera_start = pd.Timestamp("2020-12-02", tz="UTC")
+    cutoff = pd.Timestamp("2021-01-31", tz="UTC")
     camera_end = pd.Timestamp("2021-05-05", tz="UTC")
+    phase1 = [(d, texts) for d, texts in groups if camera_start <= d < cutoff]
+    phase2 = [(d, texts) for d, texts in groups if cutoff <= d <= camera_end]
     retained_dates = {day for day, _ in groups}
     diagnostic = {
-        "record_interpretation": "pinned author non-root and text-cleaning semantics",
+        "record_interpretation": "official Dataverse comments-only file; camera-ready minimum-30 fixed windows",
         "phase1_count": len(phase1),
         "phase2_count": len(phase2),
         "phase1_range": [phase1[0][0].date().isoformat(), phase1[-1][0].date().isoformat()] if phase1 else [],
@@ -82,7 +101,7 @@ def load_windows() -> tuple[list[pd.Timestamp], list[list[str]], list[int]]:
     }
     print("CLAIM5_WINDOW_DIAGNOSTIC " + json.dumps(diagnostic, sort_keys=True), flush=True)
     if len(phase1) != 50 or len(phase2) != 50:
-        raise RuntimeError(f"released capped split is not 50+50: {len(phase1)}+{len(phase2)}")
+        raise RuntimeError(f"camera-ready official-comments stream is not 50+50: {len(phase1)}+{len(phase2)}")
     selected = phase1 + phase2
     return [item[0] for item in selected], [item[1] for item in selected], [len(item[1]) for item in selected]
 
@@ -203,8 +222,9 @@ def main() -> int:
     np.random.seed(SEED)
     torch.manual_seed(SEED)
     torch.set_num_threads(min(32, available_cpus()))
+    ensure_data()
     if md5(DATA) != EXPECTED_DATA_MD5:
-        raise RuntimeError("Dataverse input MD5 changed")
+        raise RuntimeError("official comments Dataverse input MD5 changed")
     dates, text_windows, sizes = load_windows()
     clouds, representation = embed_clouds(text_windows)
     barycenter, bary_weights = fit_barycenter(clouds[:50])
@@ -246,7 +266,7 @@ def main() -> int:
             "barycenter_support": 64,
             "ot_solver": "exact EMD with barycentric projection",
             "threshold_quantile": 0.95,
-            "record_interpretation": "pinned author non-root and text-cleaning semantics; released MIN_PER_DAY=20, MAX_PER_DAY=500, last-50/first-50 cutoff split",
+            "record_interpretation": "official SummaryResults_Covid_Comments; camera-ready MIN_PER_DAY=30 and fixed date windows",
             **representation,
         },
         "limits": {"spe": spe_limit, "t2": t2_limit, "hotelling_t2": hotelling_limit},
@@ -267,7 +287,7 @@ def main() -> int:
             "The 64-support free Wasserstein barycenter is deterministic but its support size is not specified in the paper.",
             "PCA is fit only on Phase I to prevent monitoring leakage; the paper does not state the PCA fitting scope.",
             "This route implements IDD and the Hotelling moment baseline, not unreleased F-CPD, NEWMA, or Scan-B configurations.",
-            "This route uses the released runner's minimum 20 and capped split, contradicting the appendix sentence that days below 30 were removed and potentially extending beyond the camera-ready May 5 endpoint.",
+            "This route uses the separate official comments-only Dataverse file and the camera-ready minimum-30 fixed windows; the pinned runner instead names the All file and defaults to minimum 20.",
         ],
     }
     RAW.mkdir(parents=True, exist_ok=True)
