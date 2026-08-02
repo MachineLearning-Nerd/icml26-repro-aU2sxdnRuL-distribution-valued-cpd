@@ -1,0 +1,9 @@
+{
+  "claim": 5,
+  "contract": "The official comments-only Dataverse artifact must expose dated comment text sufficient to construct exactly 50 Phase-I and 50 Phase-II daily distributions with at least 30 comments per retained day before a faithful alarm rerun is possible.",
+  "decision_rule": "Audit the archival, saved-original, and preprocessed representations. Schema discovery cannot verify the alarm-alignment claim; retain BLOCKED unless a later child executes the full paper pipeline on an exact 50+50 stream.",
+  "paper_phase_1": ["2020-12-02", "2021-01-30"],
+  "paper_phase_2": ["2021-01-31", "2021-05-05"],
+  "minimum_comments": 30,
+  "verdict": "BLOCKED"
+}
