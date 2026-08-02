@@ -45,18 +45,28 @@ def load_windows() -> tuple[list[pd.Timestamp], list[list[str]], list[int]]:
     frame = pd.read_csv(DATA)
     frame["created_utc"] = pd.to_datetime(frame["created_utc"], utc=True, errors="coerce")
     frame = frame[frame["created_utc"].notna()].copy()
-    # Route 3 follows the released runner: replies only and MIN_PER_DAY=20.
+    # Route 4 follows the released runner's reply filter and capped split.
     frame = frame[~frame["Parent"].astype(str).eq("1")].copy()
     frame["text"] = frame["text"].astype(str)
     frame = frame[~frame["text"].str.lower().isin(["[deleted]", "[removed]", "nan"])]
     frame = frame[frame["text"].str.len() > 0]
     frame["day"] = frame["created_utc"].dt.floor("D")
-    groups = [(day, group["text"].tolist()) for day, group in frame.groupby("day") if len(group) >= 20]
+    rng = np.random.default_rng(0)
+    groups = []
+    for day, group in frame.groupby("day"):
+        if len(group) < 20:
+            continue
+        texts = group["text"].tolist()
+        if len(texts) > 500:
+            selected = rng.choice(len(texts), size=500, replace=False)
+            texts = [texts[index] for index in selected]
+        groups.append((day, texts))
     groups.sort(key=lambda item: item[0])
-    phase1 = [(d, texts) for d, texts in groups if pd.Timestamp("2020-12-02", tz="UTC") <= d <= pd.Timestamp("2021-01-30", tz="UTC")]
-    phase2 = [(d, texts) for d, texts in groups if pd.Timestamp("2021-01-31", tz="UTC") <= d <= pd.Timestamp("2021-05-05", tz="UTC")]
+    cutoff = pd.Timestamp("2021-01-31", tz="UTC")
+    phase1 = [(d, texts) for d, texts in groups if d < cutoff][-50:]
+    phase2 = [(d, texts) for d, texts in groups if d >= cutoff][:50]
     if len(phase1) != 50 or len(phase2) != 50:
-        raise RuntimeError(f"camera-ready windows are not 50+50: {len(phase1)}+{len(phase2)}")
+        raise RuntimeError(f"released capped split is not 50+50: {len(phase1)}+{len(phase2)}")
     selected = phase1 + phase2
     return [item[0] for item in selected], [item[1] for item in selected], [len(item[1]) for item in selected]
 
@@ -70,7 +80,7 @@ def embed_clouds(text_windows: list[list[str]]) -> tuple[list[np.ndarray], dict]
         batch_size=64,
         show_progress_bar=False,
         convert_to_numpy=True,
-        normalize_embeddings=False,
+        normalize_embeddings=True,
     ).astype(np.float64)
     pca = PCA(n_components=20, svd_solver="full")
     pca.fit(embeddings[: offsets[50]])
@@ -156,9 +166,10 @@ def hotelling_statistics(clouds: list[np.ndarray]) -> np.ndarray:
     return np.einsum("ij,jk,ik->i", delta, inverse, delta)
 
 
-def permutation_alignment(alarm_count: int, phase2_dates: list[str]) -> dict:
+def permutation_alignment(alarm_dates: list[str], phase2_dates: list[str]) -> dict:
     rng = np.random.default_rng(SEED)
-    observed = len(set(phase2_dates) & RESPONSE_DATES)
+    alarm_count = len(alarm_dates)
+    observed = len(set(alarm_dates) & RESPONSE_DATES)
     counts = []
     for _ in range(5000):
         shuffled = rng.choice(phase2_dates, size=alarm_count, replace=False)
@@ -219,14 +230,14 @@ def main() -> int:
             "barycenter_support": 64,
             "ot_solver": "exact EMD with barycentric projection",
             "threshold_quantile": 0.95,
-            "record_interpretation": "non-root replies, released runner MIN_PER_DAY=20",
+            "record_interpretation": "non-root replies; released MIN_PER_DAY=20, MAX_PER_DAY=500, last-50/first-50 cutoff split",
             **representation,
         },
         "limits": {"spe": spe_limit, "t2": t2_limit, "hotelling_t2": hotelling_limit},
         "independent_checker": checker,
         "negative_controls": {
             "identity_tangents_rejected": identity_control_rejected,
-            "date_shuffle": permutation_alignment(len(spe_alarms), phase2_dates),
+            "date_shuffle": permutation_alignment(spe_alarms, phase2_dates),
         },
         "compute": {
             "estimated_cores": 32,
@@ -240,7 +251,7 @@ def main() -> int:
             "The 64-support free Wasserstein barycenter is deterministic but its support size is not specified in the paper.",
             "PCA is fit only on Phase I to prevent monitoring leakage; the paper does not state the PCA fitting scope.",
             "This route implements IDD and the Hotelling moment baseline, not unreleased F-CPD, NEWMA, or Scan-B configurations.",
-            "This route uses the released runner's minimum 20, contradicting the appendix sentence that days below 30 were removed.",
+            "This route uses the released runner's minimum 20 and capped split, contradicting the appendix sentence that days below 30 were removed and potentially extending beyond the camera-ready May 5 endpoint.",
         ],
     }
     RAW.mkdir(parents=True, exist_ok=True)

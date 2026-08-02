@@ -21,7 +21,7 @@ def main() -> int:
     protocol = result["protocol"]
     checker = result["independent_checker"]
     if len(rows) != 100 or protocol["phase1_days"] != 50 or protocol["phase2_days"] != 50:
-        failures.append("camera-ready 50+50 daily stream was not reconstructed")
+        failures.append("released capped 50+50 daily stream was not reconstructed")
     if protocol["embedding_dimension"] != 384 or protocol["pca_dimension"] != 20:
         failures.append("SBERT-384 to PCA-20 contract failed")
     if protocol["minimum_comments"] < 20:
@@ -32,6 +32,10 @@ def main() -> int:
         failures.append("identity-tangent control was not rejected")
     if not result["observed"]["idd_spe_alarms"]:
         failures.append("IDD reconstruction produced no testable alarms")
+    shuffled = result["negative_controls"]["date_shuffle"]
+    expected_matches = len(set(result["observed"]["idd_spe_alarms"]) & {"2021-03-02", "2021-04-30", "2021-05-03"})
+    if shuffled["observed_response_date_matches"] != expected_matches:
+        failures.append("date-shuffle control did not count alarm/event matches")
     output = {"claim": 5, "route_verifier": "FAIL" if failures else "PASS", "evidence_verdict": result["verdict"], "failures": failures}
     print(json.dumps(output, sort_keys=True), flush=True)
     return 1 if failures else 0
