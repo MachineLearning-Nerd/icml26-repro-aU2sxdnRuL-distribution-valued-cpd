@@ -1,0 +1,11 @@
+import subprocess
+import sys
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+def test_claim5_official_artifact_probe():
+    subprocess.run([sys.executable, str(ROOT / "src" / "claim5_official_artifact_probe.py")], cwd=ROOT, check=True)
+    subprocess.run([sys.executable, str(ROOT / "src" / "verify_claim5_official_artifact_probe.py")], cwd=ROOT, check=True)

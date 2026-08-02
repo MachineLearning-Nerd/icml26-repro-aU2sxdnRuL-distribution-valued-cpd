@@ -1,0 +1,206 @@
+{
+  "actionable_comment_streams": [
+    {
+      "date_column": "created_utc",
+      "minimum_comments": 30,
+      "phase1_days": 38,
+      "phase2_days": 48,
+      "representation": "archival",
+      "text_column": "text",
+      "valid_rows": 11168
+    },
+    {
+      "date_column": "created_utc",
+      "minimum_comments": 30,
+      "phase1_days": 38,
+      "phase2_days": 48,
+      "representation": "original",
+      "text_column": "text",
+      "valid_rows": 11168
+    }
+  ],
+  "claim": 5,
+  "compute": {
+    "actual_available_cpus": 64,
+    "estimated_cores": 2,
+    "gpu_requested": false,
+    "selected_flavor": "cpu-upgrade"
+  },
+  "independent_checker": {
+    "csv_sniffer_recorded": true,
+    "distinct_hash_count": 3,
+    "pandas_comma_and_tab_parsers_recorded": true
+  },
+  "negative_control": {
+    "preprocessed_json_not_accepted_as_comment_stream": true
+  },
+  "reason": "The official representations do not expose an exact 50+50 dated text stream.",
+  "representations": {
+    "archival": {
+      "best_parse": "tab",
+      "bytes": 4008381,
+      "headers": {
+        "content_disposition": "attachment; filename*=UTF-8''SummaryResults_Covid_Comments.tab",
+        "content_type": "text/tab-separated-values",
+        "http_status": 200
+      },
+      "md5": "cc7b3dd51780192bc7eada321c76d95b",
+      "parses": {
+        "comma": {
+          "columns": [
+            "id\ttext\tauthor\tcreated_utc\tNo_of_comments\tSubjectivity\tPolarity\tSentiment\tParent\tLink\tTopic\tDuration\tStance"
+          ],
+          "date_columns": [
+            "id\ttext\tauthor\tcreated_utc\tNo_of_comments\tSubjectivity\tPolarity\tSentiment\tParent\tLink\tTopic\tDuration\tStance"
+          ],
+          "ok": true,
+          "rows": 11189,
+          "text_columns": [
+            "id\ttext\tauthor\tcreated_utc\tNo_of_comments\tSubjectivity\tPolarity\tSentiment\tParent\tLink\tTopic\tDuration\tStance"
+          ]
+        },
+        "tab": {
+          "columns": [
+            "id",
+            "text",
+            "author",
+            "created_utc",
+            "No_of_comments",
+            "Subjectivity",
+            "Polarity",
+            "Sentiment",
+            "Parent",
+            "Link",
+            "Topic",
+            "Duration",
+            "Stance"
+          ],
+          "date_columns": [
+            "created_utc",
+            "Sentiment"
+          ],
+          "ok": true,
+          "rows": 11189,
+          "text_columns": [
+            "text",
+            "No_of_comments"
+          ]
+        }
+      },
+      "prefix_hex_16": "6964097465787409617574686f720963",
+      "sha256": "48d8faf352ef9bf574a77a271287ee7ef48fff6ca3eaf90dd66b0fdf88b081bf",
+      "sniffed_delimiter": "\t",
+      "url": "https://dataverse.harvard.edu/api/access/datafile/6430672",
+      "window_audit": {
+        "date_column": "created_utc",
+        "minimum_comments": 30,
+        "phase1_days": 38,
+        "phase2_days": 48,
+        "text_column": "text",
+        "valid_rows": 11168
+      }
+    },
+    "original": {
+      "best_parse": "comma",
+      "bytes": 3807764,
+      "headers": {
+        "content_disposition": "attachment; filename*=UTF-8''SummaryResults_Covid_Comments.csv",
+        "content_type": "text/csv",
+        "http_status": 200
+      },
+      "md5": "a87e5821d516f5195e45a2bd911495a5",
+      "parses": {
+        "comma": {
+          "columns": [
+            "id",
+            "text",
+            "author",
+            "created_utc",
+            "No_of_comments",
+            "Subjectivity",
+            "Polarity",
+            "Sentiment",
+            "Parent",
+            "Link",
+            "Topic",
+            "Duration",
+            "Stance"
+          ],
+          "date_columns": [
+            "created_utc",
+            "Sentiment"
+          ],
+          "ok": true,
+          "rows": 11189,
+          "text_columns": [
+            "text",
+            "No_of_comments"
+          ]
+        },
+        "tab": {
+          "error_type": "ParserError",
+          "ok": false
+        }
+      },
+      "prefix_hex_16": "69642c746578742c617574686f722c63",
+      "sha256": "b8b7050bb60fa6a52c7fc2d6abb0acad7f9f33d8bd151dc81223d0c48f10d5ee",
+      "sniffed_delimiter": ",",
+      "url": "https://dataverse.harvard.edu/api/access/datafile/6430672?format=original",
+      "window_audit": {
+        "date_column": "created_utc",
+        "minimum_comments": 30,
+        "phase1_days": 38,
+        "phase2_days": 48,
+        "text_column": "text",
+        "valid_rows": 11168
+      }
+    },
+    "preprocessed": {
+      "best_parse": "comma",
+      "bytes": 173,
+      "headers": {
+        "content_disposition": "",
+        "content_type": "application/json;charset=UTF-8",
+        "error_reason": "Not Found",
+        "http_status": 404
+      },
+      "md5": "e4e86a40e638e9c19112eceed87df35b",
+      "parses": {
+        "comma": {
+          "columns": [
+            "{\"status\":\"ERROR\"",
+            "code:404",
+            "message:\"datafile access error: requested optional service (image scaling",
+            " format conversion",
+            " etc.) could not be performed on this datafile.\"}"
+          ],
+          "date_columns": [],
+          "ok": true,
+          "rows": 0,
+          "text_columns": []
+        },
+        "tab": {
+          "columns": [
+            "{\"status\":\"ERROR\",\"code\":404,\"message\":\"datafile access error: requested optional service (image scaling, format conversion, etc.) could not be performed on this datafile.\"}"
+          ],
+          "date_columns": [],
+          "ok": true,
+          "rows": 0,
+          "text_columns": []
+        }
+      },
+      "prefix_hex_16": "7b22737461747573223a224552524f52",
+      "sha256": "95e6864b7934480aacbe2168ee3fcdae7dd93806020f7f61f92525fcb0b94d76",
+      "sniffed_delimiter": ",",
+      "url": "https://dataverse.harvard.edu/api/access/datafile/6430672?format=prep",
+      "window_audit": null
+    }
+  },
+  "source": {
+    "datafile_id": 6430672,
+    "dataverse_rule": "default is archival TSV; format=original requests the saved upload",
+    "retrieval_user_agent": "OpenResearch-Reproduction/1.0 (paper 2602.07252)"
+  },
+  "verdict": "BLOCKED"
+}
+

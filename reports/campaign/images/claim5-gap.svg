@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="410" viewBox="0 0 900 410" role="img" aria-labelledby="title desc">
+  <title id="title">Claim 5 public-data gap and alarm saturation</title><desc id="desc">The official comments file has 38 plus 48 eligible days instead of 50 plus 50. The closest released-runner reconstruction has 50 plus 49 days and alarms on all 49 monitoring days.</desc>
+  <rect width="900" height="410" fill="#0b1020"/>
+  <text x="50" y="54" fill="#f8fafc" font-family="sans-serif" font-size="26" font-weight="700">Claim 5: exact input is missing; closest route alarms everywhere</text>
+  <g font-family="sans-serif" font-size="17">
+    <text x="50" y="112" fill="#cbd5e1">Paper contract</text><rect x="250" y="88" width="500" height="34" fill="#6366f1"/><text x="770" y="112" fill="#c7d2fe">50 + 50 days</text>
+    <text x="50" y="176" fill="#cbd5e1">Official ≥30 file</text><rect x="250" y="152" width="430" height="34" fill="#f59e0b"/><text x="700" y="176" fill="#fde68a">38 + 48 days</text>
+    <text x="50" y="240" fill="#cbd5e1">Released ≥20 route</text><rect x="250" y="216" width="495" height="34" fill="#22d3ee"/><text x="765" y="240" fill="#cffafe">50 + 49 days</text>
+    <text x="50" y="310" fill="#fda4af">Closest route: 49/49 SPE alarms; paper: 5 alarms; exact-alarm Jaccard 0.102</text>
+    <text x="50" y="345" fill="#cbd5e1">Date-shuffle response-event overlap: p=1.0 (no specificity beyond alarming every day).</text>
+    <text x="50" y="382" fill="#94a3b8" font-size="15">Verdict: BLOCKED—not falsified—because the exact 50+50 paper stream and private core are unavailable.</text>
+  </g>
+</svg>

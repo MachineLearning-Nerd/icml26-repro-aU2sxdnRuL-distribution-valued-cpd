@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="360" viewBox="0 0 900 360" role="img" aria-labelledby="title desc">
+  <title id="title">Claim 3 maximum high-variance delay reduction</title><desc id="desc">The paper claim is 95 percent while the maximum calculated from all displayed high-variance rows is 72.5 percent.</desc>
+  <rect width="900" height="360" fill="#0b1020"/>
+  <text x="50" y="55" fill="#f8fafc" font-family="sans-serif" font-size="26" font-weight="700">Claim 3: no displayed high-variance row reaches 95%</text>
+  <text x="50" y="122" fill="#cbd5e1" font-family="sans-serif" font-size="17">Maximum table reduction</text>
+  <rect x="270" y="92" width="435" height="45" rx="8" fill="#22d3ee"/><text x="718" y="122" fill="#67e8f9" font-family="sans-serif" font-size="21">72.5%</text>
+  <text x="50" y="205" fill="#cbd5e1" font-family="sans-serif" font-size="17">Claimed maximum</text>
+  <rect x="270" y="175" width="570" height="45" rx="8" fill="#fb7185"/><text x="790" y="205" fill="#fff1f2" font-family="sans-serif" font-size="21" text-anchor="middle">95%</text>
+  <text x="50" y="290" fill="#94a3b8" font-family="sans-serif" font-size="16">Best row: IDD 1.1 vs best displayed Log-KDE 4.0 → (4.0−1.1)/4.0 = 72.5%. Verdict: FALSIFIED.</text>
+</svg>

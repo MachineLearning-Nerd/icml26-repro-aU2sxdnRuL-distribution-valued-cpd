@@ -1,0 +1,27 @@
+{
+  "space_id": "DineshAI/repro-aU2sxdnRuL-distribution-valued-cpd",
+  "revision": "881cb4f9cda9250f4bb1394b7cee539825ac6ac7",
+  "files": {
+    ".gitattributes": "11ad7efa24975ee4b0c3c3a38ed18737f0658a5f75a0a96787b576a78a023361",
+    "README.md": "12e322a2ab915bddd3332ddfa894b1c15536d50be41d3b48bcaf013842366808",
+    "bucket-icon.svg": "d1c28fc0a4e07f2688d013f576cf76ffc422d278d56a52a82989e0b93b3b3964",
+    "index.html": "28577b9ab20406cb6e3d2c49ea541d0738cf22a82e62d8ccbf4776854af09d1e",
+    "logbook.css": "24416f882c6d09a9a042aac199d8d1db4bf12abd527480d4ffa5c45c2878ad53",
+    "logbook.js": "4675deda1c5d5297088ef8c16b0ba124f26b2440d74e34bce5aea73f80b3091d",
+    "logbook.json": "0990df44a4eab6c61f932b82ea3c10fb007e0ba36c2dcffb544d456f0a16f12e",
+    "pages/claim-1-tangent-space-idd-mapping/page.md": "38c1d46f42f9a1927872bfe0530deb5f09a8d83a64551888d322bd67aa8d3e6f",
+    "pages/claim-2-empirical-quantile-arl/page.md": "29c99139648d0632479d626c516410a2409fc4c43e27d908a3e0c1a5d3a1139e",
+    "pages/claim-3-synthetic-delay-reduction/page.md": "6a93ace951d80bc936ee6610cf283379ed2a133bcceeb04c5b59c8d43428f468",
+    "pages/claim-4-flowcap-ii-aml-detection/page.md": "758234b5f60caa22f47caac855f857860b2c5b3b01edd9dddfa1df49bcb16a61",
+    "pages/claim-5-reddit-event-alignment/page.md": "6a165ac890c060b5618ef924a6535ed554ec7448ca1885231450626f6807985f",
+    "pages/claim-6-finite-dimensional-epsilon-isometry/page.md": "ff8f30acd3c40ba72f74bc28543339d671b941b70dfbde354fb30034ebbf0fbf",
+    "pages/conclusion/page.md": "b21ef801ad175b8298312dbeb995bb190048950074dce4727462ea7af16f625a",
+    "pages/executive-summary/page.md": "bb5305415ad07cb3a1950fad2aa5721512f2f1e1f5709cf2af5d935830db2e5a",
+    "pages/index.md": "c8b73ca33e8b11466629aa495ec5f43df46dbd93481529bd40743cdc0f81eca6",
+    "style.css": "789bfd541c9f06658ac410d968e9c39fa8c63a48a08643b36071b984c699a9f4",
+    "trackio-logo-light.png": "a6eb72253c0128ce79b526a86b7943eed37beec186b5f57ff6c1701d0e9ff596",
+    "trackio-logo.png": "3e3792061d4d095759da30d7cfe7f14b621901793cd4d677b61b2896f5bf472b",
+    "trackio-wordmark-dark.png": "71da94795855710d214801eb9b9b7b8898e9a8757abac0e22966a0531bbb2f4f",
+    "workspace.json": "4109bde5f5cb1d2ab8c1e0b796aea55e24c24dab4d5345ecbe9f45a8f1498dce"
+  }
+}

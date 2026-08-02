@@ -1,0 +1,136 @@
+{
+  "calibration": {
+    "arl1_100_row": 143.5,
+    "arl1_10_row": 356.5,
+    "arl1_grid_rows": [
+      137,
+      143.5,
+      153.5,
+      164.5,
+      176.5,
+      190.5,
+      207.5,
+      228.5,
+      254.5,
+      292.5,
+      356.5,
+      366.5,
+      376.5,
+      403.5,
+      420,
+      441.5,
+      467.5,
+      496
+    ],
+    "f1_grid_rows": [
+      137,
+      206.5,
+      279.5,
+      352.5,
+      424.5,
+      496
+    ],
+    "f1_one_row": 133.83333333333331,
+    "f1_zero_row": 497.1666666666667
+  },
+  "claim": "On 7-D FlowCAP-II, IDD has F1 approximately 0.75 and ARL1 approximately 1, versus Hotelling T2 F1 below 0.4.",
+  "compute": {
+    "actual_available_cpus": 64,
+    "estimated_cores": 2,
+    "gpu_requested": false,
+    "runtime_seconds": 0.391,
+    "selected_flavor": "cpu-upgrade"
+  },
+  "contract": {
+    "approximate_1_generous_upper_bound": 1.5,
+    "falsification_rule": "FALSIFIED if every displayed IDD ARL1 point is above 1.5 after log-axis digitization.",
+    "scope": "camera-ready paper claim and its original plotted evidence; not an independent raw-data rerun"
+  },
+  "extracted": {
+    "hotelling_f1": [
+      0.37339449541284403,
+      0.3513761467889908,
+      0.32385321100917436,
+      0.27431192660550463,
+      0.23853211009174316
+    ],
+    "hotelling_f1_max": 0.37339449541284403,
+    "idd_arl1": [
+      2.6314055929256006,
+      2.8382565135328717,
+      2.8382565135328717,
+      3.3741859607341396,
+      3.3741859607341396,
+      3.3741859607341396
+    ],
+    "idd_arl1_max": 3.3741859607341396,
+    "idd_arl1_min": 2.6314055929256006,
+    "idd_f1": [
+      0.7848623853211009,
+      0.7380733944954129,
+      0.6802752293577982,
+      0.6444954128440367,
+      0.5591743119266055,
+      0.48761467889908255,
+      0.47660550458715595
+    ],
+    "idd_f1_max": 0.7848623853211009
+  },
+  "independent_checker": {
+    "all_idd_arl1_above_2": true,
+    "column_method_all_above_2": true,
+    "column_method_marker_count": 4,
+    "column_method_values": [
+      2.6314055929256006,
+      3.196648141788757,
+      3.5232897211086356,
+      3.600294509562185
+    ],
+    "idd_arl1_marker_count": 6,
+    "maximum_range_endpoint_gap": 0.22610854882804565,
+    "minimum_range_endpoint_gap": 0,
+    "red_fill_patch_pixels": [
+      225,
+      225,
+      225,
+      225,
+      225,
+      225
+    ]
+  },
+  "limitations": [
+    "This is a quantitative audit of the paper's own original PNG, not a rerun from FlowCAP FCS files.",
+    "The word approximately has no tolerance in the paper; the contract uses a generous 50% upper tolerance before inspecting coordinates.",
+    "Raw FCS access remains authentication-blocked, so unrelated implementation or sampling claims are not verified here."
+  ],
+  "negative_control": {
+    "reason": "A linear interpretation of the explicitly logarithmic ARL1 axis produces non-positive delays.",
+    "rejected": true,
+    "wrong_linear_axis_values": [
+      -42.183098591549296,
+      -39.225352112676056,
+      -39.225352112676056,
+      -32.46478873239437,
+      -32.46478873239437,
+      -32.46478873239437
+    ]
+  },
+  "source": {
+    "anchors": [
+      "main0.tex:986",
+      "main0.tex:998-1000",
+      "main0.tex:1751",
+      "main0.tex:1798-1810"
+    ],
+    "archive_sha256": "6d4af865d403a1c4f72ed3ef8057069212ac1633aa79410b4607b04a8b9edb87",
+    "figure_member": "figures/tradeoff_F1_vs_ARL0_singlecol.png",
+    "figure_sha256": "e788172329eb5886009265a37733a037a158efecf7e85089a790cc8bd1af363a",
+    "figure_shape": [
+      601,
+      1232,
+      3
+    ]
+  },
+  "verdict": "FALSIFIED"
+}
+

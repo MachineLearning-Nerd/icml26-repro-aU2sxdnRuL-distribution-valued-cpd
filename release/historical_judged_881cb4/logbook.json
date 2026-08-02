@@ -1,0 +1,93 @@
+{
+  "schema_version": 2,
+  "title": "Reproduction: Beyond Euclidean Summaries: Online Change Point Detection for Distribution-Valued Data",
+  "emoji": "🎯",
+  "space_id": "DineshAI/repro-aU2sxdnRuL-distribution-valued-cpd",
+  "paper": null,
+  "tags": [
+    "icml2026-repro",
+    "paper-aU2sxdnRuL"
+  ],
+  "updated_at": "2026-07-31T08:31:43+00:00",
+  "root": {
+    "slug": "index",
+    "title": "Reproduction: Beyond Euclidean Summaries: Online Change Point Detection for Distribution-Valued Data",
+    "file": "pages/index.md",
+    "children": [
+      {
+        "slug": "executive-summary",
+        "title": "Executive summary",
+        "file": "pages/executive-summary/page.md",
+        "children": []
+      },
+      {
+        "slug": "claim-1-tangent-space-idd-mapping",
+        "title": "Claim 1: tangent-space IDD mapping",
+        "file": "pages/claim-1-tangent-space-idd-mapping/page.md",
+        "children": []
+      },
+      {
+        "slug": "claim-2-empirical-quantile-arl",
+        "title": "Claim 2: empirical-quantile ARL",
+        "file": "pages/claim-2-empirical-quantile-arl/page.md",
+        "children": []
+      },
+      {
+        "slug": "claim-3-synthetic-delay-reduction",
+        "title": "Claim 3: synthetic delay reduction",
+        "file": "pages/claim-3-synthetic-delay-reduction/page.md",
+        "children": []
+      },
+      {
+        "slug": "claim-4-flowcap-ii-aml-detection",
+        "title": "Claim 4: FlowCAP-II AML detection",
+        "file": "pages/claim-4-flowcap-ii-aml-detection/page.md",
+        "children": []
+      },
+      {
+        "slug": "claim-5-reddit-event-alignment",
+        "title": "Claim 5: Reddit event alignment",
+        "file": "pages/claim-5-reddit-event-alignment/page.md",
+        "children": []
+      },
+      {
+        "slug": "claim-6-finite-dimensional-epsilon-isometry",
+        "title": "Claim 6: finite-dimensional epsilon-isometry",
+        "file": "pages/claim-6-finite-dimensional-epsilon-isometry/page.md",
+        "children": []
+      },
+      {
+        "slug": "conclusion",
+        "title": "Conclusion",
+        "file": "pages/conclusion/page.md",
+        "children": []
+      }
+    ]
+  },
+  "traces": [],
+  "workspace": {
+    "file": "workspace.json",
+    "file_count": 0,
+    "total_size": 0,
+    "bucket_id": null
+  },
+  "agent_view_tokens": 3824,
+  "trace_view_tokens": 29668,
+  "workspace_view_tokens": 36,
+  "revision": "d2924a6f1fdda2eb9338",
+  "traces_ref": {
+    "repo_id": "DineshAI/repro-aU2sxdnRuL-distribution-valued-cpd-traces",
+    "repo_type": "dataset",
+    "repo_url": "https://huggingface.co/datasets/DineshAI/repro-aU2sxdnRuL-distribution-valued-cpd-traces",
+    "private": true,
+    "viewer_path": "trackio/index.json"
+  },
+  "trace_dataset": "https://huggingface.co/datasets/DineshAI/repro-aU2sxdnRuL-distribution-valued-cpd-traces",
+  "workspace_ref": {
+    "repo_id": "DineshAI/repro-aU2sxdnRuL-distribution-valued-cpd-artifacts",
+    "repo_type": "bucket",
+    "repo_url": "https://huggingface.co/buckets/DineshAI/repro-aU2sxdnRuL-distribution-valued-cpd-artifacts",
+    "private": true
+  },
+  "workspace_bucket": "https://huggingface.co/buckets/DineshAI/repro-aU2sxdnRuL-distribution-valued-cpd-artifacts"
+}

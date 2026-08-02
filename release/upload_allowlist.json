@@ -1,0 +1,575 @@
+{
+  "space_id": "DineshAI/repro-aU2sxdnRuL-distribution-valued-cpd",
+  "base_revision": "881cb4f9cda9250f4bb1394b7cee539825ac6ac7",
+  "text_only": true,
+  "entries": [
+    {
+      "source": ".openresearch/artifacts/claim1_paper_scale/EVAL.md",
+      "target": ".openresearch/artifacts/claim1_paper_scale/EVAL.md"
+    },
+    {
+      "source": ".openresearch/artifacts/claim1_paper_scale/claim_contract.json",
+      "target": ".openresearch/artifacts/claim1_paper_scale/claim_contract.json"
+    },
+    {
+      "source": ".openresearch/artifacts/claim1_paper_scale/limitations.md",
+      "target": ".openresearch/artifacts/claim1_paper_scale/limitations.md"
+    },
+    {
+      "source": ".openresearch/artifacts/claim1_paper_scale/method.md",
+      "target": ".openresearch/artifacts/claim1_paper_scale/method.md"
+    },
+    {
+      "source": ".openresearch/artifacts/claim1_paper_scale/raw/result.json",
+      "target": ".openresearch/artifacts/claim1_paper_scale/raw/result.json"
+    },
+    {
+      "source": ".openresearch/artifacts/claim1_paper_scale/source_audit.md",
+      "target": ".openresearch/artifacts/claim1_paper_scale/source_audit.md"
+    },
+    {
+      "source": ".openresearch/artifacts/claim4_figure_falsification/EVAL.md",
+      "target": ".openresearch/artifacts/claim4_figure_falsification/EVAL.md"
+    },
+    {
+      "source": ".openresearch/artifacts/claim4_figure_falsification/claim_contract.json",
+      "target": ".openresearch/artifacts/claim4_figure_falsification/claim_contract.json"
+    },
+    {
+      "source": ".openresearch/artifacts/claim4_figure_falsification/limitations.md",
+      "target": ".openresearch/artifacts/claim4_figure_falsification/limitations.md"
+    },
+    {
+      "source": ".openresearch/artifacts/claim4_figure_falsification/method.md",
+      "target": ".openresearch/artifacts/claim4_figure_falsification/method.md"
+    },
+    {
+      "source": ".openresearch/artifacts/claim4_figure_falsification/raw/result.json",
+      "target": ".openresearch/artifacts/claim4_figure_falsification/raw/result.json"
+    },
+    {
+      "source": ".openresearch/artifacts/claim4_figure_falsification/source_audit.md",
+      "target": ".openresearch/artifacts/claim4_figure_falsification/source_audit.md"
+    },
+    {
+      "source": ".openresearch/artifacts/claim4_flowcap/EVAL.md",
+      "target": ".openresearch/artifacts/claim4_flowcap/EVAL.md"
+    },
+    {
+      "source": ".openresearch/artifacts/claim4_flowcap/claim_contract.json",
+      "target": ".openresearch/artifacts/claim4_flowcap/claim_contract.json"
+    },
+    {
+      "source": ".openresearch/artifacts/claim4_flowcap/limitations.md",
+      "target": ".openresearch/artifacts/claim4_flowcap/limitations.md"
+    },
+    {
+      "source": ".openresearch/artifacts/claim4_flowcap/method.md",
+      "target": ".openresearch/artifacts/claim4_flowcap/method.md"
+    },
+    {
+      "source": ".openresearch/artifacts/claim4_flowcap/source_audit.md",
+      "target": ".openresearch/artifacts/claim4_flowcap/source_audit.md"
+    },
+    {
+      "source": ".openresearch/artifacts/claim5_official_artifact_probe/EVAL.md",
+      "target": ".openresearch/artifacts/claim5_official_artifact_probe/EVAL.md"
+    },
+    {
+      "source": ".openresearch/artifacts/claim5_official_artifact_probe/claim_contract.json",
+      "target": ".openresearch/artifacts/claim5_official_artifact_probe/claim_contract.json"
+    },
+    {
+      "source": ".openresearch/artifacts/claim5_official_artifact_probe/limitations.md",
+      "target": ".openresearch/artifacts/claim5_official_artifact_probe/limitations.md"
+    },
+    {
+      "source": ".openresearch/artifacts/claim5_official_artifact_probe/method.md",
+      "target": ".openresearch/artifacts/claim5_official_artifact_probe/method.md"
+    },
+    {
+      "source": ".openresearch/artifacts/claim5_official_artifact_probe/raw/result.json",
+      "target": ".openresearch/artifacts/claim5_official_artifact_probe/raw/result.json"
+    },
+    {
+      "source": ".openresearch/artifacts/claim5_official_artifact_probe/source_audit.md",
+      "target": ".openresearch/artifacts/claim5_official_artifact_probe/source_audit.md"
+    },
+    {
+      "source": ".openresearch/artifacts/claim5_reddit_reconstruction/EVAL.md",
+      "target": ".openresearch/artifacts/claim5_reddit_reconstruction/EVAL.md"
+    },
+    {
+      "source": ".openresearch/artifacts/claim5_reddit_reconstruction/claim_contract.json",
+      "target": ".openresearch/artifacts/claim5_reddit_reconstruction/claim_contract.json"
+    },
+    {
+      "source": ".openresearch/artifacts/claim5_reddit_reconstruction/limitations.md",
+      "target": ".openresearch/artifacts/claim5_reddit_reconstruction/limitations.md"
+    },
+    {
+      "source": ".openresearch/artifacts/claim5_reddit_reconstruction/method.md",
+      "target": ".openresearch/artifacts/claim5_reddit_reconstruction/method.md"
+    },
+    {
+      "source": ".openresearch/artifacts/claim5_reddit_reconstruction/raw/result.json",
+      "target": ".openresearch/artifacts/claim5_reddit_reconstruction/raw/result.json"
+    },
+    {
+      "source": ".openresearch/artifacts/claim5_reddit_reconstruction/source_audit.md",
+      "target": ".openresearch/artifacts/claim5_reddit_reconstruction/source_audit.md"
+    },
+    {
+      "source": ".trackio/logbook/README.md",
+      "target": "README.md"
+    },
+    {
+      "source": ".trackio/logbook/logbook.json",
+      "target": "logbook.json"
+    },
+    {
+      "source": ".trackio/logbook/pages/current-claim-1/page.md",
+      "target": "pages/current-claim-1/page.md"
+    },
+    {
+      "source": ".trackio/logbook/pages/current-claim-2/page.md",
+      "target": "pages/current-claim-2/page.md"
+    },
+    {
+      "source": ".trackio/logbook/pages/current-claim-3/page.md",
+      "target": "pages/current-claim-3/page.md"
+    },
+    {
+      "source": ".trackio/logbook/pages/current-claim-4/page.md",
+      "target": "pages/current-claim-4/page.md"
+    },
+    {
+      "source": ".trackio/logbook/pages/current-claim-5/page.md",
+      "target": "pages/current-claim-5/page.md"
+    },
+    {
+      "source": ".trackio/logbook/pages/current-claim-6/page.md",
+      "target": "pages/current-claim-6/page.md"
+    },
+    {
+      "source": ".trackio/logbook/pages/current-index/page.md",
+      "target": "pages/current-index/page.md"
+    },
+    {
+      "source": ".trackio/logbook/pages/current-release-report/page.md",
+      "target": "pages/current-release-report/page.md"
+    },
+    {
+      "source": ".trackio/logbook/pages/historical-rejected-baseline/page.md",
+      "target": "pages/historical-rejected-baseline/page.md"
+    },
+    {
+      "source": "contract/challenge_README.md",
+      "target": "contract/challenge_README.md"
+    },
+    {
+      "source": "contract/contract_manifest.json",
+      "target": "contract/contract_manifest.json"
+    },
+    {
+      "source": "contract/live_claims.json",
+      "target": "contract/live_claims.json"
+    },
+    {
+      "source": "contract/metadata.json",
+      "target": "contract/metadata.json"
+    },
+    {
+      "source": "notebooks/reproduction.py",
+      "target": "notebooks/reproduction.py"
+    },
+    {
+      "source": "outputs/claim1_attempt1_SHA256SUMS.txt",
+      "target": "outputs/claim1_attempt1_SHA256SUMS.txt"
+    },
+    {
+      "source": "outputs/claim1_attempt1_audit.md",
+      "target": "outputs/claim1_attempt1_audit.md"
+    },
+    {
+      "source": "outputs/claim1_attempt1_toy.json",
+      "target": "outputs/claim1_attempt1_toy.json"
+    },
+    {
+      "source": "outputs/claim1_attempt2_SHA256SUMS.txt",
+      "target": "outputs/claim1_attempt2_SHA256SUMS.txt"
+    },
+    {
+      "source": "outputs/claim1_attempt2_audit.md",
+      "target": "outputs/claim1_attempt2_audit.md"
+    },
+    {
+      "source": "outputs/claim1_attempt2_empirical.json",
+      "target": "outputs/claim1_attempt2_empirical.json"
+    },
+    {
+      "source": "outputs/claim1_attempt2_environment.txt",
+      "target": "outputs/claim1_attempt2_environment.txt"
+    },
+    {
+      "source": "outputs/claim1_attempt3_SHA256SUMS.txt",
+      "target": "outputs/claim1_attempt3_SHA256SUMS.txt"
+    },
+    {
+      "source": "outputs/claim1_attempt3_quantile_audit.json",
+      "target": "outputs/claim1_attempt3_quantile_audit.json"
+    },
+    {
+      "source": "outputs/claim1_attempt3_quantile_audit.md",
+      "target": "outputs/claim1_attempt3_quantile_audit.md"
+    },
+    {
+      "source": "outputs/claim1_falsification_SHA256SUMS.txt",
+      "target": "outputs/claim1_falsification_SHA256SUMS.txt"
+    },
+    {
+      "source": "outputs/claim1_falsification_audit.md",
+      "target": "outputs/claim1_falsification_audit.md"
+    },
+    {
+      "source": "outputs/claim1_falsification_scope.json",
+      "target": "outputs/claim1_falsification_scope.json"
+    },
+    {
+      "source": "outputs/claim2_attempt1_SHA256SUMS.txt",
+      "target": "outputs/claim2_attempt1_SHA256SUMS.txt"
+    },
+    {
+      "source": "outputs/claim2_attempt1_audit.md",
+      "target": "outputs/claim2_attempt1_audit.md"
+    },
+    {
+      "source": "outputs/claim2_attempt1_empirical_arl.json",
+      "target": "outputs/claim2_attempt1_empirical_arl.json"
+    },
+    {
+      "source": "outputs/claim3_attempt1/result.json",
+      "target": "outputs/claim3_attempt1/result.json"
+    },
+    {
+      "source": "outputs/claim3_attempt1_SHA256SUMS.txt",
+      "target": "outputs/claim3_attempt1_SHA256SUMS.txt"
+    },
+    {
+      "source": "outputs/claim3_attempt1_audit.md",
+      "target": "outputs/claim3_attempt1_audit.md"
+    },
+    {
+      "source": "outputs/claim4_attempt1_audit.md",
+      "target": "outputs/claim4_attempt1_audit.md"
+    },
+    {
+      "source": "outputs/claim4_attempt1_audit_stdout.json",
+      "target": "outputs/claim4_attempt1_audit_stdout.json"
+    },
+    {
+      "source": "outputs/claim4_attempt1_source_audit.json",
+      "target": "outputs/claim4_attempt1_source_audit.json"
+    },
+    {
+      "source": "outputs/claim4_attempt2_SHA256SUMS.txt",
+      "target": "outputs/claim4_attempt2_SHA256SUMS.txt"
+    },
+    {
+      "source": "outputs/claim4_attempt2_audit.md",
+      "target": "outputs/claim4_attempt2_audit.md"
+    },
+    {
+      "source": "outputs/claim4_attempt2_public_availability.json",
+      "target": "outputs/claim4_attempt2_public_availability.json"
+    },
+    {
+      "source": "outputs/claim5_attempt1_SHA256SUMS.txt",
+      "target": "outputs/claim5_attempt1_SHA256SUMS.txt"
+    },
+    {
+      "source": "outputs/claim5_attempt1_audit.md",
+      "target": "outputs/claim5_attempt1_audit.md"
+    },
+    {
+      "source": "outputs/claim5_attempt1_source_audit.json",
+      "target": "outputs/claim5_attempt1_source_audit.json"
+    },
+    {
+      "source": "outputs/claim5_attempt2/protocol_history_audit.json",
+      "target": "outputs/claim5_attempt2/protocol_history_audit.json"
+    },
+    {
+      "source": "outputs/claim5_attempt2/repaired_import_exit_code.txt",
+      "target": "outputs/claim5_attempt2/repaired_import_exit_code.txt"
+    },
+    {
+      "source": "outputs/claim5_attempt2_audit.md",
+      "target": "outputs/claim5_attempt2_audit.md"
+    },
+    {
+      "source": "outputs/claim5_attempt3/arxiv_archive_audit.json",
+      "target": "outputs/claim5_attempt3/arxiv_archive_audit.json"
+    },
+    {
+      "source": "outputs/claim5_attempt3/test_exit_code.txt",
+      "target": "outputs/claim5_attempt3/test_exit_code.txt"
+    },
+    {
+      "source": "outputs/claim5_attempt3_audit.md",
+      "target": "outputs/claim5_attempt3_audit.md"
+    },
+    {
+      "source": "outputs/claim6_attempt1/result.json",
+      "target": "outputs/claim6_attempt1/result.json"
+    },
+    {
+      "source": "outputs/claim6_attempt1_audit.md",
+      "target": "outputs/claim6_attempt1_audit.md"
+    },
+    {
+      "source": "outputs/final_blocker_remediation.md",
+      "target": "outputs/final_blocker_remediation.md"
+    },
+    {
+      "source": "paper_source/main0.tex",
+      "target": "paper_source/main0.tex"
+    },
+    {
+      "source": "pyproject.toml",
+      "target": "pyproject.toml"
+    },
+    {
+      "source": "release/historical_judged_881cb4/README.md",
+      "target": "release/historical_judged_881cb4/README.md"
+    },
+    {
+      "source": "release/historical_judged_881cb4/logbook.json",
+      "target": "release/historical_judged_881cb4/logbook.json"
+    },
+    {
+      "source": "release/protected_judged_manifest.json",
+      "target": "release/protected_judged_manifest.json"
+    },
+    {
+      "source": "release/upload_allowlist.json",
+      "target": "release/upload_allowlist.json"
+    },
+    {
+      "source": "release/upload_manifest.sha256",
+      "target": "release/upload_manifest.sha256"
+    },
+    {
+      "source": "reports/campaign/images/claim1-mechanism.svg",
+      "target": "reports/campaign/images/claim1-mechanism.svg"
+    },
+    {
+      "source": "reports/campaign/images/claim2-arl.svg",
+      "target": "reports/campaign/images/claim2-arl.svg"
+    },
+    {
+      "source": "reports/campaign/images/claim3-delay.svg",
+      "target": "reports/campaign/images/claim3-delay.svg"
+    },
+    {
+      "source": "reports/campaign/images/claim5-gap.svg",
+      "target": "reports/campaign/images/claim5-gap.svg"
+    },
+    {
+      "source": "reports/campaign/images/headline-flowcap.svg",
+      "target": "reports/campaign/images/headline-flowcap.svg"
+    },
+    {
+      "source": "reports/campaign/report.md",
+      "target": "reports/campaign/report.md"
+    },
+    {
+      "source": "requirements.txt",
+      "target": "requirements.txt"
+    },
+    {
+      "source": "scripts/publish_space_text.py",
+      "target": "scripts/publish_space_text.py"
+    },
+    {
+      "source": "scripts/run_campaign.py",
+      "target": "scripts/run_campaign.py"
+    },
+    {
+      "source": "scripts/validate_release_candidate.py",
+      "target": "scripts/validate_release_candidate.py"
+    },
+    {
+      "source": "src/claim1_attempt1.py",
+      "target": "src/claim1_attempt1.py"
+    },
+    {
+      "source": "src/claim1_attempt2_empirical.py",
+      "target": "src/claim1_attempt2_empirical.py"
+    },
+    {
+      "source": "src/claim1_attempt3_quantile_audit.py",
+      "target": "src/claim1_attempt3_quantile_audit.py"
+    },
+    {
+      "source": "src/claim1_falsification.py",
+      "target": "src/claim1_falsification.py"
+    },
+    {
+      "source": "src/claim1_paper_scale.py",
+      "target": "src/claim1_paper_scale.py"
+    },
+    {
+      "source": "src/claim1_protocol.md",
+      "target": "src/claim1_protocol.md"
+    },
+    {
+      "source": "src/claim2_attempt1_empirical_arl.py",
+      "target": "src/claim2_attempt1_empirical_arl.py"
+    },
+    {
+      "source": "src/claim3_attempt1_source_audit.py",
+      "target": "src/claim3_attempt1_source_audit.py"
+    },
+    {
+      "source": "src/claim4_attempt1_source_audit.py",
+      "target": "src/claim4_attempt1_source_audit.py"
+    },
+    {
+      "source": "src/claim4_attempt2_public_availability.py",
+      "target": "src/claim4_attempt2_public_availability.py"
+    },
+    {
+      "source": "src/claim4_figure_falsification.py",
+      "target": "src/claim4_figure_falsification.py"
+    },
+    {
+      "source": "src/claim4_flowrepository_probe.py",
+      "target": "src/claim4_flowrepository_probe.py"
+    },
+    {
+      "source": "src/claim5_attempt1_source_audit.py",
+      "target": "src/claim5_attempt1_source_audit.py"
+    },
+    {
+      "source": "src/claim5_attempt2_protocol_audit.py",
+      "target": "src/claim5_attempt2_protocol_audit.py"
+    },
+    {
+      "source": "src/claim5_attempt3_arxiv_archive_audit.py",
+      "target": "src/claim5_attempt3_arxiv_archive_audit.py"
+    },
+    {
+      "source": "src/claim5_official_artifact_probe.py",
+      "target": "src/claim5_official_artifact_probe.py"
+    },
+    {
+      "source": "src/claim5_reddit_reconstruction.py",
+      "target": "src/claim5_reddit_reconstruction.py"
+    },
+    {
+      "source": "src/claim6_attempt1_theorem_audit.py",
+      "target": "src/claim6_attempt1_theorem_audit.py"
+    },
+    {
+      "source": "src/verify_claim1_paper_scale.py",
+      "target": "src/verify_claim1_paper_scale.py"
+    },
+    {
+      "source": "src/verify_claim4_figure_falsification.py",
+      "target": "src/verify_claim4_figure_falsification.py"
+    },
+    {
+      "source": "src/verify_claim4_flowrepository_probe.py",
+      "target": "src/verify_claim4_flowrepository_probe.py"
+    },
+    {
+      "source": "src/verify_claim5_official_artifact_probe.py",
+      "target": "src/verify_claim5_official_artifact_probe.py"
+    },
+    {
+      "source": "src/verify_claim5_reddit_reconstruction.py",
+      "target": "src/verify_claim5_reddit_reconstruction.py"
+    },
+    {
+      "source": "tests/test_claim1_attempt1.py",
+      "target": "tests/test_claim1_attempt1.py"
+    },
+    {
+      "source": "tests/test_claim1_attempt2.py",
+      "target": "tests/test_claim1_attempt2.py"
+    },
+    {
+      "source": "tests/test_claim1_attempt3.py",
+      "target": "tests/test_claim1_attempt3.py"
+    },
+    {
+      "source": "tests/test_claim1_falsification.py",
+      "target": "tests/test_claim1_falsification.py"
+    },
+    {
+      "source": "tests/test_claim1_paper_scale.py",
+      "target": "tests/test_claim1_paper_scale.py"
+    },
+    {
+      "source": "tests/test_claim2_attempt1.py",
+      "target": "tests/test_claim2_attempt1.py"
+    },
+    {
+      "source": "tests/test_claim3_attempt1.py",
+      "target": "tests/test_claim3_attempt1.py"
+    },
+    {
+      "source": "tests/test_claim4_attempt2_public_availability.py",
+      "target": "tests/test_claim4_attempt2_public_availability.py"
+    },
+    {
+      "source": "tests/test_claim4_figure_falsification.py",
+      "target": "tests/test_claim4_figure_falsification.py"
+    },
+    {
+      "source": "tests/test_claim4_flowrepository_probe.py",
+      "target": "tests/test_claim4_flowrepository_probe.py"
+    },
+    {
+      "source": "tests/test_claim4_source_audit.py",
+      "target": "tests/test_claim4_source_audit.py"
+    },
+    {
+      "source": "tests/test_claim5_attempt1.py",
+      "target": "tests/test_claim5_attempt1.py"
+    },
+    {
+      "source": "tests/test_claim5_attempt2.py",
+      "target": "tests/test_claim5_attempt2.py"
+    },
+    {
+      "source": "tests/test_claim5_attempt3.py",
+      "target": "tests/test_claim5_attempt3.py"
+    },
+    {
+      "source": "tests/test_claim5_official_artifact_probe.py",
+      "target": "tests/test_claim5_official_artifact_probe.py"
+    },
+    {
+      "source": "tests/test_claim5_reddit_reconstruction.py",
+      "target": "tests/test_claim5_reddit_reconstruction.py"
+    },
+    {
+      "source": "tests/test_claim6_attempt1.py",
+      "target": "tests/test_claim6_attempt1.py"
+    },
+    {
+      "source": "tests/test_contract.py",
+      "target": "tests/test_contract.py"
+    },
+    {
+      "source": "tests/test_publication_artifacts.py",
+      "target": "tests/test_publication_artifacts.py"
+    },
+    {
+      "source": "uv.lock",
+      "target": "uv.lock"
+    }
+  ]
+}

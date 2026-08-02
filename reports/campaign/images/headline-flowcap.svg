@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="420" viewBox="0 0 900 420" role="img" aria-labelledby="title desc">
+  <title id="title">FlowCAP ARL1 claim versus digitized paper figure</title>
+  <desc id="desc">The claimed approximate ARL1 of one is below every digitized IDD point, which ranges from 2.63 to 3.37.</desc>
+  <rect width="900" height="420" fill="#0b1020"/>
+  <text x="52" y="58" fill="#f8fafc" font-family="sans-serif" font-size="27" font-weight="700">Claim 4: the paper's own figure contradicts ARL₁ ≈ 1</text>
+  <text x="52" y="90" fill="#a5b4fc" font-family="sans-serif" font-size="16">Six IDD markers digitized on the stated logarithmic axis</text>
+  <line x1="110" y1="325" x2="840" y2="325" stroke="#64748b" stroke-width="2"/>
+  <g fill="#94a3b8" font-family="sans-serif" font-size="14" text-anchor="middle">
+    <text x="110" y="352">0</text><text x="292" y="352">1</text><text x="475" y="352">2</text><text x="657" y="352">3</text><text x="840" y="352">4</text>
+  </g>
+  <line x1="292" y1="120" x2="292" y2="325" stroke="#fb7185" stroke-width="4" stroke-dasharray="9 7"/>
+  <text x="292" y="113" fill="#fb7185" font-family="sans-serif" font-size="16" text-anchor="middle">paper: ≈1</text>
+  <line x1="384" y1="145" x2="384" y2="325" stroke="#f59e0b" stroke-width="3" stroke-dasharray="6 6"/>
+  <text x="384" y="137" fill="#fbbf24" font-family="sans-serif" font-size="15" text-anchor="middle">predeclared generous bound: 1.5</text>
+  <line x1="590" y1="230" x2="725" y2="230" stroke="#22d3ee" stroke-width="8" stroke-linecap="round"/>
+  <g fill="#67e8f9" stroke="#082f49" stroke-width="2">
+    <circle cx="590" cy="230" r="10"/><circle cx="628" cy="230" r="10"/><circle cx="628" cy="230" r="7"/><circle cx="725" cy="230" r="10"/><circle cx="725" cy="230" r="7"/><circle cx="725" cy="230" r="4"/>
+  </g>
+  <text x="657" y="273" fill="#cffafe" font-family="sans-serif" font-size="18" text-anchor="middle">observed IDD: 2.63–3.37</text>
+  <text x="52" y="395" fill="#94a3b8" font-family="sans-serif" font-size="14">Result: FALSIFIED for the literal figure-backed ARL₁ statement; raw FCS rerun remains unavailable.</text>
+</svg>
