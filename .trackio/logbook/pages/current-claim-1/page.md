@@ -8,7 +8,7 @@ Equation 6 and Proposition 3.4 map each streaming empirical distribution to the 
 
 The paper-scale audit uses 300 Phase-I plus 300 Phase-II distributions in `d=5`, with 300 points per distribution. Six independently assigned distributions have maximum radial-isometry error `6.94e-18`. Nine components explain `0.9620` variance. Independent Gram/SVD checks have maximum errors: eigenvalues `1.04e-17`, SPE `2.46e-16`, T² `1.35e-13`. The changed-half alarm rate is `0.9933` for either statistic.
 
-Negative controls fail as intended: the identity map misses true W2² by `0.03712`; an indexed wrong-reference plan is suboptimal by `5.9856`; omitting Hotelling scaling changes T² by `80.7605`.
+Independent checker and negative controls: the separate Gram/SVD checker agrees through the errors above. The identity map misses true W2² by `0.03712`; an indexed wrong-reference plan is suboptimal by `5.9856`; omitting Hotelling scaling changes T² by `80.7605`.
 
 ## Reproduce and inspect
 

@@ -8,7 +8,7 @@ The live claim states: on 7-D FlowCAP-II, IDD has F1 approximately `.75` and ARL
 
 Six filled IDD diamond markers have ARL1 values `2.6314, 2.8383, 2.8383, 3.3742, 3.3742, 3.3742`; every point exceeds `2` and the `1.5` contract bound. IDD F1 reaches `.7849`; Hotelling's maximum digitized F1 is `.3734`.
 
-An independent column-density method finds four uncollapsed vertical positions, all above `2` (`2.6314, 3.1966, 3.5233, 3.6003`). Filled-patch areas and range endpoints agree. A deliberately wrong linear reading of the explicitly log ARL1 axis gives negative delays and is rejected.
+Independent checker and negative control: a separate column-density checker finds four uncollapsed vertical positions, all above `2` (`2.6314, 3.1966, 3.5233, 3.6003`). Filled-patch areas and range endpoints agree. The negative control deliberately reads the explicitly logarithmic ARL1 axis as linear, gives impossible negative delays, and is rejected.
 
 ## Reproduce and inspect
 
