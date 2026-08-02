@@ -2,7 +2,7 @@
 title: Beyond Euclidean Summaries reproduction
 emoji: 🎯
 colorFrom: indigo
-colorTo: cyan
+colorTo: blue
 sdk: static
 pinned: false
 ---
