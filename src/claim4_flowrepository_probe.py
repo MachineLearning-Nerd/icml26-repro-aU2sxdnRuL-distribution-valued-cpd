@@ -79,11 +79,12 @@ def main() -> int:
     if not files:
         raise RuntimeError("official API returned no FCS file records")
 
-    range_request = urllib.request.Request(
+    file_request = urllib.request.Request(
         files[0]["url"],
-        headers={"User-Agent": USER_AGENT, "Range": "bytes=0-1023"},
+        headers={"User-Agent": USER_AGENT},
     )
-    file_status, file_url, file_headers, prefix = fetch(opener, range_request, 1024)
+    declared_size = int(files[0]["file-size"])
+    file_status, file_url, file_headers, prefix = fetch(opener, file_request, declared_size + 1)
 
     negative_status = None
     try:
@@ -137,6 +138,9 @@ def main() -> int:
             "accept_ranges": file_headers.get("Accept-Ranges"),
             "prefix_bytes": len(prefix),
             "prefix_sha256": hashlib.sha256(prefix).hexdigest(),
+            "full_md5": hashlib.md5(prefix).hexdigest(),
+            "declared_md5": files[0]["md5sum"],
+            "declared_bytes": declared_size,
             "fcs_header": prefix[:6].decode("ascii", errors="replace"),
         },
         "negative_control": {
@@ -153,7 +157,7 @@ def main() -> int:
         "limitations": [
             "This bounded route establishes primary data availability and labels; it does not test Claim 4 performance.",
             "TLS verification is disabled because the primary server currently presents a certificate chain rejected by the job image; SHA-256 and exact URLs are recorded.",
-            "Only the first 1,024 bytes of one directly addressed FCS file are requested before the full acquisition route is chosen.",
+            "This route downloads one complete directly addressed FCS file before the full acquisition route is chosen.",
         ],
     }
     path = RAW / "probe.json"

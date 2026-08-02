@@ -25,6 +25,10 @@ def main() -> int:
         failures.append("official API omitted per-file integrity hashes")
     if not result["file_probe"]["fcs_header"].startswith("FCS"):
         failures.append("direct file endpoint did not return an FCS payload")
+    if result["file_probe"]["prefix_bytes"] != result["file_probe"]["declared_bytes"]:
+        failures.append("direct file byte count differs from the API record")
+    if result["file_probe"]["full_md5"] != result["file_probe"]["declared_md5"]:
+        failures.append("direct file MD5 differs from the API record")
     if not result["negative_control"]["rejected"]:
         failures.append("nonexistent direct-file control was not rejected")
     print(json.dumps({"claim": 4, "probe_verifier": "PASS" if not failures else "FAIL", "failures": failures}, sort_keys=True))
