@@ -24,8 +24,8 @@ def main() -> int:
         failures.append("camera-ready 50+50 daily stream was not reconstructed")
     if protocol["embedding_dimension"] != 384 or protocol["pca_dimension"] != 20:
         failures.append("SBERT-384 to PCA-20 contract failed")
-    if protocol["minimum_comments"] < 30:
-        failures.append("a retained day violates the 30-comment minimum")
+    if protocol["minimum_comments"] < 20:
+        failures.append("a retained day violates the released 20-comment minimum")
     if checker["eigenvalue_max_abs_error"] > 1e-8 or checker["t2_max_abs_error"] > 1e-6 or checker["spe_max_abs_error"] > 1e-8:
         failures.append("independent Gram-matrix checker disagrees")
     if not result["negative_controls"]["identity_tangents_rejected"]:

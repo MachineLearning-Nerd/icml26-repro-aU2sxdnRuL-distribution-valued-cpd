@@ -45,13 +45,13 @@ def load_windows() -> tuple[list[pd.Timestamp], list[list[str]], list[int]]:
     frame = pd.read_csv(DATA)
     frame["created_utc"] = pd.to_datetime(frame["created_utc"], utc=True, errors="coerce")
     frame = frame[frame["created_utc"].notna()].copy()
-    # Route 2 interprets "user comments" as every textual record in the cited corpus,
-    # including root discussion posts. Route 1 tested replies only and yielded 38+48 days.
+    # Route 3 follows the released runner: replies only and MIN_PER_DAY=20.
+    frame = frame[~frame["Parent"].astype(str).eq("1")].copy()
     frame["text"] = frame["text"].astype(str)
     frame = frame[~frame["text"].str.lower().isin(["[deleted]", "[removed]", "nan"])]
     frame = frame[frame["text"].str.len() > 0]
     frame["day"] = frame["created_utc"].dt.floor("D")
-    groups = [(day, group["text"].tolist()) for day, group in frame.groupby("day") if len(group) >= 30]
+    groups = [(day, group["text"].tolist()) for day, group in frame.groupby("day") if len(group) >= 20]
     groups.sort(key=lambda item: item[0])
     phase1 = [(d, texts) for d, texts in groups if pd.Timestamp("2020-12-02", tz="UTC") <= d <= pd.Timestamp("2021-01-30", tz="UTC")]
     phase2 = [(d, texts) for d, texts in groups if pd.Timestamp("2021-01-31", tz="UTC") <= d <= pd.Timestamp("2021-05-05", tz="UTC")]
@@ -219,7 +219,7 @@ def main() -> int:
             "barycenter_support": 64,
             "ot_solver": "exact EMD with barycentric projection",
             "threshold_quantile": 0.95,
-            "record_interpretation": "all textual records, including root posts",
+            "record_interpretation": "non-root replies, released runner MIN_PER_DAY=20",
             **representation,
         },
         "limits": {"spe": spe_limit, "t2": t2_limit, "hotelling_t2": hotelling_limit},
@@ -240,7 +240,7 @@ def main() -> int:
             "The 64-support free Wasserstein barycenter is deterministic but its support size is not specified in the paper.",
             "PCA is fit only on Phase I to prevent monitoring leakage; the paper does not state the PCA fitting scope.",
             "This route implements IDD and the Hotelling moment baseline, not unreleased F-CPD, NEWMA, or Scan-B configurations.",
-            "This route includes root posts; the paper says user comments but does not state how the dataset's Parent field was used.",
+            "This route uses the released runner's minimum 20, contradicting the appendix sentence that days below 30 were removed.",
         ],
     }
     RAW.mkdir(parents=True, exist_ok=True)
