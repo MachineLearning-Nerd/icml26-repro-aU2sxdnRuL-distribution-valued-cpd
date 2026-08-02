@@ -37,6 +37,12 @@ def main() -> int:
         failures.append("independent column method found too few markers")
     if not result["independent_checker"]["column_method_all_above_2"]:
         failures.append("independent column method found an IDD delay at or below 2")
+    if result["independent_checker"]["minimum_range_endpoint_gap"] > 0.5:
+        failures.append("primary and independent IDD minimum delays disagree")
+    if result["independent_checker"]["maximum_range_endpoint_gap"] > 0.5:
+        failures.append("primary and independent IDD maximum delays disagree")
+    if extracted["idd_arl1_max"] >= 4.0:
+        failures.append("filled-diamond extractor is contaminated by the higher outlined NEWMA series")
     if not result["negative_control"]["rejected"]:
         failures.append("wrong linear-axis negative control was not rejected")
     if len(rows) < 15:
